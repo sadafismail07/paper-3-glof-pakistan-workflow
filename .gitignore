@@ -1,0 +1,24 @@
+# Raw data — too large for git, accessed from external sources
+data/raw/
+
+# But keep the README/manifest in data/raw/
+!data/raw/README.md
+
+# R session files
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+~$*
+
