@@ -22,3 +22,12 @@ Thumbs.db
 *.bak
 ~$*
 
+
+# Large rasters — too big for GitHub (>100MB), archive to Zenodo instead
+data/processed/DEM_*.tif
+data/processed/S2_WaterMask*.tif
+data/processed/*.tif
+
+# Large rasters — too big for GitHub (>100MB)
+# These files live on disk; archive to Zenodo at submission
+data/processed/*.tif
