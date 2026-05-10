@@ -1,0 +1,8 @@
+"lake_id","glacier_name","lake_type","scenario","Vw_m3","Hb_m","manning_n","bulking_factor","peak_Q_input_m3s","peak_depth_m","peak_velocity_ms","wetted_area_km2","vol_conservation_pct","hecras_plan"
+"L29","Passu Glacier","moraine-dammed","Low",1077092,37.5,0.05,1,893,8.02,3.26,1.8,0.016,"L29_Passu_Low_baseline"
+"L29","Passu Glacier","moraine-dammed","Mid_baseline",2154184,37.5,0.05,1,1261,9.61,4.27,2.56,0.002,"L29_Passu_Mid_baseline"
+"L29","Passu Glacier","moraine-dammed","High",3231276,37.5,0.05,1,1547,10.29,4.89,2.79,0.003,"L29_Passu_High_baseline"
+"L29","Passu Glacier","moraine-dammed","Mid_n04",2154184,37.5,0.04,1,1261,9.58,5.18,2.5,0.001,"L29_Passu_Mid_n04"
+"L29","Passu Glacier","moraine-dammed","Mid_n06",2154184,37.5,0.06,1,1261,9.64,3.64,2.57,0.003,"L29_Passu_Mid_n06"
+"L29","Passu Glacier","moraine-dammed","Mid_bulk15",2154184,37.5,0.05,1.5,1892,10.34,5.03,2.8,0.003,"L29_Passu_Mid_bulk15"
+"L29","Passu Glacier","moraine-dammed","Mid_bulk20",2154184,37.5,0.05,2,2522,11.88,4.38,3.3,6e-06,"L29_Passu_Mid_bulk20"
