@@ -31,3 +31,20 @@ data/processed/*.tif
 # Large rasters — too big for GitHub (>100MB)
 # These files live on disk; archive to Zenodo at submission
 data/processed/*.tif
+
+# HEC-RAS binary outputs (large; archive on Zenodo at submission)
+hecras_models/**/*.hdf
+hecras_models/**/*.dss
+hecras_models/**/*.bin
+hecras_models/**/*.b0*
+hecras_models/**/*.bco*
+hecras_models/**/*.ic.o*
+hecras_models/**/*.x0*
+hecras_models/**/*.rasmap.backup
+hecras_models/**/Backup/
+hecras_models/**/Backup.*
+hecras_models/**/L29_Low/
+hecras_models/**/*.tmp
+
+# Keep these (HEC-RAS project definition files):
+# *.prj  *.g0*  *.u0*  *.p0*  *.rasmap
