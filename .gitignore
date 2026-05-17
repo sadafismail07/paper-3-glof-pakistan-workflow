@@ -1,3 +1,33 @@
+# Raster and GIS outputs
+*.tif
+*.tiff
+*.vrt
+*.aux.xml
+
+# HEC-RAS outputs
+*.hdf
+*.dss
+
+# Processed data
+data/processed/
+
+# Large figures
+figures/*.png
+figures/*.pdf
+figures/*.tiff
+
+# Shapefiles
+*.shp
+*.dbf
+*.shx
+*.prj
+*.cpg
+
+# Temporary figure folders
+figures/New folder/
+figures/New folder (2)/
+
+
 # Raw data — too large for git, accessed from external sources
 data/raw/
 

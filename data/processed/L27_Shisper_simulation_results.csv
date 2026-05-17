@@ -1,8 +1,0 @@
-"lake_id","glacier_name","lake_type","scenario","Vw_m3","Hb_m","manning_n","bulking_factor","peak_Q_input_m3s","peak_depth_m","peak_velocity_p95","peak_velocity_max","wetted_area_km2","wetted_cells","vol_conservation_pct","hecras_plan"
-"L27","Shisper Glacier","ice-dammed","Low",10200000,134,0.05,1,9829,22.41,7.06,12.47,4.57,6717,NA,"L27_Shisper_Low_baseline"
-"L27","Shisper Glacier","ice-dammed","Mid_baseline",16600000,134,0.05,1,12546,25.32,7.66,15.84,7.59,10414,1e-06,"L27_Shisper_Mid_baseline"
-"L27","Shisper Glacier","ice-dammed","High",2.3e+07,134,0.05,1,14776,27.37,8.33,18.4,9.01,11823,NA,"L27_Shisper_High_baseline"
-"L27","Shisper Glacier","ice-dammed","Mid_n04",16600000,134,0.04,1,12546,24.76,9.04,19.32,7.49,10298,NA,"L27_Shisper_Mid_n04"
-"L27","Shisper Glacier","ice-dammed","Mid_n06",16600000,134,0.06,1,12546,25.72,6.77,13.42,7.24,9834,NA,"L27_Shisper_Mid_n06"
-"L27","Shisper Glacier","ice-dammed","Mid_bulk15",16600000,134,0.05,1.5,18819,28.59,8.93,19.49,9.47,12288,NA,"L27_Shisper_Mid_bulk15"
-"L27","Shisper Glacier","ice-dammed","Mid_bulk20",16600000,134,0.05,2,25092,31.3,9.95,21.91,10.66,13471,0.001,"L27_Shisper_Mid_bulk20"

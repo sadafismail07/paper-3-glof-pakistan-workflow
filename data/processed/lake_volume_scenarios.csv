@@ -1,7 +1,0 @@
-"lake_id","scenario","volume_m3","source"
-"L29","Low",1077091.9812453,"Huggel et al. 2002 (V = 0.104 * A^1.42); ±50% scenarios"
-"L29","Mid",2154183.96249061,"Huggel et al. 2002 (V = 0.104 * A^1.42); ±50% scenarios"
-"L29","High",3231275.94373591,"Huggel et al. 2002 (V = 0.104 * A^1.42); ±50% scenarios"
-"L27","Low",10200000,"Bhambri 2020 direct measurement ± stated uncertainty"
-"L27","Mid",16600000,"Bhambri 2020 direct measurement ± stated uncertainty"
-"L27","High",2.3e+07,"Bhambri 2020 direct measurement ± stated uncertainty"
