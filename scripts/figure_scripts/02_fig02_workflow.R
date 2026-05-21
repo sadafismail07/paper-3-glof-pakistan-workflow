@@ -30,7 +30,7 @@ steps <- tribble(
   "Delineation",  2,         6,        "Map corridors + exposure",  "QGIS + R",              "qgis",
   "Delineation",  2,         7,        "Score + rank lakes",        "R",                     "r",
   "Simulation",   3,         8,        "Parameterise breach model", "R",                     "r",
-  "Simulation",   3,         9,        "Run flood simulations",     "HEC-RAS 1D",            "hecras",
+  "Simulation",   3,         9,        "Run flood simulations",     "HEC-RAS 2D",            "hecras",   # CHANGED: 1D → 2D
   "Assessment",   4,         10,       "Map hazard + exposure",     "QGIS + R",              "qgis",
   "Assessment",   4,         11,       "Validate peak discharges",  "R + literature",        "r"
 )
@@ -42,7 +42,7 @@ box_h    <- 11
 gap_x    <- 5
 gap_y    <- 14    # vertical space between phase panels
 pad      <- 3     # padding inside phase panel around boxes
-canvas_w <- 174   # mm — we will centre each phase row to this
+canvas_w <- 174   # mm — well centre each phase row to this
 
 steps <- steps |>
   group_by(phase_id) |>
@@ -127,12 +127,15 @@ tool_border <- c(
   gee    = "#B08A00",
   hecras = "#B04010"
 )
+# CHANGED: reordered so legend reads top-to-bottom as:
+# Input data → QGIS → GEE → R → HEC-RAS
+# (seq y_mid ascends, so first element = bottom; reverse order needed for top-to-bottom read)
 tool_label <- c(
-  input  = "Input data",
-  qgis   = "QGIS",
+  hecras = "HEC-RAS",
   r      = "R",
   gee    = "Google Earth Engine",
-  hecras = "HEC-RAS"
+  qgis   = "QGIS",
+  input  = "Input data"
 )
 
 steps <- steps |>

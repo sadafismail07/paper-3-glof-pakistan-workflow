@@ -198,23 +198,14 @@
     <Layer Name="L27_Shisper_unsteady_Mid_bulk15" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u04.hdf" />
     <Layer Name="L27_Shisper_unsteady_Mid_bulk20" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u05.hdf" />
   </EventConditions>
-  <Results Checked="True" Expanded="True">
+  <Results Checked="True">
     <Layer Name="L27_Mid" Type="RASResults" Filename=".\L27_Shisper_GLOF.p01.hdf">
       <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p01.hdf" />
       <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p01.hdf">
         <Layer Type="RASRiver" Checked="True" />
         <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
         <Layer Type="RASStorageArea" Checked="True" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -365,16 +356,7 @@
         <Layer Type="RASRiver" Checked="True" />
         <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
         <Layer Type="RASStorageArea" Checked="True" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -525,16 +507,7 @@
         <Layer Type="RASRiver" Checked="True" />
         <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
         <Layer Type="RASStorageArea" Checked="True" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -685,16 +658,7 @@
         <Layer Type="RASRiver" Checked="True" />
         <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
         <Layer Type="RASStorageArea" Checked="True" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -845,16 +809,7 @@
         <Layer Type="RASRiver" Checked="True" />
         <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
         <Layer Type="RASStorageArea" Checked="True" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -1003,16 +958,7 @@
       <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p06.hdf" />
       <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p06.hdf">
         <Layer Type="RASXS" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -1156,20 +1102,11 @@
         <MapParameters MapType="depth" LayerName="Depth (Max)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_Mid_bulk1.5\Depth (Max).vrt" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" OverwriteOutputFilename="Depth (Max)" />
       </Layer>
     </Layer>
-    <Layer Name="L27_Mid_bulk2.0" Type="RASResults" Filename=".\L27_Shisper_GLOF.p07.hdf">
+    <Layer Name="L27_Mid_bulk2.0" Type="RASResults" Expanded="True" Filename=".\L27_Shisper_GLOF.p07.hdf">
       <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p07.hdf" />
       <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p07.hdf">
         <Layer Type="RASXS" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
-        <Layer Type="RASD2FlowArea" Checked="True">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
-          </DataColumnGroupVisibilities>
-        </Layer>
-        <Layer Type="MeshPerimeterLayer">
-          <DataColumnGroupVisibilities>
-            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
-          </DataColumnGroupVisibilities>
-        </Layer>
+        <Layer Type="RASD2FlowArea" Checked="True" />
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />

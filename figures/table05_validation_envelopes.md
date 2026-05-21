@@ -1,0 +1,16 @@
+| Lake | Scenario | HEC-RAS Q (m³ s⁻¹) | Walder & O'Connor 1997 | Costa & Schuster 1988 | Khan et al. 2021 |
+|---|---|---|---|---|---|
+| L29 Passu | Low | 893 | 431 | 4,683 | — |
+| L29 Passu | Mid (baseline) | 1,261 | 681 | 6,265 | — |
+| L29 Passu | High | 1,547 | 890 | 7,428 | — |
+| L29 Passu | Mid (n = 0.04) | 1,261 | 681 | 6,265 | — |
+| L29 Passu | Mid (n = 0.06) | 1,261 | 681 | 6,265 | — |
+| L29 Passu | Mid (×1.5 bulk) | 1,892 | 681 | 6,265 | — |
+| L29 Passu | Mid (×2.0 bulk) | 2,522 | 681 | 6,265 | — |
+| L27 Shisper | Low | 9,829 | — | 20,551 | 4,500–6,937 |
+| L27 Shisper | Mid (baseline) | 12,546 | — | 25,216 | 4,500–6,937 |
+| L27 Shisper | High | 14,776 | — | 28,917 | 4,500–6,937 |
+| L27 Shisper | Mid (n = 0.04) | 12,546 | — | 25,216 | 4,500–6,937 |
+| L27 Shisper | Mid (n = 0.06) | 12,546 | — | 25,216 | 4,500–6,937 |
+| L27 Shisper | Mid (×1.5 bulk) | 18,819 | — | 25,216 | 4,500–6,937 |
+| L27 Shisper | Mid (×2.0 bulk) | 25,092 | — | 25,216 | 4,500–6,937 |

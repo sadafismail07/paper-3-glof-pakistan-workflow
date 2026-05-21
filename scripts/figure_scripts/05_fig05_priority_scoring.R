@@ -16,6 +16,7 @@ library(readr)
 
 df <- read_csv("data/processed/lake_priority_scores.csv",
                show_col_types = FALSE) |>
+  filter(lake_id != "L30") |>                          # ADDED: exclude L30
   arrange(composite_score) |>
   mutate(label = factor(lake_id, levels = lake_id))
 
@@ -128,7 +129,6 @@ Highlighted rows: selected lakes (L27 Shisper, L29 Passu)."
   )
 OUT_DIR <- "C:/Users/sadaf/Documents/PPR3/figures"
 
-# ── 5. Export ─────────────────────────────────────────────────────────────────
 
 # -- 5. Save -------------------------------------------------------------------
 

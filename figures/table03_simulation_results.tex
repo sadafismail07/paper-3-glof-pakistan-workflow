@@ -1,0 +1,26 @@
+\begin{table}[ht]
+\centering
+\scriptsize
+\caption{HEC-RAS simulation results for the 14 lake-scenario combinations: three volume scenarios per lake (Low, Mid baseline, High), two Manning's $n$ sensitivity runs on the mid volume scenario ($n = 0.04$ and $n = 0.06$), and two sediment bulking sensitivity runs on the mid volume scenario ($\times$1.5 and $\times$2.0 applied to peak discharge). Peak Q is the upstream-input breach hydrograph peak; peak depth and peak velocity are the maxima observed across the 2D mesh; wetted area is the total inundated cell area; volume conservation expresses the percentage discrepancy between input and output mass.}
+\label{tab:simulation_results}
+\begin{tabular}{llrrrrrrrr}
+\hline
+Lake & Scenario & Volume ($\times 10^6$ m\textsuperscript{3}) & Manning's $n$ & Bulking & Peak $Q$ (m\textsuperscript{3} s\textsuperscript{-1}) & Peak depth (m) & Peak velocity (m s\textsuperscript{-1}) & Wetted area (km\textsuperscript{2}) & Vol. cons. (\%) \\
+\hline
+L29 Passu & Low & 1.08 & 0.05 & 1.0 & 893 & 8.02 & 3.26 & 1.80 & 0.0160 \\
+L29 Passu & Mid (baseline) & 2.15 & 0.05 & 1.0 & 1,261 & 9.61 & 4.27 & 2.56 & 0.0020 \\
+L29 Passu & High & 3.23 & 0.05 & 1.0 & 1,547 & 10.29 & 4.89 & 2.79 & 0.0030 \\
+L29 Passu & Mid (n = 0.04) & 2.15 & 0.04 & 1.0 & 1,261 & 9.58 & 5.18 & 2.50 & 0.0010 \\
+L29 Passu & Mid (n = 0.06) & 2.15 & 0.06 & 1.0 & 1,261 & 9.64 & 3.64 & 2.57 & 0.0030 \\
+L29 Passu & Mid ($\times$1.5 bulk) & 2.15 & 0.05 & 1.5 & 1,892 & 10.34 & 5.03 & 2.80 & 0.0030 \\
+L29 Passu & Mid ($\times$2.0 bulk) & 2.15 & 0.05 & 2.0 & 2,522 & 11.88 & 4.38 & 3.30 & 0.0000 \\
+L27 Shisper & Low & 10.20 & 0.05 & 1.0 & 9,829 & 22.41 &  NA & 4.57 &    NA \\
+L27 Shisper & Mid (baseline) & 16.60 & 0.05 & 1.0 & 12,546 & 25.32 &  NA & 7.59 & 0.0000 \\
+L27 Shisper & High & 23.00 & 0.05 & 1.0 & 14,776 & 27.37 &  NA & 9.01 &    NA \\
+L27 Shisper & Mid (n = 0.04) & 16.60 & 0.04 & 1.0 & 12,546 & 24.76 &  NA & 7.49 &    NA \\
+L27 Shisper & Mid (n = 0.06) & 16.60 & 0.06 & 1.0 & 12,546 & 25.72 &  NA & 7.24 &    NA \\
+L27 Shisper & Mid ($\times$1.5 bulk) & 16.60 & 0.05 & 1.5 & 18,819 & 28.59 &  NA & 9.47 &    NA \\
+L27 Shisper & Mid ($\times$2.0 bulk) & 16.60 & 0.05 & 2.0 & 25,092 & 31.30 &  NA & 10.66 & 0.0010 \\
+\hline
+\end{tabular}
+\end{table}

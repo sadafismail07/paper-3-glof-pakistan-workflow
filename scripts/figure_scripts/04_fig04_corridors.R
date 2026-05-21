@@ -48,16 +48,16 @@ bridges    <- st_read(file.path(L, "osm_bridges.gpkg"), quiet = TRUE)
 cat("  All layers loaded
 ")
 
-# --- 2. Exclude L21, prepare attributes ---------------------------------------
+# --- 2. Exclude L21 + L30, prepare attributes ---------------------------------
 
 corr <- corr_all |>
-  filter(lake_id != "L21") |>
+  filter(!lake_id %in% c("L21", "L30")) |>            # CHANGED: added L30
   arrange(final_score)
 
 corr$display_label <- case_when(
   corr$lake_id == "L27" ~ "L27 Shisper",
   corr$lake_id == "L29" ~ "L29 Passu",
-  corr$lake_id == "L30" ~ "L30 Khurdopin",
+  # REMOVED: L30 Khurdopin case
   TRUE ~ corr$lake_id
 )
 
@@ -73,7 +73,7 @@ score_max <- ceiling(max(corr$final_score, na.rm = TRUE) * 10) / 10
 # --- 3. Clusters and extents --------------------------------------------------
 
 chitral_ids <- c("L06", "L01", "L02", "L03", "L04", "L05")
-hunza_ids   <- c("L27", "L28", "L26", "L25", "L24", "L29", "L30", "L19")
+hunza_ids   <- c("L27", "L28", "L26", "L25", "L24", "L29", "L19")  # CHANGED: removed "L30"
 
 chitral_corr <- corr |> filter(lake_id %in% chitral_ids)
 hunza_corr   <- corr |> filter(lake_id %in% hunza_ids)
@@ -148,7 +148,7 @@ build_panel <- function(xlim, ylim, corr_sub, lakes_sub, label_ids = NULL,
                                      xmax = xlim[2], ymax = ylim[2]),
                                    crs = st_crs(4326)))
   riv_sub <- suppressWarnings(st_intersection(rivers, panel_bbox))
-  corr_sub_union <- st_union(corr_sub)
+  corr_sub_union <- st_union(corr_sub) |> st_make_valid()  # FIX: repair degenerate vertices before intersection
   roads_sub   <- suppressWarnings(st_intersection(roads, corr_sub_union))
   bridges_sub <- suppressWarnings(st_intersection(bridges, corr_sub_union))
 
@@ -276,7 +276,7 @@ p_overview <- build_panel(
   label_ids = c("L27", "L29"),
   show_legend   = TRUE,
   show_boundary = FALSE,
-  title         = "(a) Overview -- 17 corridors (L21 Karambar excluded: no downstream exposure)",
+  title         = "(a) Overview -- 16 corridors (L21 Karambar, L30 Khurdopin excluded)",  # CHANGED: count 17→16, added L30 note
   show_scalebar = TRUE
 ) +
   geom_sf(data = box_chitral, fill = NA, colour = "#0072B2",
@@ -301,12 +301,13 @@ p_chitral <- build_panel(
 p_hunza <- build_panel(
   xlim = hunza_xlim, ylim = hunza_ylim,
   corr_sub  = hunza_corr, lakes_sub = hunza_lakes,
-  label_ids = c("L27", "L29", "L30", "L19"),
+  label_ids = c("L27", "L29", "L19"),                  # CHANGED: removed "L30"
   show_legend   = FALSE,
   show_boundary = TRUE,
   title         = "(c) Hunza-Karakoram cluster",
   show_scalebar = TRUE
 ) +
+  scale_x_continuous(breaks = seq(74.2, 75.0, by = 0.4)) +  # FIX: thin x-axis breaks (was 0.1 degree, too dense)
   theme(panel.border = element_rect(fill = NA, colour = "#009E73", linewidth = 0.7))
 
 # --- 7. Combine + save --------------------------------------------------------

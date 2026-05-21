@@ -1,0 +1,18 @@
+Lake ID,Glacier / lake name,Lat,Lon,Vulnerability,Lake type,Area (m²),Area source,Literature reference
+L01,Reshun,36.1513,72.27,5,moraine-dammed (cirque/proglacial),"1,259",Manual digitisation,—
+L02,Booni,36.1808,72.3026,5,supraglacial,289,Google Earth digitisation,Ashraf (2021)
+L03,Sonoghor,36.2134,72.4306,5,moraine-dammed (provisional),—,Not visible,Ashraf (2021)
+L04,Brep,36.3752,72.7364,5,moraine-dammed (provisional),"11,351",Google Earth digitisation,—
+L05,Yarkhun Lusht,36.8312,73.0145,5,uncertain,—,Not visible,Ashraf (2021)
+L06,Dir Gole,36.2311,71.8106,5,supraglacial,—,Not visible,Ashraf (2021)
+L15,Khurdopin,36.0369,73.1957,5,moraine dammed / proglacial,"66,789",Manual digitisation,—
+L19,Hinarchi,36.0408,74.663,5,moraine-dammed,—,Not visible,Ashraf (2021)
+L20,Badswat,36.491,74.052,5,moraine-dammed (provisional),—,Not visible,—
+L21,Karamber,36.6161,74.2185,5,ice-dammed,—,Not visible,Shrestha (2023)
+L22,Ishkoman,36.5674,73.87,4,moraine-dammed (provisional),—,Not visible,—
+L24,Gulkin,36.4154,74.7681,4,supraglacial,—,Not visible,Shrestha (2023)
+L25,Gulmit,36.3678,74.7855,5,supraglacial,—,Not visible,Shrestha (2023)
+L26,Hundur (Bualtar),36.1249,74.7313,4,moraine-dammed (provisional),—,Not visible,Hewitt (2010)
+L27,Shisper,36.4332,74.6225,4,ice-dammed,"400,000",Literature value,Khan (2021)
+L28,Ultar,36.3734,74.6834,5,moraine-dammed (provisional),—,Not visible,Hewitt (2010)
+L29,Passu,36.4556,74.878,5,moraine-dammed,"141,988",Manual digitisation,Bhambri (2020)
