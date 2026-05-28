@@ -190,6 +190,11 @@
       <Layer Name="Zones" Type="RASEncroachmentZones" Filename=".\L27_Shisper_GLOF.p07" />
       <Layer Name="Regions" Type="RASEncroachmentPolygons" Filename=".\L27_Shisper_GLOF.p07" />
     </Layer>
+    <Layer Name="L27_Shisper_Mid_baseline_0.019_slope" Type="RASPlan" Filename=".\L27_Shisper_GLOF.p08" GeometryHDF=".\L27_Shisper_GLOF.g01.hdf">
+      <Layer Name="Encroachments" Type="RASEncroachments" Filename=".\L27_Shisper_GLOF.p08" />
+      <Layer Name="Zones" Type="RASEncroachmentZones" Filename=".\L27_Shisper_GLOF.p08" />
+      <Layer Name="Regions" Type="RASEncroachmentPolygons" Filename=".\L27_Shisper_GLOF.p08" />
+    </Layer>
   </Plans>
   <EventConditions>
     <Layer Name="L27_Shisper_unsteady_Mid" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u01.hdf" />
@@ -197,8 +202,9 @@
     <Layer Name="L27_Shisper_unsteady_High" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u03.hdf" />
     <Layer Name="L27_Shisper_unsteady_Mid_bulk15" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u04.hdf" />
     <Layer Name="L27_Shisper_unsteady_Mid_bulk20" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u05.hdf" />
+    <Layer Name="_L27_Shisper_unsteady_Mid_0.019_slope" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.u06.hdf" />
   </EventConditions>
-  <Results Checked="True">
+  <Results Checked="True" Expanded="True">
     <Layer Name="L27_Mid" Type="RASResults" Filename=".\L27_Shisper_GLOF.p01.hdf">
       <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p01.hdf" />
       <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p01.hdf">
@@ -652,13 +658,22 @@
         <MapParameters MapType="depth" LayerName="Depth (Max)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_High\Depth (Max).vrt" ProfileIndex="2147483647" ProfileName="Max" OverwriteOutputFilename="Depth (Max)" />
       </Layer>
     </Layer>
-    <Layer Name="L27_Mid_n04" Type="RASResults" Filename=".\L27_Shisper_GLOF.p04.hdf">
+    <Layer Name="L27_Mid_n04" Type="RASResults" Checked="True" Filename=".\L27_Shisper_GLOF.p04.hdf">
       <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p04.hdf" />
       <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p04.hdf">
         <Layer Type="RASRiver" Checked="True" />
         <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
         <Layer Type="RASStorageArea" Checked="True" />
-        <Layer Type="RASD2FlowArea" Checked="True" />
+        <Layer Type="RASD2FlowArea" Checked="True">
+          <DataColumnGroupVisibilities>
+            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
+          </DataColumnGroupVisibilities>
+        </Layer>
+        <Layer Type="MeshPerimeterLayer">
+          <DataColumnGroupVisibilities>
+            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
+          </DataColumnGroupVisibilities>
+        </Layer>
         <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
         <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
         <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
@@ -783,7 +798,7 @@
         </Layer>
       </Layer>
       <Layer Name="Plan" Type="RASPlan" Filename=".\L27_Shisper_GLOF.p04.hdf" GeometryHDF=".\L27_Shisper_GLOF.p04.hdf">
-        <Layer Name="Encroachments" Type="RASEncroachments" Filename=".\L27_Shisper_GLOF.p04.hdf" />
+        <Layer Name="Encroachments" Type="RASEncroachments" Checked="True" Filename=".\L27_Shisper_GLOF.p04.hdf" />
         <Layer Name="Zones" Type="RASEncroachmentZones" Filename=".\L27_Shisper_GLOF.p04.hdf" />
         <Layer Name="Regions" Type="RASEncroachmentPolygons" Filename=".\L27_Shisper_GLOF.p04.hdf" />
       </Layer>
@@ -1102,7 +1117,7 @@
         <MapParameters MapType="depth" LayerName="Depth (Max)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_Mid_bulk1.5\Depth (Max).vrt" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" OverwriteOutputFilename="Depth (Max)" />
       </Layer>
     </Layer>
-    <Layer Name="L27_Mid_bulk2.0" Type="RASResults" Expanded="True" Filename=".\L27_Shisper_GLOF.p07.hdf">
+    <Layer Name="L27_Mid_bulk2.0" Type="RASResults" Filename=".\L27_Shisper_GLOF.p07.hdf">
       <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p07.hdf" />
       <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p07.hdf">
         <Layer Type="RASXS" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
@@ -1245,6 +1260,172 @@
       </Layer>
       <Layer Name="Depth" Type="RASResultsMap" Checked="True" Filename=".\L27_Mid_bulk2.0\Depth (Max).vrt">
         <MapParameters MapType="depth" LayerName="Depth (Max)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_Mid_bulk2.0\Depth (Max).vrt" ProfileIndex="2147483647" ProfileName="Max" OverwriteOutputFilename="Depth (Max)" />
+      </Layer>
+    </Layer>
+    <Layer Name="L27_mid_0.019" Type="RASResults" Checked="True" Expanded="True" Filename=".\L27_Shisper_GLOF.p08.hdf">
+      <Layer Name="Event Conditions" Type="RASEventConditions" Filename=".\L27_Shisper_GLOF.p08.hdf" />
+      <Layer Type="RASGeometry" Checked="True" Filename=".\L27_Shisper_GLOF.p08.hdf">
+        <Layer Type="RASRiver" Checked="True" />
+        <Layer Type="RASXS" Checked="True" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
+        <Layer Type="RASStorageArea" Checked="True" />
+        <Layer Type="RASD2FlowArea" Checked="True">
+          <DataColumnGroupVisibilities>
+            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="False" />
+          </DataColumnGroupVisibilities>
+        </Layer>
+        <Layer Type="MeshPerimeterLayer">
+          <DataColumnGroupVisibilities>
+            <DataColumnGroupVisibility DisplayName="Feature Parameters" IsVisible="True" />
+          </DataColumnGroupVisibilities>
+        </Layer>
+        <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Bridges/Culverts" />
+        <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Gate Openings" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Inline Structures" />
+        <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Inline Structures" />
+        <Layer Name="Rating Curve Outlets" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Inline Structures" />
+        <Layer Name="Outlet Time Series" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Inline Structures" />
+        <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Gate Openings" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Lateral Structures" />
+        <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Lateral Structures" />
+        <Layer Name="Rating Curve Outlets" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Lateral Structures" />
+        <Layer Name="Outlet Time Series" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="Lateral Structures" />
+        <Layer Name="Gate Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Gate Openings" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="SA/2D Connections" />
+        <Layer Name="Culvert Groups" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="" />
+        <Layer Name="Culvert Barrels" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="SA/2D Connections" />
+        <Layer Name="Rating Curve Outlets" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="SA/2D Connections" />
+        <Layer Name="Outlet Time Series" Type="VirtualGeometryFeatureLayer" ParentIdentifiers="SA/2D Connections" />
+        <Layer Type="StructureLayer" UnitsRiverStation="Feet" RiverStationDecimalPlaces="0" />
+        <Layer Type="RASPipeNetworks" Checked="True" />
+        <Layer Type="RASPipeNodes">
+          <SymbologyByAttributeColumns Checked="True" SelectedColumn="Node Type">
+            <ValueToSymbology Value="Start">
+              <Symbology>
+                <PointSymbol Type="1" Size="8" pA="255" pR="255" pG="255" pB="255" bA="255" bR="0" bG="128" bB="0" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="0" G="128" R="0" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="0" G="128" R="0" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+            <ValueToSymbology Value="Junction">
+              <Symbology>
+                <PointSymbol Type="1" Size="8" pA="255" pR="255" pG="255" pB="255" bA="255" bR="128" bG="0" bB="0" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="0" G="0" R="128" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="0" G="0" R="128" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+            <ValueToSymbology Value="Culvert Opening">
+              <Symbology>
+                <PointSymbol Type="1" Size="8" pA="255" pR="128" pG="128" pB="128" bA="255" bR="128" bG="128" bB="128" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="128" G="128" R="128" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="128" G="128" R="128" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+            <ValueToSymbology Value="External">
+              <Symbology>
+                <PointSymbol Type="1" Size="8" pA="255" pR="255" pG="255" pB="0" bA="255" bR="255" bG="255" bB="0" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="0" G="255" R="255" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="0" G="255" R="255" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+            <ValueToSymbology Value="Closed">
+              <Symbology>
+                <PointSymbol Type="1" Size="8" pA="255" pR="255" pG="255" pB="255" bA="255" bR="0" bG="0" bB="255" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="255" G="0" R="0" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="255" G="0" R="0" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+            <ValueToSymbology Value="Error">
+              <Symbology>
+                <PointSymbol Type="1" Size="8" pA="255" pR="255" pG="0" pB="0" bA="255" bR="255" bG="0" bB="0" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="0" G="0" R="255" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="0" G="0" R="255" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+          </SymbologyByAttributeColumns>
+        </Layer>
+        <Layer Type="RASPipeLinks">
+          <SymbologyByAttributeColumns Checked="True" SelectedColumn="Modeling Approach">
+            <ValueToSymbology Value="Hydraulic">
+              <Symbology>
+                <PointSymbol Type="1" Size="7" pA="255" pR="147" pG="112" pB="219" bA="255" bR="147" bG="112" bB="219" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="219" G="112" R="147" A="255" Dash="0" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="219" G="112" R="147" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+            <ValueToSymbology Value="Instantaneous">
+              <Symbology>
+                <PointSymbol Type="1" Size="7" pA="255" pR="147" pG="112" pB="219" bA="255" bR="147" bG="112" bB="219" />
+                <HillShade On="True" Azimuth="315" Zenith="45" ZFactor="3" />
+                <Contour On="False" Interval="5" Color="-16777216" />
+                <Pen B="219" G="112" R="147" A="255" Dash="2" Width="2" />
+                <SurfaceFill Colors="-1,-16777216" Values="0,100" Stretched="True" AlphaTag="255" UseDatasetMinMax="False" RegenerateForScreen="False" />
+                <Brush Type="SolidBrush" B="219" G="112" R="147" A="50" Name="PolygonFill" />
+              </Symbology>
+            </ValueToSymbology>
+          </SymbologyByAttributeColumns>
+        </Layer>
+        <Layer Type="FinalNValueLayer">
+          <ResampleMethod>near</ResampleMethod>
+          <Surface On="True" />
+        </Layer>
+        <Layer Name="Final Values" Type="InterpretationRasterizerLayer" Filename=".\L27_Shisper_GLOF.p08.hdf">
+          <ResampleMethod>near</ResampleMethod>
+          <Surface On="True" />
+        </Layer>
+        <Layer Name="Final Values" Type="InterpretationRasterizerLayer" Filename=".\L27_Shisper_GLOF.p08.hdf">
+          <ResampleMethod>near</ResampleMethod>
+          <Surface On="True" />
+        </Layer>
+      </Layer>
+      <Layer Name="Plan" Type="RASPlan" Filename=".\L27_Shisper_GLOF.p08.hdf" GeometryHDF=".\L27_Shisper_GLOF.p08.hdf">
+        <Layer Name="Encroachments" Type="RASEncroachments" Filename=".\L27_Shisper_GLOF.p08.hdf" />
+        <Layer Name="Zones" Type="RASEncroachmentZones" Filename=".\L27_Shisper_GLOF.p08.hdf" />
+        <Layer Name="Regions" Type="RASEncroachmentPolygons" Filename=".\L27_Shisper_GLOF.p08.hdf" />
+      </Layer>
+      <Layer Name="WSE" Type="RASResultsMap">
+        <MapParameters MapType="elevation" ProfileIndex="2147483647" ProfileName="Max" />
+      </Layer>
+      <Layer Name="Depth" Type="RASResultsMap" Checked="True">
+        <MapParameters MapType="depth" LayerName="Depth" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" />
+      </Layer>
+      <Layer Name="Velocity" Type="RASResultsMap" Checked="True">
+        <MapParameters MapType="velocity" LayerName="Velocity" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" />
+      </Layer>
+      <Layer Name="Depth" Type="RASResultsMap" Checked="True" Filename=".\L27_mid_0.019\Depth (Max).vrt">
+        <MapParameters MapType="depth" LayerName="Depth (Max)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_mid_0.019\Depth (Max).vrt" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" OverwriteOutputFilename="Depth (Max)" />
+      </Layer>
+      <Layer Name="Velocity" Type="RASResultsMap" Checked="True" Filename=".\L27_mid_0.019\Velocity (Max).vrt">
+        <MapParameters MapType="velocity" LayerName="Velocity (Max)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_mid_0.019\Velocity (Max).vrt" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" OverwriteOutputFilename="Velocity (Max)" />
+      </Layer>
+      <Layer Name="Depth" Type="RASResultsMap" Checked="True" Filename=".\L27_mid_0.019\Depth (Max) (1).vrt">
+        <MapParameters MapType="depth" LayerName="Depth (Max) (1)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_mid_0.019\Depth (Max) (1).vrt" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" OverwriteOutputFilename="Depth (Max) (1)" />
+      </Layer>
+      <Layer Name="Velocity" Type="RASResultsMap" Checked="True" Filename=".\L27_mid_0.019\Velocity (Max) (1).vrt">
+        <MapParameters MapType="velocity" LayerName="Velocity (Max) (1)" OutputMode="Stored Current Terrain" StoredFilename=".\L27_mid_0.019\Velocity (Max) (1).vrt" Terrain="Terrain" ProfileIndex="2147483647" ProfileName="Max" ArrivalDepth="0" OverwriteOutputFilename="Velocity (Max) (1)" />
       </Layer>
     </Layer>
   </Results>

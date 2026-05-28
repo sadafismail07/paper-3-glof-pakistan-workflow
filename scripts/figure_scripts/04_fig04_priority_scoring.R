@@ -1,11 +1,17 @@
 
 # ════════════════════════════════════════════════════════════════
-# 05_fig05_priority_scoring.R
-# Figure 5 — Priority Scoring Dumbbell Plot
+# 04_fig04_priority_scoring.R
+# Figure 4 — Priority Scoring Dumbbell Plot
 # PURPOSE: Hazard score vs exposure score per lake, sorted by composite
 # AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
 # DATE:    2026
 # ════════════════════════════════════════════════════════════════
+# =============================================================================
+# Fig 4 — Priority Scoring Dumbbell Plot
+#          Hazard score vs exposure score per lake, sorted by composite
+# Output: figures/fig04o_priority_scores.pdf  (84 mm wide, single-column)
+# Input:  data/processed/lake_priority_scores.csv
+# =============================================================================
 
 library(ggplot2)
 library(dplyr)
@@ -16,7 +22,6 @@ library(readr)
 
 df <- read_csv("data/processed/lake_priority_scores.csv",
                show_col_types = FALSE) |>
-  filter(lake_id != "L30") |>                          # ADDED: exclude L30
   arrange(composite_score) |>
   mutate(label = factor(lake_id, levels = lake_id))
 
@@ -129,17 +134,18 @@ Highlighted rows: selected lakes (L27 Shisper, L29 Passu)."
   )
 OUT_DIR <- "C:/Users/sadaf/Documents/PPR3/figures"
 
+# ── 5. Export ─────────────────────────────────────────────────────────────────
 
 # -- 5. Save -------------------------------------------------------------------
 
 n_lakes <- nrow(df)
 fig_h   <- max(60, n_lakes * 5.8)
 
-ggsave(file.path(OUT_DIR, "fig05_v3_priority_scoring.png"), p,
+ggsave(file.path(OUT_DIR, "fig04_v3_priority_scoring.png"), p,
        width = 84, height = fig_h, units = "mm",
        dpi = 600, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig05_v3_priority_scoring.tiff"), p,
+ggsave(file.path(OUT_DIR, "fig04_v3_priority_scoring.tiff"), p,
        width = 84, height = fig_h, units = "mm",
        dpi = 600, bg = "white", compression = "lzw")
 

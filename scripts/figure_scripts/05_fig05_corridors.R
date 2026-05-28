@@ -1,7 +1,18 @@
 
 # ════════════════════════════════════════════════════════════════
-# 04_fig04_corridors.R
-# Figure 4 — Downstream Corridors with Exposure Scores
+# 05_fig05_corridors.R
+# Figure 5 — Downstream Corridors with Exposure Scores
+# PURPOSE: Map of all filtered lakes with their 50 km downstream corridors along the
+#           river network, colour-coded by composite exposure score. This is the
+#          "before simulation" overview — shows spatial pattern of exposure and
+#           justifies why L27 and L29 were selected.
+# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
+# DATE:    2026
+# ════════════════════════════════════════════════════════════════
+
+# ════════════════════════════════════════════════════════════════
+# 04_fig05o_corridors.R
+# Figure 5 — Downstream Corridors with Exposure Scores
 # PURPOSE: Map of all filtered lakes with their 50 km downstream corridors along the
 #           river network, colour-coded by composite exposure score. This is the
 #          "before simulation" overview — shows spatial pattern of exposure and
@@ -11,7 +22,7 @@
 # ════════════════════════════════════════════════════════════════
 
 # =============================================================================
-# fig04_v9_downstream_corridors.R
+# fig05o_v9_downstream_corridors.R
 # =============================================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
@@ -318,14 +329,15 @@ cat("--- Combining panels ---
 p_bottom <- plot_grid(p_chitral, p_hunza, ncol = 2, rel_widths = c(1, 1))
 p_final  <- plot_grid(p_overview, p_bottom, ncol = 1, rel_heights = c(1, 1))
 
-ggsave(file.path(OUT_DIR, "fig04_v9_corridors.png"), p_final,
+ggsave(file.path(OUT_DIR, "fig05_v9_corridors.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig04_v9_corridors.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "fig05_v9_corridors.tiff"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
 
 cat("Done! Saved to", OUT_DIR, "
 ")
+
 

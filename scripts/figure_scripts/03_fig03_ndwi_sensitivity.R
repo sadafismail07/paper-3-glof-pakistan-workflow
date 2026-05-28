@@ -36,8 +36,8 @@ df <- read_csv(
 chosen_threshold <- 0.1
 
 lake_colours <- c(
-  "Khurdupin" = "#2166AC",
-  "Shishper"  = "#E08020",
+  "Khurdopin" = "#2166AC",
+  "Shisper"   = "#E08020", 
   "Passu"     = "#1A9850",
   "Karambar"  = "#984EA3"
 )
@@ -49,7 +49,7 @@ circle_r <- 0.022
 shishper_y <- df |>
   filter(
     threshold == chosen_threshold,
-    name == "Shishper"
+    name == "Shisper"
   ) |>
   pull(area_km2)
 
@@ -69,7 +69,7 @@ x_label <- chosen_threshold + 0.045
 labels_df <- tibble(
 
   # Label text identities stay same
-  name = c("Shishper", "Passu"),
+  name = c("Shisper", "Passu"),
 
   # Text shown
   lab = c("0.162 km²", "0.019 km²"),
@@ -104,15 +104,15 @@ labels_df <- tibble(
 circles_df <- df |>
   filter(
     threshold == chosen_threshold,
-    name %in% c("Shishper", "Passu")
+    name %in% c("Shisper", "Passu")
   )
 
-# ── Khurdupin annotation ────────────────────────────────────────────────────
+# ── Khurdopin annotation ────────────────────────────────────────────────────
 
 khurdupin_t0 <- df |>
   filter(
     threshold == 0.0,
-    name == "Khurdupin"
+    name == "Khurdopin"
   )
 
 annot_x      <- 0.018
