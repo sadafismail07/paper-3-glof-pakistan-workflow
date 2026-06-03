@@ -5,7 +5,7 @@ prioritisation and hydrodynamic simulation in the Gilgit-Baltistan and
 Chitral region of northern Pakistan. This repository accompanies the
 manuscript:
 
-> Ismail, S. and Yamagata, Y. (2026). A Reproducible Open-Data Workflow for
+> Ismail, S. and Yamashiki, Y. (2026). A Reproducible Open-Data Workflow for
 > Glacial Lake Outburst Flood Prioritization and Hydrodynamic Simulation
 > in Northern Pakistan. [Journal, volume, pages, DOI at publication.]
 
