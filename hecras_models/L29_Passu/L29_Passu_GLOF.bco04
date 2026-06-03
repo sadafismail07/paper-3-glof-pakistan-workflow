@@ -1,0 +1,70 @@
+ 
+                                              HEC-RAS - River Analysis System
+ 
+ 
+Project File:  C:\Users\sadaf\Documents\PPR3\hecras_models\L29_Passu\L29_Passu_GLOF.prj
+ 
+Project Name:  L29_Passu_GLOF
+ 
+ 
+Plan Name:     L29_Passu_High_baseline
+ 
+Short ID:      L29_High
+ 
+
+Starting Time:   31Jul2025 2400
+
+Ending Time:     01Aug2025 0600
+
+
+                ################################################
+                #                                              #
+                #                                              #
+                #       1D and 2D Unsteady Flow Module         #
+                #                                              #
+                #                                              #
+                #          HEC-RAS 7.0 April 2026              #
+                #                                              #
+                #             10MAY26 at 09:36:39              #
+                #                                              #
+                ################################################
+                
+ 
+ 
+ 
+
+         US Inflow      DS Outflow       Lat Hydro        SA Hydro     Groundwater      Diversions   Precip Excess
+         *********      **********       *********        ********     ***********      **********   *************
+                                                                                                                                  
+
+    Start 1D Reach  Final 1D Reach   Starting SA's      Final SA's
+    **************  **************   *************      **********
+                                                                  
+
+
+
+                 ***   Volume Accounting for 2D Flow Area in 1000 m^3   ***
+
+           2D Area    Starting Vol      Ending Vol      Cum Inflow     Cum Outflow           Error   Percent Error
+           *******    ************      **********      **********     ***********           *****   *************
+ 
+ 
+       Perimeter 1                           3231.           3231.                         0.09130        0.002826
+
+
+
+                 ***  Total Volume Accounting (for the entire model) in 1000 m^3   ***
+
+Total Boundary Flux of Water In            3231.
+Total Boundary Flux of Water Out    0.0000000000
+
+Starting Volume                     0.0000000000
+Ending Volume                              3231.
+
+
+                             Error   Percent Error
+                             *****   *************
+                           0.09130        0.002826
+
+
+

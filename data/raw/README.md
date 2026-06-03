@@ -8,7 +8,7 @@ the source data using the URLs and access dates documented in
 ## Files expected in this folder
 
 - `ndma_vulnerable_glof_sites.csv` — NDMA Vulnerable GLOF Sites of Pakistan
-  (29 lakes, vulnerability rated 2-5). Personal communication, 2026.
+  (29 lakes, vulnerability rated 2-5). Institutional source; see docs/data_sources.csv for citation.
 
 - `gadm41_PAK.gpkg` — GADM v4.1 Pakistan administrative boundaries.
   https://geodata.ucdavis.edu/gadm/gadm4.1/gpkg/gadm41_PAK.gpkg

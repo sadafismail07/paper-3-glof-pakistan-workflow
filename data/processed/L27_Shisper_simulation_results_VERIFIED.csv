@@ -1,0 +1,8 @@
+"lake","scenario","folder","peak_depth_m","peak_vel_p95","peak_vel_max","wetted_area_km2","wetted_cells","depth_file","vel_file"
+"L27","Low","L27_Low",27.35,7.06,12.47,6.021,6690,"hecras_models/L27_Shisper/L27_Low/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_Low/Velocity (Max).Terrain.L27_terrain.tif"
+"L27","Mid_baseline","L27_Mid",30.29,7.66,15.84,9.3267,10363,"hecras_models/L27_Shisper/L27_Mid/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_Mid/Velocity (Max).Terrain.L27_terrain.tif"
+"L27","High","L27_High",32.44,8.33,18.4,10.6056,11784,"hecras_models/L27_Shisper/L27_High/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_High/Velocity (Max).Terrain.L27_terrain.tif"
+"L27","Mid_n04","L27_Mid_n04",29.97,9.06,19.32,9.2223,10247,"hecras_models/L27_Shisper/L27_Mid_n04/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_Mid_n04/Velocity (Max).Terrain.L27_terrain.tif"
+"L27","Mid_n06","L27_Mid_n06",30.5,6.77,13.42,8.8173,9797,"hecras_models/L27_Shisper/L27_Mid_n06/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_Mid_n06/Velocity (Max).Terrain.L27_terrain.tif"
+"L27","Mid_bulk1.5","L27_Mid_bulk1.5",33.45,8.93,19.49,11.0268,12252,"hecras_models/L27_Shisper/L27_Mid_bulk1.5/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_Mid_bulk1.5/Velocity (Max).Terrain.L27_terrain.tif"
+"L27","Mid_bulk2.0","L27_Mid_bulk2.0",35.99,9.96,21.91,12.0951,13439,"hecras_models/L27_Shisper/L27_Mid_bulk2.0/Depth (Max).Terrain.L27_terrain.tif","hecras_models/L27_Shisper/L27_Mid_bulk2.0/Velocity (Max) (2).Terrain.L27_terrain.tif"

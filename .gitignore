@@ -1,80 +1,16 @@
-# Raster and GIS outputs
+docs/PROJECT_NOTES.md
+docs/PAPER_NOTES.md
+PROJECT_NOTES.md
+PAPER_NOTES.md
+*_INTERNAL.md
+*_BACKUP.md
+*_BACKUP.csv
+data/raw/
 *.tif
 *.tiff
-*.vrt
-*.aux.xml
-
-# HEC-RAS outputs
 *.hdf
-*.dss
-
-# Processed data
-data/processed/
-
-# Large figures
-figures/*.png
-figures/*.pdf
-figures/*.tiff
-
-# Shapefiles
-*.shp
-*.dbf
-*.shx
-*.prj
-*.cpg
-
-# Temporary figure folders
-figures/New folder/
-figures/New folder (2)/
-
-
-# Raw data — too large for git, accessed from external sources
-data/raw/
-
-# But keep the README/manifest in data/raw/
-!data/raw/README.md
-
-# R session files
+.Rproj.user/
 .Rhistory
 .RData
-.Rproj.user/
-*.Rproj
-
-# Jupyter
-.ipynb_checkpoints/
-
-# OS
 .DS_Store
 Thumbs.db
-
-# Temporary files
-*.tmp
-*.bak
-~$*
-
-
-# Large rasters — too big for GitHub (>100MB), archive to Zenodo instead
-data/processed/DEM_*.tif
-data/processed/S2_WaterMask*.tif
-data/processed/*.tif
-
-# Large rasters — too big for GitHub (>100MB)
-# These files live on disk; archive to Zenodo at submission
-data/processed/*.tif
-
-# HEC-RAS binary outputs (large; archive on Zenodo at submission)
-hecras_models/**/*.hdf
-hecras_models/**/*.dss
-hecras_models/**/*.bin
-hecras_models/**/*.b0*
-hecras_models/**/*.bco*
-hecras_models/**/*.ic.o*
-hecras_models/**/*.x0*
-hecras_models/**/*.rasmap.backup
-hecras_models/**/Backup/
-hecras_models/**/Backup.*
-hecras_models/**/L29_Low/
-hecras_models/**/*.tmp
-
-# Keep these (HEC-RAS project definition files):
-# *.prj  *.g0*  *.u0*  *.p0*  *.rasmap

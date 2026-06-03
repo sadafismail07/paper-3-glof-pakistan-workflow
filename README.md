@@ -38,8 +38,6 @@ L27_Shisper/        # HEC-RAS project for L27 Shisper
 figures/              # final figures and tables
 docs/
 data_sources.csv    # dataset versioning, URLs, citations
-PAPER_NOTES.md      # verified bibliography and methodological notes
-PROJECT_NOTES.md    # operational decisions log
 SELECTION_CRITERIA.md  # pre-registered lake selection criteria
 sessionInfo.txt     # R session info at the time of analysis
 REPRODUCE.md          # step-by-step replication guide
