@@ -14,3 +14,15 @@ data/raw/
 .RData
 .DS_Store
 Thumbs.db
+hecras_models/**/Backup/ 
+hecras_models/**/Backup/ 
+hecras_models/**/Backup/ 
+hecras_models/**/*.vrt 
+hecras_models/**/*.dss 
+hecras_models/**/*.bco* 
+hecras_models/**/*.b0* 
+hecras_models/**/*.ic.o* 
+hecras_models/**/*.x0* 
+hecras_models/**/*.rasmap.backup 
+hecras_models/**/*.aux.xml 
+*.bak 
