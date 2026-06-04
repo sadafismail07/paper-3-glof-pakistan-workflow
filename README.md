@@ -5,9 +5,9 @@ prioritisation and hydrodynamic simulation in the Gilgit-Baltistan and
 Chitral region of northern Pakistan. This repository accompanies the
 manuscript:
 
-> Ismail, S. and Yamashiki, Y. (2026). A Reproducible Open-Data Workflow for
-> Glacial Lake Outburst Flood Prioritization and Hydrodynamic Simulation
-> in Northern Pakistan. [Journal, volume, pages, DOI at publication.]
+> Ismail, S. and Yamashiki, Y. (2026). GLOF prioritisation and hydrodynamic
+> simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a
+> reproducible open-data workflow. [Journal, volume, pages, DOI at publication.]
 
 ## Overview
 
@@ -21,27 +21,35 @@ JavaScript and documented for replication.
 
 ## Status
 
-Manuscript drafted; figures and tables generated through Figure 8.
-Figures 9-11 and final submission deposit pending.
+Complete. All 11 figures and 5 tables generated; manuscript prepared for
+submission. This repository is archived on Zenodo (DOI below).
 
 ## Repository structure
+
+```
 data/
-raw/                # source data (gitignored; see data/raw/README.md)
-processed/          # outputs from each pipeline stage (tracked)
+  raw/                # source data (gitignored; see data/raw/README.md)
+  processed/          # outputs from each pipeline stage (tracked)
 scripts/
-gee/                # Google Earth Engine JavaScript scripts
-analysis/           # R analytical scripts (run in numerical order)
-figure_scripts/     # R scripts that render manuscript figures
+  gee/                # Google Earth Engine JavaScript scripts
+  analysis/           # R analytical scripts (run in numerical order)
+  figure_scripts/     # R scripts that render manuscript figures
 hecras_models/
-L29_Passu/          # HEC-RAS project for L29 Passu
-L27_Shisper/        # HEC-RAS project for L27 Shisper
-figures/              # final figures and tables
+  L29_Passu/          # HEC-RAS project for L29 Passu (inputs only)
+  L27_Shisper/        # HEC-RAS project for L27 Shisper (inputs only)
+figures/              # final figures (PNG) and tables (CSV/MD/TEX)
 docs/
-data_sources.csv    # dataset versioning, URLs, citations
-SELECTION_CRITERIA.md  # pre-registered lake selection criteria
-sessionInfo.txt     # R session info at the time of analysis
+  data_sources.csv      # dataset versioning, URLs, citations
+  SELECTION_CRITERIA.md # pre-registered lake selection criteria
+  sessionInfo.txt       # R session info at the time of analysis
 REPRODUCE.md          # step-by-step replication guide
 LICENSE               # MIT License
+```
+
+Note: HEC-RAS stored-map rasters, DSS, and backup files are not tracked
+(they are regenerated when the simulation plans are run). The repository
+contains the model inputs (geometry, plans, unsteady-flow data, boundary
+geometry) needed to reproduce the runs.
 
 ## How to reproduce
 
@@ -82,16 +90,19 @@ Full working set documented in `figures/table01_working_set_lakes.csv`.
 ## License
 
 This project is released under the MIT License. See `LICENSE` for
-details.
+details. Third-party datasets retain their own licences; see
+`docs/data_sources.csv`.
 
 ## Citation
 
 If you use this workflow or any part of it, please cite the manuscript
 (reference above) and the archived Zenodo snapshot:
 
-> [DOI to be inserted at submission]
+> A snapshot of this repository is archived on Zenodo:
+Ismail, S. (2026). GLOF prioritisation and hydrodynamic simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a reproducible open-data workflow (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20534604
+
+
 
 ## Contact
 
 Sadaf Ismail - sadafismail07@gmail.com
-

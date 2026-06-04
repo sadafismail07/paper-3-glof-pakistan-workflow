@@ -3,9 +3,9 @@
 This document walks through reproducing the analysis presented in the
 manuscript:
 
-> Ismail, S. and Yamagata, Y. (2026). A Reproducible Open-Data Workflow for
-> Glacial Lake Outburst Flood Prioritization and Hydrodynamic Simulation
-> in Northern Pakistan. [Journal name to be inserted at submission.]
+> Ismail, S. and Yamashiki, Y. (2026). GLOF prioritisation and hydrodynamic
+> simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a
+> reproducible open-data workflow. [Journal name to be inserted at submission.]
 
 The full pipeline runs from raw data acquisition through to the figures
 and tables in the manuscript. Most steps are scripted; two require
@@ -26,19 +26,22 @@ manual operations in QGIS or the HEC-RAS desktop GUI.
 
 ## Repository structure
 
+```
 PPR3/
-data/
-raw/                # original inputs (gitignored; see data/raw/README.md)
-processed/          # intermediate and final processed datasets
-scripts/
-gee/                # JavaScript scripts for Google Earth Engine
-analysis/           # R analytical scripts (run in numerical order)
-figure_scripts/     # R scripts that render figures
-hecras_models/
-L29_Passu/          # HEC-RAS project files for L29 Passu
-L27_Shisper/        # HEC-RAS project files for L27 Shisper
-figures/              # final figures (PNG/PDF) and tables (CSV, MD, TEX)
-docs/                 # documentation, citation files, session info
+  data/
+    raw/                # original inputs (gitignored; see data/raw/README.md)
+    processed/          # intermediate and final processed datasets
+  scripts/
+    gee/                # JavaScript scripts for Google Earth Engine
+    analysis/           # R analytical scripts (run in numerical order)
+    figure_scripts/     # R scripts that render figures
+  hecras_models/
+    L29_Passu/          # HEC-RAS project files for L29 Passu (inputs only)
+    L27_Shisper/        # HEC-RAS project files for L27 Shisper (inputs only)
+  figures/              # final figures (PNG) and tables (CSV, MD, TEX)
+  docs/                 # documentation, citation files, session info
+```
+
 ---
 
 ## Data sources (manual download required)
@@ -88,7 +91,7 @@ See `docs/data_sources.csv` for full versioning, URLs, and citations.
 
 8. `scripts/analysis/07_clip_hydrosheds.R` - clip HydroBASINS Levels 8
    and 9 and HydroRIVERS to the study area.
-9. `scripts/analysis/08_figure01_study_area.R` - render Figure 1.
+9. `scripts/analysis/08_figure01_study_area.R` - prepare Figure 1 layers.
 
 ### Stage 4 - DEM and lake delineation
 
@@ -100,7 +103,7 @@ See `docs/data_sources.csv` for full versioning, URLs, and citations.
 12. `scripts/gee/02_water_mask.js` - run in GEE to produce regional NDWI
     water mask from Sentinel-2 imagery.
 13. **Manual step in QGIS**: load the NDWI mask and digitise lake
-    polygons for visible lakes (L01, L02, L04, L15, L29). Save as
+    polygons for visible lakes. Save as
     `data/processed/lakes_polygons_verified.gpkg`. See Section 3.4 of
     the manuscript for the digitisation protocol.
 
@@ -123,10 +126,10 @@ See `docs/data_sources.csv` for full versioning, URLs, and citations.
 18. `scripts/analysis/13_extract_population.R` - extract per-corridor
     population, building, road, bridge, power-feature, and built-up
     area exposure indicators from the OSM and GEE-derived inputs.
-19. Priority scoring (script not yet committed to repository at the
-    cut-off commit hash) - apply the composite hazard-exposure score
-    described in Section 3.6; produce
-    `data/processed/lake_corridors_scored.gpkg`.
+19. `scripts/analysis/14_priority_scoring.R` - apply the composite
+    hazard-exposure score described in Section 3.6; produce
+    `data/processed/lake_corridors_scored.gpkg` and select the top-2
+    lakes for detailed simulation.
 
 ### Stage 7 - Hydrodynamic simulation
 
@@ -138,34 +141,40 @@ See `docs/data_sources.csv` for full versioning, URLs, and citations.
 22. `scripts/analysis/17_breach_hydrograph_generation.R` - generate
     upstream breach hydrographs for all 14 lake-scenario combinations.
 23. **Manual step in HEC-RAS**: open the project file in
-    `hecras_models/L29_Passu/` and run all 7 simulation plans. Repeat
+    `hecras_models/L29_Passu/` and run all simulation plans. Repeat
     for `hecras_models/L27_Shisper/`. Export max-depth and max-velocity
     rasters to `data/processed/`.
 24. `scripts/analysis/18_velocity_distribution_diagnostic.R` -
     diagnostic on velocity distributions for quality control.
+25. `scripts/analysis/20_simulation_results.R` - compile the 14-run
+    simulation results matrix (peak depth, velocity, wetted area) used
+    in Table 3 and the sensitivity figures.
 
 ### Stage 8 - Hazard zones and refined exposure
 
-25. `scripts/analysis/19_h4_hazard_mapping.R` - delineate H4 hazard
+26. `scripts/analysis/19_h4_hazard_mapping.R` - delineate H4 hazard
     zones using the Westoby (2015) threshold (depth > 1.5 m or
     depth-velocity product > 0.7 m^2/s); compute per-zone exposure
     indicators; produce `data/processed/h4_exposure_summary.csv`.
 
 ### Stage 9 - Figures and tables
 
-26. Run scripts in `scripts/figure_scripts/` in numerical order to
-    regenerate Figures 1-8:
+27. Run scripts in `scripts/figure_scripts/` in numerical order to
+    regenerate Figures 1-11:
     - `01_fig01_study_area.R`
     - `02_fig02_workflow.R`
     - `03_fig03_ndwi_sensitivity.R`
-    - `04_fig04_corridors.R`
-    - `05_fig05_priority_scoring.R`
+    - `04_fig04_priority_scoring.R`
+    - `05_fig05_corridors.R`
     - `06_fig06_inundation_L29.R`
     - `07_fig07_inundation_L27.R`
-    - `08_fig08_H4_Hazard_Class_Map.R`
-27. Tables 1-5 are regenerated by table-specific R cells documented in
-    outputs are saved to `figures/` as CSV,
-    Markdown, and LaTeX.
+    - `08_fig08_tornado.R`
+    - `09_fig09_hydrographs.R`
+    - `10_fig10_h4_hazard.R`
+    - `11_fig11_validation.R`
+28. Tables 1-5 are generated by the table scripts in
+    `scripts/analysis/` (see Section 3 of the manuscript); outputs are
+    saved to `figures/` as CSV, Markdown, and LaTeX.
 
 ---
 
@@ -173,12 +182,13 @@ See `docs/data_sources.csv` for full versioning, URLs, and citations.
 
 Two stages require human judgement that is not automated:
 
-- **Stage 4, Step 13** - manual lake digitisation in QGIS for the five
-  lakes with visible water surfaces. The Sentinel-2 NDWI water mask
-  produced by `scripts/gee/02_water_mask.js` is the starting point;
-  final polygons are drawn by hand at scales between 1:2,000 and
-  1:10,000 to capture the lake shape accurately. See Section 3.4 of the
-  manuscript for the full protocol.
+- **Stage 4, Step 13** - manual lake digitisation in QGIS for the lakes
+  with visible water surfaces. The Sentinel-2 NDWI water mask produced
+  by `scripts/gee/02_water_mask.js` is the starting point; final
+  polygons are drawn by hand from Sentinel-2 and ESRI World Imagery at
+  scales appropriate to each lake (typically 1:2,000 to 1:10,000; finer
+  for very small features, e.g. ~1:900 for L01 Reshun). See Section 3.4
+  of the manuscript for the full protocol.
 - **Stage 7, Step 23** - HEC-RAS plan execution from the HEC-RAS desktop
   GUI. Project files contain all geometry, mesh, boundary conditions,
   and unsteady-flow data; the simulation plans are pre-configured and
@@ -190,7 +200,7 @@ Two stages require human judgement that is not automated:
 
 After running the full pipeline, the following are regenerated:
 
-- Figures 1-8 as `figures/fig01_*.png` through `figures/fig08_*.png`
+- Figures 1-11 as `figures/fig01_*.png` through `figures/fig11_*.png`
 - Tables 1-5 as `figures/table0[1-5]_*.{csv,md,tex}`
 - All intermediate datasets in `data/processed/`
 
@@ -200,13 +210,12 @@ After running the full pipeline, the following are regenerated:
 
 If you use this workflow or any part of it, please cite:
 
-> Ismail, S. and Yamagata, Y. (2026). A Reproducible Open-Data Workflow for
-> Glacial Lake Outburst Flood Prioritization and Hydrodynamic Simulation
-> in Northern Pakistan. [Journal, volume, pages, DOI at publication.]
+> Ismail, S. and Yamashiki, Y. (2026). GLOF prioritisation and hydrodynamic
+> simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a
+> reproducible open-data workflow. [Journal, volume, pages, DOI at publication.]
 
-A snapshot of this repository is archived on Zenodo:
-Ismail, S. (2026). GLOF prioritisation and hydrodynamic simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a reproducible open-data workflow (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20534604
-
+A snapshot of this repository is archived on Zenodo at
+[DOI to be inserted at submission].
 
 ---
 
@@ -214,4 +223,3 @@ Ismail, S. (2026). GLOF prioritisation and hydrodynamic simulation in Gilgit-Bal
 
 Questions about the workflow or its application to other regions:
 Sadaf Ismail, sadafismail07@gmail.com
-
