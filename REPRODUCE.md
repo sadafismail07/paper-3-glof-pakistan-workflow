@@ -205,7 +205,8 @@ If you use this workflow or any part of it, please cite:
 > in Northern Pakistan. [Journal, volume, pages, DOI at publication.]
 
 A snapshot of this repository is archived on Zenodo:
-Ismail, S. (2026). GLOF prioritisation and hydrodynamic simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a reproducible open-data workflow (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20534604
+Ismail, S. and Yamashiki, Y. (2026). GLOF prioritisation and hydrodynamic simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a reproducible open-data workflow (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20534604
+
 
 
 ---
