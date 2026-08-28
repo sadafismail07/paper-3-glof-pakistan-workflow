@@ -1,4 +1,3 @@
-
 # ════════════════════════════════════════════════════════════════
 # 05_fig05_corridors.R
 # Figure 5 — Downstream Corridors with Exposure Scores
@@ -8,22 +7,38 @@
 #           justifies why L27 and L29 were selected.
 # AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
 # DATE:    2026
+#
+# UPDATED (2026-08-21): supersedes 05_fig05_corridors.R (moved to
+# scripts/OLD/). Fixes one problem found during manuscript review:
+#
+# ON-IMAGE TITLE FALSELY CLAIMED A SECOND EXCLUSION. The panel (a) title
+# read "16 corridors (L21 Karambar, L30 Khurdopin excluded)". Two things
+# were wrong with this: (1) there is no lake "L30" anywhere in the
+# working set -- the real lake named Khurdupin is L15, and (2) L15 was
+# never actually excluded by the filter below in the first place: the
+# old filter was `!lake_id %in% c("L21", "L30")`, and since no row has
+# lake_id "L30", that filter only ever removed L21. The resulting count
+# (17 - 1 = 16) was arithmetically correct, but the title's explanation
+# of *why* it was 16 was fabricated -- confirmed against the manuscript
+# body text (Section 4.1: "The L21 Karamber corridor ... is retained in
+# the working set but excluded from the spatial display in Fig. 5.
+# Across the remaining 16 corridors..." -- only ONE exclusion is
+# described there, matching the code's actual behaviour, not the old
+# title's claim of two). Confirmed visually too: L15's corridor IS
+# present and coloured in the panel (a) overview (it just isn't
+# labelled, and its longitude ~73.2°E falls in the gap between the
+# Chitral cluster box and the Hunza-Karakoram cluster box, which is why
+# it doesn't appear in panels (b) or (c) -- that is a real cartographic
+# gap between the two inset extents, not a data exclusion, and the
+# manuscript text does not claim otherwise).
+#
+# Fix: removed "L30" from the exclusion filter (it was dead code -- matched
+# nothing, changed no output) and corrected the on-image title to state
+# only the real exclusion (L21). No other logic changed; panel (a)'s
+# plotted corridors and the overview map are otherwise pixel-identical
+# to before this fix -- only the title text changes.
 # ════════════════════════════════════════════════════════════════
 
-# ════════════════════════════════════════════════════════════════
-# 04_fig05o_corridors.R
-# Figure 5 — Downstream Corridors with Exposure Scores
-# PURPOSE: Map of all filtered lakes with their 50 km downstream corridors along the
-#           river network, colour-coded by composite exposure score. This is the
-#          "before simulation" overview — shows spatial pattern of exposure and
-#           justifies why L27 and L29 were selected.
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-
-# =============================================================================
-# fig05o_v9_downstream_corridors.R
-# =============================================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(sf)
@@ -40,8 +55,8 @@ library(cowplot)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 18.0
-FIG_DPI    <- 600
-BASE_SIZE  <- 7
+FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
 L <- "data/processed/fig01_layers"
 
 # --- 1. Load layers -----------------------------------------------------------
@@ -59,16 +74,16 @@ bridges    <- st_read(file.path(L, "osm_bridges.gpkg"), quiet = TRUE)
 cat("  All layers loaded
 ")
 
-# --- 2. Exclude L21 + L30, prepare attributes ---------------------------------
+# --- 2. Exclude L21 (spatial-display exclusion only; retained in the working
+#        set and in Table 2 -- see Section 4.1) --------------------------------
 
 corr <- corr_all |>
-  filter(!lake_id %in% c("L21", "L30")) |>            # CHANGED: added L30
+  filter(!lake_id %in% c("L21")) |>
   arrange(final_score)
 
 corr$display_label <- case_when(
   corr$lake_id == "L27" ~ "L27 Shisper",
   corr$lake_id == "L29" ~ "L29 Passu",
-  # REMOVED: L30 Khurdopin case
   TRUE ~ corr$lake_id
 )
 
@@ -84,7 +99,7 @@ score_max <- ceiling(max(corr$final_score, na.rm = TRUE) * 10) / 10
 # --- 3. Clusters and extents --------------------------------------------------
 
 chitral_ids <- c("L06", "L01", "L02", "L03", "L04", "L05")
-hunza_ids   <- c("L27", "L28", "L26", "L25", "L24", "L29", "L19")  # CHANGED: removed "L30"
+hunza_ids   <- c("L27", "L28", "L26", "L25", "L24", "L29", "L19")
 
 chitral_corr <- corr |> filter(lake_id %in% chitral_ids)
 hunza_corr   <- corr |> filter(lake_id %in% hunza_ids)
@@ -287,7 +302,7 @@ p_overview <- build_panel(
   label_ids = c("L27", "L29"),
   show_legend   = TRUE,
   show_boundary = FALSE,
-  title         = "(a) Overview -- 16 corridors (L21 Karambar, L30 Khurdopin excluded)",  # CHANGED: count 17→16, added L30 note
+  title         = "(a) Overview -- 16 corridors (L21 Karambar excluded)",
   show_scalebar = TRUE
 ) +
   geom_sf(data = box_chitral, fill = NA, colour = "#0072B2",
@@ -312,7 +327,7 @@ p_chitral <- build_panel(
 p_hunza <- build_panel(
   xlim = hunza_xlim, ylim = hunza_ylim,
   corr_sub  = hunza_corr, lakes_sub = hunza_lakes,
-  label_ids = c("L27", "L29", "L19"),                  # CHANGED: removed "L30"
+  label_ids = c("L27", "L29", "L19"),
   show_legend   = FALSE,
   show_boundary = TRUE,
   title         = "(c) Hunza-Karakoram cluster",
@@ -339,5 +354,3 @@ ggsave(file.path(OUT_DIR, "fig05_v9_corridors.tiff"), p_final,
 
 cat("Done! Saved to", OUT_DIR, "
 ")
-
-

@@ -24,8 +24,8 @@ library(ggnewscale)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 12.0
-FIG_DPI    <- 600
-BASE_SIZE  <- 7
+FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
 L <- "data/processed/fig06_layers"
 
 # --- 1. Load layers -----------------------------------------------------------
@@ -103,7 +103,7 @@ cat("  Flood extent: lon", round(xlim, 3), " lat", round(ylim, 3), "
 # --- 5. Depth colours ---------------------------------------------------------
 
 depth_cols <- c(
-  "1" = "#A8D8EA",
+  "1" = "#7FC1DE",   # darkened from #A8D8EA for contrast against basemap (R4.9)
   "2" = "#4A90C4",
   "3" = "#1B4F8A",
   "4" = "#1A1147"

@@ -6691,6 +6691,30 @@ BC Line End Position= 1001324.40313341 , 4025319.11505783
 BC Line Arc= 2 
 999253.1623209024027483.204596421001324.403133414025319.11505783
 BC Line Text Position= 1.79769313486232E+308 , 1.79769313486232E+308 
+Reference Line Name=RL_upper                        
+Reference Line Storage Area=Perimeter 1     
+Reference Line Start Position= 1026928.88322513 , 4048933.77733579 
+Reference Line Middle Position= 1027671.88656722 , 4048666.07915298 
+Reference Line End Position= 1028414.88990931 , 4048398.38097017 
+Reference Line Arc= 2 
+1026928.883225134048933.777335791028414.889909314048398.38097017
+Reference Line Text Position= 1.79769313486232E+308 , 1.79769313486232E+308 
+Reference Line Name=RL_arrest                       
+Reference Line Storage Area=Perimeter 1     
+Reference Line Start Position= 1026077.33838391 , 4043313.69727576 
+Reference Line Middle Position= 1026937.58685122 , 4043291.08080496 
+Reference Line End Position= 1027797.83531853 , 4043268.46433416 
+Reference Line Arc= 2 
+1026077.338383914043313.697275761027797.835318534043268.46433416
+Reference Line Text Position= 1.79769313486232E+308 , 1.79769313486232E+308 
+Reference Line Name=RL_outlet                       
+Reference Line Storage Area=Perimeter 1     
+Reference Line Start Position= 999943.040337026 , 4027541.53149223 
+Reference Line Middle Position= 1000430.54128653 , 4026930.54141499 
+Reference Line End Position= 1000918.04223604 , 4026319.55133775 
+Reference Line Arc= 2 
+999943.0403370264027541.531492231000918.042236044026319.55133775
+Reference Line Text Position= 1.79769313486232E+308 , 1.79769313486232E+308 
 LCMann Time=Dec/30/1899 00:00:00
 LCMann Region Time=Dec/30/1899 00:00:00
 LCMann Table=0

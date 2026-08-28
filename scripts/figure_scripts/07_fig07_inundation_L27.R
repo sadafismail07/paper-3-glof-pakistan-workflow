@@ -3,8 +3,8 @@
 # 07_fig07_inundation_L27.R
 # Figure 7 — Inundation Maps: L27 Shisper (Low / Mid / High)
 # PURPOSE: Identical layout to Fig 6 but for L27 Shisper (ice-dammed).
-           Shisper has a much larger footprint (up to 10.66 km²) so the map
-           extent will be wider. 
+# Shisper has a much larger footprint (up to 10.66 km²) so the map
+# extent will be wider.
 # AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
 # DATE:    2026
 # ════════════════════════════════════════════════════════════════
@@ -25,8 +25,8 @@ library(ggnewscale)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 16.0
-FIG_DPI    <- 600
-BASE_SIZE  <- 7
+FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
 L <- "data/processed/fig07_layers"
 
 # --- 1. Load layers -----------------------------------------------------------
@@ -115,7 +115,7 @@ cat("  Map extent: lon", round(xlim, 3), " lat", round(ylim, 3), "
 # --- 5. Depth colours ---------------------------------------------------------
 
 depth_cols <- c(
-  "1" = "#A8D8EA",
+  "1" = "#7FC1DE",   # darkened from #A8D8EA for contrast against basemap (R4.9)
   "2" = "#4A90C4",
   "3" = "#1B4F8A",
   "4" = "#1A1147"

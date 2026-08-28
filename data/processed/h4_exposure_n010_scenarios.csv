@@ -1,0 +1,5 @@
+"Lake","Scenario","H4 area (km2)","Total wetted (km2)","Population (GHS)","Population (WP)","Population (mean)","Buildings (n)","Roads (km)","Bridges (n)","Built-up area (m2)"
+"L27","Mid (×1.5 bulk, n=0.10)",10.352,10.665,209,2698,1453,3,5.71,11,13665
+"L27","Mid (×2.0 bulk, n=0.10)",12.196,12.413,319,2954,1636,3,6.31,11,24345
+"L29","Mid (×1.5 bulk, n=0.10)",2.783,3.118,1,122,61,0,0.77,2,1009
+"L29","Mid (×2.0 bulk, n=0.10)",3.048,3.272,2,134,68,0,0.8,2,1066

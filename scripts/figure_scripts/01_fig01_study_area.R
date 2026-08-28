@@ -1,14 +1,17 @@
-
-# ════════════════════════════════════════════════════════════════
-# 01_fig01_study_area.R
-# Figure 1 — Study Area Map
-# PURPOSE: Overview map of northern Pakistan showing the study region. 
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-
+# =============================================================================
+# fig01_v5_study_area_map.R
+# Figure 1 - Study Area Map
+# 174 x 120 mm, 800 dpi (bumped from 600 -- GitHub/publication release requirement)
+# Reads pre-clipped layers from data/processed/fig01_layers/
+#
+# v5 changes from v4 (Reviewer 1):
+#   1. Plots the 17-lake working set, not all 29 inventory lakes
+#   2. Vulnerability legend restricted to classes 4 and 5
+#   3. Map extent still derived from the full inventory (v4 framing preserved)
+#   4. Afghanistan label removed
+# Everything else is unchanged from v4.
+# =============================================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
-
 library(sf)
 library(terra)
 library(ggplot2)
@@ -17,18 +20,14 @@ library(cowplot)
 library(ggrepel)
 library(dplyr)
 library(tidyterra)
-
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 12.0
-FIG_DPI    <- 600
-BASE_SIZE  <- 7
+FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
 L <- "data/processed/fig01_layers"
-
 # --- 1. Load pre-clipped layers -----------------------------------------------
-
-cat("--- Loading layers ---
-")
+cat("--- Loading layers ---\n")
 lakes      <- st_read(file.path(L, "lakes.gpkg"), quiet = TRUE)
 pak_L0     <- st_read(file.path(L, "pak_L0.gpkg"), quiet = TRUE)
 gb_chitral <- st_read(file.path(L, "gb_chitral.gpkg"), quiet = TRUE)
@@ -37,51 +36,48 @@ chn_L0     <- st_read(file.path(L, "chn_L0.gpkg"), quiet = TRUE)
 glaciers   <- st_read(file.path(L, "glaciers_clipped.gpkg"), quiet = TRUE)
 rivers     <- st_read(file.path(L, "rivers_clipped.gpkg"), quiet = TRUE)
 hs_rast    <- rast(file.path(L, "hillshade_clipped.tif"))
-cat("  All layers loaded
-")
-
+cat("  All layers loaded\n")
+# --- CHANGE 1: filter to the 17-lake working set ------------------------------
+WORKING_IDS <- c("L01","L02","L03","L04","L05","L06","L15","L19","L20",
+                 "L21","L22","L24","L25","L26","L27","L28","L29")
+lakes_all <- lakes                                    # retained for map extent
+lakes     <- lakes |> filter(lake_id %in% WORKING_IDS)
+stopifnot(nrow(lakes) == 17)
+cat("  Plotting", nrow(lakes), "of", nrow(lakes_all), "inventory lakes; classes:",
+    paste(sort(unique(lakes$vulnerability)), collapse = "/"), "\n")
 # --- 2. Prepare lake attributes -----------------------------------------------
-
-lakes$vuln_display <- as.factor(lakes$vulnerability)
-
+# CHANGE 2: legend restricted to classes 4 and 5
+lakes$vuln_display <- factor(lakes$vulnerability, levels = c(4, 5))
 lakes$is_priority <- grepl("Shisper|Shishper|L27|Passu|L29",
                            lakes$glacier_name, ignore.case = TRUE)
 lakes$display_label <- ifelse(lakes$is_priority, lakes$glacier_name, NA)
 lakes$display_label <- gsub(".*Shis[hp].*", "L27 — Shisper", lakes$display_label)
 lakes$display_label <- gsub(".*Passu.*",    "L29 — Passu",   lakes$display_label)
 priority_lakes <- lakes |> filter(is_priority)
-
 # --- 3. Map extent ------------------------------------------------------------
-
-lake_bbox <- st_bbox(lakes)
+# CHANGE 3: extent from the full inventory, preserving v4 framing
+lake_bbox <- st_bbox(lakes_all)
 x_pad <- (lake_bbox[["xmax"]] - lake_bbox[["xmin"]]) * 0.15
 y_pad <- (lake_bbox[["ymax"]] - lake_bbox[["ymin"]]) * 0.15
-
 xlim <- c(lake_bbox[["xmin"]] - x_pad, lake_bbox[["xmax"]] + x_pad)
 ylim <- c(lake_bbox[["ymin"]] - y_pad, lake_bbox[["ymax"]] + y_pad)
-
 # --- 4. Derived objects -------------------------------------------------------
-
 all_borders <- bind_rows(
   pak_L0[, attr(pak_L0, "sf_column")],
   afg_L0[, attr(afg_L0, "sf_column")],
   chn_L0[, attr(chn_L0, "sf_column")]
 )
-
 gb_dissolved <- st_union(gb_chitral) |> st_as_sf()
 gb_dissolved$label <- "Gilgit-Baltistan & Chitral"
-
 # River Strahler weight
 ord_col <- intersect(names(rivers), c("ORD_STRA", "strahler", "ord_stra"))
 if (length(ord_col) > 0) rivers$stream_wt <- pmin(rivers[[ord_col[1]]], 6)
-
-# Country label positions
+# CHANGE 4: Afghanistan label removed
 country_labels <- data.frame(
-  label = c("Pakistan", "Afghanistan", "China"),
-  x = c(mean(xlim), xlim[1] + diff(xlim) * 0.08, xlim[2] - diff(xlim) * 0.12),
-  y = c(ylim[1] + diff(ylim) * 0.08, mean(ylim), ylim[2] - diff(ylim) * 0.08)
+  label = c("Pakistan", "China"),
+  x = c(mean(xlim), xlim[2] - diff(xlim) * 0.12),
+  y = c(ylim[1] + diff(ylim) * 0.08, ylim[2] - diff(ylim) * 0.08)
 )
-
 # Manual label positions — L27 fixed at 36.2N/74E, L29 uses ggrepel
 priority_coords <- st_coordinates(priority_lakes)
 priority_labels_df <- data.frame(
@@ -89,15 +85,11 @@ priority_labels_df <- data.frame(
   pt_x  = priority_coords[, 1],
   pt_y  = priority_coords[, 2]
 )
-
 l27_label <- priority_labels_df |> filter(grepl("L27", label))
 l27_label$lbl_x <- 74.0
 l27_label$lbl_y <- 36.2
-
 l29_lakes <- priority_lakes |> filter(grepl("Passu", display_label))
-
 # --- 5. Theme -----------------------------------------------------------------
-
 theme_fig <- function(base_size = BASE_SIZE) {
   theme_minimal(base_size = base_size) +
     theme(
@@ -115,27 +107,19 @@ theme_fig <- function(base_size = BASE_SIZE) {
       plot.margin      = margin(2, 2, 2, 2, "mm")
     )
 }
-
 # --- 6. Main map --------------------------------------------------------------
-
-cat("--- Building main map ---
-")
-
+cat("--- Building main map ---\n")
 p_main <- ggplot() +
-
   # 1. Hillshade
   geom_spatraster(data = hs_rast, show.legend = FALSE) +
   scale_fill_gradient(low = "grey10", high = "white",
                       na.value = "transparent", guide = "none") +
-
   # 2. Country borders
   geom_sf(data = all_borders, fill = NA, colour = "grey40",
           linewidth = 0.5, linetype = "dashed") +
-
   # 3. Glaciers
   geom_sf(data = glaciers, fill = alpha("#B3DDF2", 0.5),
           colour = alpha("#7FB5D4", 0.6), linewidth = 0.15)
-
 # 4. Rivers
 if (length(ord_col) > 0) {
   p_main <- p_main +
@@ -146,9 +130,7 @@ if (length(ord_col) > 0) {
   p_main <- p_main +
     geom_sf(data = rivers, colour = "#4393C3", linewidth = 0.2)
 }
-
 p_main <- p_main +
-
 # 5. GB + Chitral ON TOP of rivers, with legend
   geom_sf(data = gb_dissolved,
           aes(linetype = label),
@@ -159,16 +141,14 @@ p_main <- p_main +
     name = "Study area",
     values = c("Gilgit-Baltistan & Chitral" = "solid")
   ) +
-
   # 6. Lake points
   geom_sf(data = lakes, aes(size = vuln_display),
           colour = "#B2182B", fill = alpha("#B2182B", 0.6),
           shape = 21, stroke = 0.4) +
   scale_size_manual(
-    values = c("2" = 1.0, "3" = 1.5, "4" = 2.2, "5" = 3.0),
-    name = "Vulnerability", drop = TRUE
+    values = c("4" = 2.2, "5" = 3.0),
+    name = "Vulnerability", drop = FALSE
   ) +
-
   # 7a. L27 label — manual position
   geom_segment(data = l27_label,
                aes(x = lbl_x, y = lbl_y, xend = pt_x, yend = pt_y),
@@ -179,7 +159,6 @@ p_main <- p_main +
              fill = alpha("white", 0.85),
              label.size = 0.2,
              label.padding = unit(0.12, "lines")) +
-
   # 7b. L29 label — ggrepel
   ggrepel::geom_label_repel(
     data = l29_lakes,
@@ -197,13 +176,11 @@ p_main <- p_main +
     max.overlaps = 20,
     seed = 42
   ) +
-
   # 8. Country labels
   geom_label(data = country_labels, aes(x = x, y = y, label = label),
              size = 2.8, colour = "grey25", fontface = "bold.italic",
              fill = alpha("white", 0.5), label.size = 0,
              label.padding = unit(0.1, "lines")) +
-
   # Coord + decorations
   coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
   annotation_scale(
@@ -224,16 +201,11 @@ p_main <- p_main +
       override.aes = list(colour = "#D95F02", linewidth = 0.8)
     )
   )
-
 # --- 7. Inset map -------------------------------------------------------------
-
-cat("--- Building inset ---
-")
-
+cat("--- Building inset ---\n")
 study_box <- st_as_sfc(st_bbox(c(xmin = xlim[1], ymin = ylim[1],
                                   xmax = xlim[2], ymax = ylim[2]),
                                 crs = st_crs(4326)))
-
 p_inset <- ggplot() +
   geom_sf(data = all_borders, fill = "grey90", colour = "grey50", linewidth = 0.3) +
   geom_sf(data = pak_L0, fill = alpha("grey80", 0.5),
@@ -244,25 +216,20 @@ p_inset <- ggplot() +
   theme(panel.background = element_rect(fill = "white", colour = "grey30",
                                          linewidth = 0.4),
         plot.margin = margin(0, 0, 0, 0))
-
 # --- 8. Combine + save --------------------------------------------------------
-
-cat("--- Saving ---
-")
-
+cat("--- Saving ---\n")
 p_final <- ggdraw() +
   draw_plot(p_main) +
-  draw_plot(p_inset, x = 0.02, y = 0.02, width = 0.25, height = 0.30)
-
-ggsave(file.path(OUT_DIR, "fig01_v4_study_area.png"), p_final,
+  draw_plot(p_inset, x = 0.68, y = 0.12, width = 0.20, height = 0.24)
+ggsave(file.path(OUT_DIR, "fig01_v5_study_area.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
-
-ggsave(file.path(OUT_DIR, "fig01_v4_study_area.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "fig01_v5_study_area.tiff"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
-
-cat("Done! Saved to", OUT_DIR, "
-")
-
-
+# --- 9. Cross-check against Table 1 -------------------------------------------
+chk <- lakes |> st_drop_geometry() |>
+  select(lake_id, glacier_name, vulnerability) |> arrange(lake_id)
+print(as.data.frame(chk), row.names = FALSE)
+write.csv(chk, file.path(OUT_DIR, "fig01_v5_lakes_plotted.csv"), row.names = FALSE)
+cat("Done! Saved to", OUT_DIR, "\n")

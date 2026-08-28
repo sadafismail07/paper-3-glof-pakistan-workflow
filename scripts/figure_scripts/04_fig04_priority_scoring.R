@@ -5,7 +5,23 @@
 # PURPOSE: Hazard score vs exposure score per lake, sorted by composite
 # AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
 # DATE:    2026
+#
+# UPDATED (2026-08-21): supersedes 04_fig04_priority_scoring.R (moved to
+# scripts/OLD/). Fix for R3.13: the previous version read
+# data/processed/lake_priority_scores.csv, which used the four-indicator
+# (tier-included) hazard composite and credited surge-type status to
+# moraine-dammed lakes regardless of their own damming mechanism -- both
+# since corrected. This version reads the corrected
+# data/processed/lake_priority_scores.csv (three-indicator hazard
+# composite; surge credit restricted to lakes that are themselves
+# ice-dammed) produced by 14_priority_scoring.R, which must be run
+# first. Column names also changed: composite_score -> final_score, and
+# the old boolean `selected` column doesn't exist in the new CSV -- it's
+# derived here as lake_id %in% c("L27","L29"). Under the corrected scoring
+# L27 Shisper now ranks first (0.758) and L29 Passu second (0.728),
+# reversing the previous order.
 # ════════════════════════════════════════════════════════════════
+
 # =============================================================================
 # Fig 4 — Priority Scoring Dumbbell Plot
 #          Hazard score vs exposure score per lake, sorted by composite
@@ -22,7 +38,8 @@ library(readr)
 
 df <- read_csv("data/processed/lake_priority_scores.csv",
                show_col_types = FALSE) |>
-  arrange(composite_score) |>
+  mutate(selected = lake_id %in% c("L27", "L29")) |>
+  arrange(final_score) |>
   mutate(label = factor(lake_id, levels = lake_id))
 
 # ── 2. Long form for dots ─────────────────────────────────────────────────────
@@ -72,7 +89,7 @@ p <- ggplot() +
   # Composite score tick mark
   geom_point(
     data = df,
-    aes(x = composite_score, y = label),
+    aes(x = final_score, y = label),
     shape = 124,   # vertical bar
     size  = 3.5,
     colour = col_composite
@@ -111,22 +128,22 @@ p <- ggplot() +
 Highlighted rows: selected lakes (L27 Shisper, L29 Passu)."
   ) +
 
-  theme_classic(base_size = 7) +
+  theme_classic(base_size = 9) +   # bumped from 7 for label legibility (R4.9)
   theme(
     legend.position      = c(0.01, 0.01),
     legend.justification = c(0, 0),
     legend.key.size      = unit(3, "mm"),
-    legend.text          = element_text(size = 6),
+    legend.text          = element_text(size = 7.5),
     legend.background    = element_rect(fill = "white", colour = "#cccccc",
                                         linewidth = 0.3),
     legend.margin        = margin(2, 4, 2, 4),
-    axis.text.y          = element_text(size = 6, colour = "#333333"),
-    axis.text.x          = element_text(size = 6),
-    axis.title.x         = element_text(size = 7),
+    axis.text.y          = element_text(size = 7.5, colour = "#333333"),
+    axis.text.x          = element_text(size = 7.5),
+    axis.title.x         = element_text(size = 9),
     axis.line.y          = element_blank(),
     axis.ticks.y         = element_blank(),
     panel.grid.major.x   = element_line(colour = "#eeeeee", linewidth = 0.3),
-    plot.caption         = element_text(size = 5.5, colour = "#666666",
+    plot.caption         = element_text(size = 7, colour = "#666666",
                                         hjust = 0, margin = margin(t = 3)),
     plot.margin          = margin(4, 12, 4, 4, "mm"),
     plot.background      = element_rect(fill = "white", colour = NA),
@@ -136,20 +153,15 @@ OUT_DIR <- "C:/Users/sadaf/Documents/PPR3/figures"
 
 # ── 5. Export ─────────────────────────────────────────────────────────────────
 
-# -- 5. Save -------------------------------------------------------------------
-
 n_lakes <- nrow(df)
 fig_h   <- max(60, n_lakes * 5.8)
 
-ggsave(file.path(OUT_DIR, "fig04_v3_priority_scoring.png"), p,
+ggsave(file.path(OUT_DIR, "fig04_v4_priority_scoring.png"), p,
        width = 84, height = fig_h, units = "mm",
-       dpi = 600, bg = "white")
+       dpi = 800, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig04_v3_priority_scoring.tiff"), p,
+ggsave(file.path(OUT_DIR, "fig04_v4_priority_scoring.tiff"), p,
        width = 84, height = fig_h, units = "mm",
-       dpi = 600, bg = "white", compression = "lzw")
+       dpi = 800, bg = "white", compression = "lzw")
 
-cat("Done! Saved to", OUT_DIR, "
-")
-
-
+cat("Done! Saved to", OUT_DIR, "\n")

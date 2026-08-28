@@ -5,6 +5,17 @@
 # PURPOSE: Flowchart of the entire methodology from data inputs to manuscript output.
 # AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
 # DATE:    2026
+#
+# UPDATED (2026-08-21): supersedes 02_fig02_workflow.R (moved to scripts/OLD/).
+# Fix for R1.software: the previous version colour-coded step boxes BY
+# SOFTWARE TOOL (QGIS/GEE/R/HEC-RAS), with its own 5-entry colour legend,
+# even though the boxes were already grouped into labelled phase panels
+# (Acquisition/Delineation/Simulation/Assessment). That made "which
+# software" the dominant visual read instead of "what stage." Step boxes
+# are now coloured by phase (matching their panel's colour family) and
+# the tool-based colour legend is removed -- the phase panels are already
+# labelled, so a separate key isn't needed. The tool name is unchanged as
+# an italic subtitle inside each box, so no information is lost.
 # ════════════════════════════════════════════════════════════════
 
 # =============================================================================
@@ -21,18 +32,18 @@ library(tibble)
 # ── 1. Steps ──────────────────────────────────────────────────────────────────
 
 steps <- tribble(
-  ~phase,        ~phase_id, ~step_id, ~label,                      ~tool,                   ~tool_cat,
-  "Acquisition",  1,         1,        "Input data",                "NDMA · GLOF-II · DEM · OSM · RGI", "input",
-  "Acquisition",  1,         2,        "Filter lakes",              "QGIS",                  "qgis",
-  "Acquisition",  1,         3,        "Compile base layers",       "QGIS",                  "qgis",
-  "Acquisition",  1,         4,        "Acquire DEM + imagery",     "GEE",                   "gee",
-  "Delineation",  2,         5,        "Delineate lakes (NDWI)",    "GEE + QGIS",            "gee",
-  "Delineation",  2,         6,        "Map corridors + exposure",  "QGIS + R",              "qgis",
-  "Delineation",  2,         7,        "Score + rank lakes",        "R",                     "r",
-  "Simulation",   3,         8,        "Parameterise breach model", "R",                     "r",
-  "Simulation",   3,         9,        "Run flood simulations",     "HEC-RAS 2D",            "hecras",   # CHANGED: 1D → 2D
-  "Assessment",   4,         10,       "Map hazard + exposure",     "QGIS + R",              "qgis",
-  "Assessment",   4,         11,       "Validate peak discharges",  "R + literature",        "r"
+  ~phase,        ~phase_id, ~step_id, ~label,                      ~tool,
+  "Acquisition",  1,         1,        "Input data",                "NDMA · GLOF-II · DEM · OSM · RGI",
+  "Acquisition",  1,         2,        "Filter lakes",              "QGIS",
+  "Acquisition",  1,         3,        "Compile base layers",       "QGIS",
+  "Acquisition",  1,         4,        "Acquire DEM + imagery",     "GEE",
+  "Delineation",  2,         5,        "Delineate lakes (NDWI)",    "GEE + QGIS",
+  "Delineation",  2,         6,        "Map corridors + exposure",  "QGIS + R",
+  "Delineation",  2,         7,        "Score + rank lakes",        "R",
+  "Simulation",   3,         8,        "Parameterise breach model", "R",
+  "Simulation",   3,         9,        "Run flood simulations",     "HEC-RAS 2D",
+  "Assessment",   4,         10,       "Map hazard + exposure",     "QGIS + R",
+  "Assessment",   4,         11,       "Validate peak discharges",  "R + literature"
 )
 
 # ── 2. Layout constants ───────────────────────────────────────────────────────
@@ -111,56 +122,26 @@ between_arrows <- phase_panels |>
   filter(!is.na(y_to)) |>
   select(phase, x_arr, y_from, y_to)
 
-# ── 6. Tool colours ───────────────────────────────────────────────────────────
+# ── 6. Step-box colours (BY PHASE, not by software tool) ─────────────────────
+# A deeper tint of each phase's colour family, so boxes read clearly against
+# their own (paler) panel background while keeping the phase grouping as the
+# single colour-coded dimension in the figure.
 
-tool_fill <- c(
-  input  = "#F0F0F0",
-  qgis   = "#DAEAF7",
-  r      = "#DAF0DA",
-  gee    = "#FEF6D8",
-  hecras = "#FAE2D8"
-)
-tool_border <- c(
-  input  = "#999999",
-  qgis   = "#2A6EAA",
-  r      = "#2A7A2A",
-  gee    = "#B08A00",
-  hecras = "#B04010"
-)
-# CHANGED: reordered so legend reads top-to-bottom as:
-# Input data → QGIS → GEE → R → HEC-RAS
-# (seq y_mid ascends, so first element = bottom; reverse order needed for top-to-bottom read)
-tool_label <- c(
-  hecras = "HEC-RAS",
-  r      = "R",
-  gee    = "Google Earth Engine",
-  qgis   = "QGIS",
-  input  = "Input data"
-)
+step_fill <- c("Acquisition" = "#CFE8F5", "Delineation" = "#CFEECF",
+               "Simulation"  = "#FCE3C8", "Assessment"  = "#E8D2EE")
 
 steps <- steps |>
   mutate(
-    fill   = tool_fill[tool_cat],
-    border = tool_border[tool_cat]
+    fill   = step_fill[phase],
+    border = phase_border[phase]
   )
 
 # ── 7. Canvas ─────────────────────────────────────────────────────────────────
 
 x_range <- c(0, canvas_w)
-y_range <- c(min(phase_panels$ymin) - 10, max(phase_panels$ymax) + 2)
+y_range <- c(min(phase_panels$ymin) - 4, max(phase_panels$ymax) + 2)
 
-# ── 8. Legend data ────────────────────────────────────────────────────────────
-
-leg <- tibble(
-  tool_cat = names(tool_label),
-  lab      = unname(tool_label),
-  x0       = 1, x1 = 6,
-  y_mid    = seq(y_range[1] + 8, by = 4, length.out = 5),
-  y0       = y_mid - 1.5,
-  y1       = y_mid + 1.5
-)
-
-# ── 9. Plot ───────────────────────────────────────────────────────────────────
+# ── 8. Plot ───────────────────────────────────────────────────────────────────
 
 p <- ggplot() +
 
@@ -178,7 +159,7 @@ p <- ggplot() +
     data = phase_panels,
     aes(x = (xmin + xmax) / 2, y = ymax - 1.5,
         label = toupper(phase), colour = phase),
-    hjust = 0.5, vjust = 1, size = 2.0, fontface = "bold"
+    hjust = 0.5, vjust = 1, size = 2.6, fontface = "bold"
   ) +
   scale_colour_manual(values = phase_border, guide = "none") +
 
@@ -198,7 +179,7 @@ p <- ggplot() +
     colour    = "#777777", linewidth = 0.3
   ) +
 
-  # Step boxes
+  # Step boxes (coloured by phase)
   geom_rect(
     data = steps,
     aes(xmin = x_left, xmax = x_right, ymin = y_bottom, ymax = y_top),
@@ -211,28 +192,14 @@ p <- ggplot() +
   geom_text(
     data = steps,
     aes(x = x_mid, y = y_mid + 1.7, label = label),
-    size = 1.9, fontface = "bold", hjust = 0.5, colour = "#111111"
+    size = 2.5, fontface = "bold", hjust = 0.5, colour = "#111111"
   ) +
 
-  # Tool subtitle
+  # Tool subtitle (unchanged -- still names the software used, just not colour-coded)
   geom_text(
     data = steps,
     aes(x = x_mid, y = y_mid - 1.7, label = tool),
-    size = 1.6, fontface = "italic", hjust = 0.5, colour = "#444444"
-  ) +
-
-  # Legend boxes
-  geom_rect(
-    data = leg,
-    aes(xmin = x0, xmax = x1, ymin = y0, ymax = y1),
-    fill      = tool_fill[leg$tool_cat],
-    colour    = tool_border[leg$tool_cat],
-    linewidth = 0.3
-  ) +
-  geom_text(
-    data = leg,
-    aes(x = x1 + 1.5, y = y_mid, label = lab),
-    hjust = 0, size = 1.7, colour = "#333333"
+    size = 2.1, fontface = "italic", hjust = 0.5, colour = "#444444"
   ) +
 
   coord_cartesian(xlim = x_range, ylim = y_range, expand = FALSE) +
@@ -242,18 +209,16 @@ p <- ggplot() +
     plot.background = element_rect(fill = "white", colour = NA)
   )
 
-# ── 10. Export ────────────────────────────────────────────────────────────────
+# ── 9. Export ────────────────────────────────────────────────────────────────
 
 dir.create("figures", showWarnings = FALSE)
 
+# dpi bumped from 600 to 800 for GitHub/publication release
 ggsave("figures/fig02_workflow.tiff",
        width = 174, height = 115, units = "mm",
-       dpi = 600, bg = "white", compression = "lzw")
-
+       dpi = 800, bg = "white", compression = "lzw")
 
 ggsave("figures/fig02_workflow.png",
-  plot = p, width = 174, height = 115, units = "mm", dpi = 600)
+  plot = p, width = 174, height = 115, units = "mm", dpi = 800)
 
 message("Saved: figures/fig02_workflow.tiff  +  .png")
-
-

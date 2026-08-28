@@ -15,8 +15,8 @@ library(colorspace)
 OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_W     <- 20.0
 FIG_H     <- 8.0
-FIG_DPI   <- 600
-BASE_SIZE <- 7
+FIG_DPI   <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE <- 9   # bumped from 7 for label legibility (R4.9)
 
 # ── 1. Load data ──────────────────────────────────────────────
 read_hydro <- function(path, lake, scenario) {

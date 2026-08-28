@@ -1,22 +1,63 @@
-
 # ════════════════════════════════════════════════════════════════
 # 11_fig11_validation.R
 # Figure 11 —  Validation Comparison
 # PURPOSE: Two-panel dot plot (faceted by lake) on log-scale x-axis. Each dot is a
 #          peak discharge estimate from a different source:
 #          Blue circles: HEC-RAS runs (Low/Mid/High/bulk x2)
-#          Gold triangles: empirical equations (Walder & OConnor 1997, Costa & Schuster 1988)
+#          Gold triangles: empirical equations (Walder & O'Connor 1997, Costa & Schuster 1988)
 #          Pink squares: published literature (Khan et al. 2021)
-#          Shows your results fall within the empirical envelope.
+#          Shows the simulated results fall within/near the empirical envelope.
 # AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
 # DATE:    2026
+#
+# UPDATED (2026-08-21, rev 1): supersedes 11_fig11_validation.R (moved to
+# scripts/OLD/). Two problems fixed:
+#
+# 1. WRONG EQUATIONS. The previous version's "Empirical" points used
+#    "Froehlich (1995)" and "Hagen (1982)" -- neither appears anywhere in
+#    the manuscript text or reference list, and Costa & Schuster (1988)
+#    was missing from the figure entirely, despite being one of the two
+#    equations the manuscript's Section 4.4 / Table 5 actually describe
+#    and compare against. The Walder & O'Connor coefficient used (0.0347)
+#    also didn't match the manuscript's own formula (0.045). This version
+#    uses exactly the two equations Table 5 reports: Walder & O'Connor
+#    (1997) Q = 0.045 * V^0.66 (L29 moraine-dammed scope only) and Costa &
+#    Schuster (1988) Q = 0.063 * (rho*g*V*H)^0.42 (both lakes). Computed
+#    values were cross-checked against Table 5's printed Mid-scenario
+#    numbers before use: Walder L29 Mid = 681 (matches), Costa L29 Mid =
+#    6265 (matches), Costa L27 Mid = 25216 (matches) -- all three agree
+#    with the manuscript to the reported precision.
+#
+# 2. BROKEN DATA SOURCE. The previous version read
+#    data/processed/L29_Passu_simulation_results.csv and
+#    L27_Shisper_simulation_results.csv, which were archived to
+#    data/processed/OLD/ this session as superseded by the _VERIFIED
+#    versions. The _VERIFIED per-lake files don't carry a peak-discharge
+#    column at all (only depth/velocity/wetted-area -- simulated outputs,
+#    not the input boundary condition). This version reads
+#    data/processed/ALL_simulation_results_VERIFIED.csv instead, which
+#    has peak_Q_input_m3s directly and consistent scenario naming across
+#    both lakes.
+#
+# UPDATED (2026-08-21, rev 2): fixed a second data-source problem found
+# after re-checking the rendered figure against Table 3/Table 5's printed
+# numbers. ALL_simulation_results_VERIFIED.csv's peak_Q_input_m3s column
+# for L29 does NOT match the values actually used to build the published
+# Table 3 / Table 5 (e.g. Mid_baseline: 1258.1 in that file vs. 1,261 in
+# Table 3, Table 5, and the manuscript body text at Section 4.4 -- also
+# off for High: 1547.2 vs 1,547, Mid_bulk1.5: 1887.1 vs 1,892, and
+# Mid_bulk2.0: 2516.1 vs 2,522). L27's values in that file happened to
+# match, which is why the mismatch wasn't caught earlier -- only L29 is
+# affected. data/processed/all_simulations_combined_v2.csv carries the
+# values that DO match Table 3 exactly (verified row-by-row against
+# figures/table03_simulation_results.csv for both lakes, all 14
+# scenarios, before switching). This version reads that file instead, so
+# the figure is now numerically consistent with Tables 3 and 5. Scenario
+# naming differs slightly between the two source files ("Mid_bulk2.0" in
+# the old source vs. "Mid_bulk20" in this one) -- scens_show and the
+# case_when() label mapping below were updated to match.
 # ════════════════════════════════════════════════════════════════
 
-# ============================================================
-# fig11_validation_v3.R
-# Fix: value labels positioned at Q * 1.15 (log-scale safe)
-# x_limits extended right to accommodate labels
-# ============================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(ggplot2)
@@ -27,20 +68,20 @@ library(scales)
 OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_W     <- 17.4
 FIG_H     <- 9.0
-FIG_DPI   <- 600
-BASE_SIZE <- 7
+FIG_DPI   <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE <- 9   # bumped from 7 for label legibility (R4.9)
 
-# ── 1. Load simulation results ────────────────────────────────
-d29 <- read.csv("data/processed/L29_Passu_simulation_results.csv")
-d27 <- read.csv("data/processed/L27_Shisper_simulation_results.csv")
+# ── 1. Load simulation results (matches Table 3 / Table 5 exactly) ──────────
+
+sim <- read.csv("data/processed/all_simulations_combined_v2.csv")
 
 scens_show <- c("Low", "Mid_baseline", "High", "Mid_bulk20")
 
-make_hecras <- function(df, lake) {
+make_hecras <- function(df, lake_code, lake_label) {
   df |>
-    filter(scenario %in% scens_show) |>
+    filter(lake == lake_code, scenario %in% scens_show) |>
     mutate(
-      lake   = lake,
+      lake   = lake_label,
       Q      = peak_Q_input_m3s,
       label  = case_when(
         scenario == "Low"          ~ "HEC-RAS: Low",
@@ -52,33 +93,33 @@ make_hecras <- function(df, lake) {
     )
 }
 
-hecras_l29 <- make_hecras(d29, "L29 Passu")
-hecras_l27 <- make_hecras(d27, "L27 Shisper")
+hecras_l29 <- make_hecras(sim, "L29", "L29 Passu")
+hecras_l27 <- make_hecras(sim, "L27", "L27 Shisper")
 
-# ── 2. Empirical ──────────────────────────────────────────────
+# ── 2. Empirical (Walder & O'Connor 1997; Costa & Schuster 1988) ────────────
+# Mid-scenario volumes/heights, matching 15_volume_dam_breach_calculations.R
+# and the manuscript's Table 5 exactly.
+
 V29 <- 2154184;  H29 <- 37.5
 V27 <- 16600000; H27 <- 134
+
+q_walder <- function(V) 0.045 * V^0.66
+q_costa  <- function(V, H) 0.063 * (1000 * 9.81 * V * H)^0.42
 
 emp_l29 <- data.frame(
   lake   = "L29 Passu",
   source = "Empirical",
-  label  = c("Walder & OConnor (1997)",
-             "Froehlich (1995)",
-             "Hagen (1982)"),
-  Q      = c(0.0347 * V29^0.66,
-             0.607  * V29^0.295 * H29^1.24,
-             0.72   * V29^0.53)
+  label  = c("Walder & O'Connor (1997)", "Costa & Schuster (1988)"),
+  Q      = c(q_walder(V29), q_costa(V29, H29))
 )
 
 emp_l27 <- data.frame(
   lake   = "L27 Shisper",
   source = "Empirical",
-  label  = c("Walder & OConnor (1997)",
-             "Froehlich (1995)",
-             "Hagen (1982)"),
-  Q      = c(1.94  * H27^1.0 * V27^0.34,
-             0.607 * V27^0.295 * H27^1.24,
-             0.72  * V27^0.53)
+  # Walder & O'Connor (1997) is not applicable to L27 -- it is calibrated
+  # on moraine-dammed outbursts and L27 is ice-dammed/piping (Section 4.4).
+  label  = c("Costa & Schuster (1988)"),
+  Q      = c(q_costa(V27, H27))
 )
 
 # ── 3. Literature ─────────────────────────────────────────────
@@ -87,7 +128,7 @@ lit_l27 <- data.frame(
   source = "Literature",
   label  = c("Khan et al. (2021): low",
              "Khan et al. (2021): high"),
-  Q      = c(5348, 6938) 
+  Q      = c(5348, 6938)
 )
 
 # ── 4. Combine + sort by Q ────────────────────────────────────
@@ -102,7 +143,7 @@ dat_l27 <- bind_rows(hecras_l27[,cols], emp_l27[,cols],
   arrange(Q) |>
   mutate(label = factor(label, levels = unique(label)))
 
-# ── 5. FIX: label x position = Q * offset (log-scale safe) ───
+# ── 5. Label x position = Q * offset (log-scale safe) ───
 # This keeps text a fixed log-distance from the point regardless
 # of where on the axis the point falls
 label_mult <- 1.45   # place label ~16% of panel width to right of point
@@ -184,11 +225,11 @@ build_val <- function(dat, title, subtitle,
     # Points
     geom_point(size = 2.4, stroke = 0.5) +
 
-    # FIX: labels at label_x (= Q * 1.18), hjust = 0
+    # labels at label_x (= Q * 1.45), hjust = 0
     # so text starts at a fixed log-distance from point
 geom_text(
   aes(x     = label_x,
-      y     = label,          # FIX: pass y explicitly
+      y     = label,
       label = scales::comma(round(Q))),
   hjust       = 0,
   vjust       = 0.45,
@@ -234,17 +275,15 @@ geom_text(
 }
 
 # ── 9. Build ──────────────────────────────────────────────────
-cat("── Building panels ──
-")
+cat("── Building panels ──\n")
 
 p_l29 <- build_val(
   dat      = dat_l29,
   title    = "(a) L29 Passu",
   subtitle = "Moraine-dammed  |  Vw = 2.15 × 10⁶ m³",
   x_breaks = c(200, 500, 1000, 2000, 5000, 10000),
-  # FIX: extend right limit to 4× max Q so labels fit
   x_limits = c(150, max(dat_l29$Q) * 4.5),
-  sep_y    = 3.5
+  sep_y    = 3
 )
 
 p_l27 <- build_val(
@@ -252,15 +291,13 @@ p_l27 <- build_val(
   title    = "(b) L27 Shisper",
   subtitle = "Ice-dammed  |  Vw = 1.66 × 10⁷ m³",
   x_breaks = c(1000, 10000, 100000),
-  # FIX: extend right limit to 4× max Q so labels fit
   x_limits = c(800, max(dat_l27$Q) * 4.5),
-  sep_y    = 4.5,
+  sep_y    = 3.5,
   show_legend = TRUE
 )
 
 # ── 10. Assemble ──────────────────────────────────────────────
-cat("── Assembling ──
-")
+cat("── Assembling ──\n")
 
 leg      <- cowplot::get_legend(p_l27)
 p_l27_nl <- p_l27 + theme(legend.position = "none")
@@ -280,24 +317,17 @@ p_final <- cowplot::plot_grid(
 )
 
 # ── 11. Save ──────────────────────────────────────────────────
-cat("── Saving ──
-")
+cat("── Saving ──\n")
 
-ggsave(file.path(OUT_DIR, "fig11_validation_v3.png"),
+ggsave(file.path(OUT_DIR, "fig11_validation_v4.png"),
        p_final, width = FIG_W, height = FIG_H,
        units = "cm", dpi = FIG_DPI, bg = "white")
-cat("  Saved: fig11_validation_v3.png
-")
+cat("  Saved: fig11_validation_v4.png\n")
 
-ggsave(file.path(OUT_DIR, "fig11_validation_v3.tiff"),
+ggsave(file.path(OUT_DIR, "fig11_validation_v4.tiff"),
        p_final, width = FIG_W, height = FIG_H,
        units = "cm", dpi = FIG_DPI, bg = "white",
        compression = "lzw")
-cat("  Saved: fig11_validation_v3.tiff
-")
+cat("  Saved: fig11_validation_v4.tiff\n")
 
-cat("
-Fig 11 v3 complete.
-")
-
-
+cat("\nFig 11 v4 complete.\n")

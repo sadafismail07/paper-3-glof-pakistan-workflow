@@ -28,8 +28,8 @@ library(ggnewscale)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 11.0
-FIG_DPI    <- 600
-BASE_SIZE  <- 7
+FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
+BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
 P          <- "data/processed/fig010o_layers"
 
 # ── 1. Load layers ────────────────────────────────────────────

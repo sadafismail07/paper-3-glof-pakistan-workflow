@@ -33,13 +33,25 @@ df <- read_csv(
     )
   )
 
+# The source layer (data/processed/Threshold_sensitivity.csv) carries the
+# lake-name attribute as "Khurdopin" and "Karambar" -- both mistyped
+# relative to this study's own working-set spelling ("Khurdupin", the L15
+# lake per the NDMA inventory) and the L21 lake's Table 1 spelling
+# ("Karamber"). Corrected here at display time, matching the
+# fix_khurdupin_spelling()/strip_bualtar() precedent used in the table
+# scripts, rather than editing the source CSV.
+df <- df |>
+  mutate(
+    name = recode(name, "Khurdopin" = "Khurdupin", "Karambar" = "Karamber")
+  )
+
 chosen_threshold <- 0.1
 
 lake_colours <- c(
-  "Khurdopin" = "#2166AC",
+  "Khurdupin" = "#2166AC",
   "Shisper"   = "#E08020", 
   "Passu"     = "#1A9850",
-  "Karambar"  = "#984EA3"
+  "Karamber"  = "#984EA3"
 )
 
 circle_r <- 0.022
@@ -112,7 +124,7 @@ circles_df <- df |>
 khurdupin_t0 <- df |>
   filter(
     threshold == 0.0,
-    name == "Khurdopin"
+    name == "Khurdupin"
   )
 
 annot_x      <- 0.018
@@ -265,18 +277,18 @@ artefacts",
     y = expression("Detected lake area (km"^2*")")
   ) +
 
-  theme_classic(base_size = 7) +
+  theme_classic(base_size = 9) +   # bumped from 7 for label legibility (R4.9)
 
   theme(
     legend.position      = "top",
     legend.justification = "right",
     legend.key.size      = unit(3.5, "mm"),
-    legend.text          = element_text(size = 6),
+    legend.text          = element_text(size = 7.5),
     legend.background    = element_blank(),
     legend.margin        = margin(0, 0, 2, 0),
 
-    axis.text            = element_text(size = 6),
-    axis.title           = element_text(size = 7),
+    axis.text            = element_text(size = 7.5),
+    axis.title           = element_text(size = 9),
 
     plot.margin          = margin(2, 4, 4, 4, "mm"),
 
@@ -297,11 +309,11 @@ dir.create("figures", showWarnings = FALSE)
 
 ggsave("figures/fig03_ndwi_sensitivity_v2.tiff",
        plot = p, width = 83, height = 80, units = "mm",
-       dpi = 600, bg = "white", compression = "lzw")
+       dpi = 800, bg = "white", compression = "lzw")
 
 ggsave("figures/fig03_ndwi_sensitivity_v2.png",
        plot = p, width = 83, height = 80, units = "mm",
-       dpi = 600, bg = "white")
+       dpi = 800, bg = "white")
 
 message(
   "Saved: figures/fig03_ndwi_sensitivity_v2.tiff  +  .png"
