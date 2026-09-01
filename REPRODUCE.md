@@ -63,7 +63,7 @@ These inputs must be downloaded separately and placed in `data/raw/`:
 | HydroBASINS Levels 8 and 9 | https://www.hydrosheds.org | Asia region |
 | HydroRIVERS v1.0 | https://www.hydrosheds.org | Asia region |
 | OpenStreetMap Pakistan | https://download.geofabrik.de | pakistan-latest.osm.pbf |
-| Pakistan 2023 Population and Housing Census (district totals) | see docs/data_sources.csv | used for the corridor-population cross-check |
+| District population totals for corridor cross-check (Chitral: 2023 census; Gilgit-Baltistan: 2017 P&DD estimate via citypopulation.de -- two different sources, see docs/data_sources.csv) | see docs/data_sources.csv | used for corridor_census_check.csv |
 
 The Copernicus DEM, Sentinel-2 imagery, GHS-POP, WorldPop, and GHS-BUILT-S
 are accessed via Google Earth Engine through the scripts in `scripts/gee/`
