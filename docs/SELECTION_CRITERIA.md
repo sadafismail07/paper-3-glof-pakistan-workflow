@@ -3,7 +3,7 @@
 ## Pre-registered Lake Selection Criteria for GLOF Hydrodynamic Simulation
 
 **Originally finalized:** 2026-04-15
-**Last amended:** 2026-04-29 (see Amendment section)
+**Last amended:** 2026-08-28 (see Amendment section)
 
 ## Purpose
 
@@ -98,6 +98,50 @@ were made (before any exposure analysis was performed):
    considered during inventory verification but is not formally part of
    the NDMA working set; treatment of this lake is documented in the
    project notes and is not the subject of the published analysis.
+
+5. Spelling note: the NDMA inventory spells the L15 working-set lake
+   "Khurdupin" (data/raw/ndma_vulnerable_glof_sites.csv), and this
+   spelling is retained as-is throughout the tables, figures and scripts
+   in this repository. This is not a typo for "Khurdopin" -- the two
+   names refer to different, unconnected features roughly 208 km apart
+   (L15 is in Yasin valley, Gupis-Yasin district; the published
+   Khurdopin Glacier is in Shimshal valley, Hunza district). See
+   manuscript Section 3.3 and the Table S4 footnote for the full
+   identification check. Do not "correct" one spelling to the other.
+
+## Amendment 2026-08-28 (post-peer-review)
+
+Following comments from Reviewer 3 (Comment R3.13) and the editor's request to
+ensure the hazard composite measures physical hazard rather than data
+availability, two changes were made to Step 4's hazard composite scoring
+after the original submission. As with the 2026-04-29 amendment, this is
+recorded here rather than silently edited into Step 4 above, and the
+resubmission's response-to-reviewers letter is the primary record of the
+review comment that prompted it.
+
+1. **Literature-corroboration indicator removed.** Step 4 as originally run
+   included a fourth hazard-composite component, a "literature-corroboration
+   indicator" reflecting the presence and strength of a published reference
+   for each lake. On reflection this is a measure of how well-documented a
+   lake is, not of its physical outburst hazard, and a data-availability
+   measure has no place in a hazard composite. It has been dropped. The
+   hazard composite is now the mean of three physical indicators only: NDMA
+   vulnerability rating (normalised), lake surface area (log10, m^2), and
+   RGI 7.0 surge-type classification (binary).
+
+2. **Surge-type credit restricted to lakes that are themselves ice-dammed.**
+   The surge-type indicator previously credited any lake associated with a
+   surge-type glacier, including moraine-dammed lakes fed by a surging
+   tributary. A surge in a tributary glacier does not itself alter a
+   moraine dam's failure mode, so surge-type credit is now restricted to
+   lakes that are themselves ice-dammed. L29 Passu (moraine-dammed) and L26
+   Hundur no longer receive surge-type credit under the adopted composite.
+
+Both changes were made before the resubmission's Table 2 ranking was
+finalised, and the full working-set ranking was recomputed under the revised
+composite. The top-two selection is unchanged: L29 Passu ranks first and L27
+Shisper ranks second, so neither lake selected for hydrodynamic simulation is
+affected by this amendment.
 
 ## Commitment
 

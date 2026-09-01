@@ -21,8 +21,9 @@ JavaScript and documented for replication.
 
 ## Status
 
-Complete. All 11 figures and 5 tables generated; manuscript prepared for
-submission. This repository is archived on Zenodo (DOI below).
+Complete. All 11 figures, 5 main tables, and 7 supplementary tables
+generated; manuscript revised per peer review and resubmitted. This
+repository is archived on Zenodo (DOI below).
 
 ## Repository structure
 
@@ -33,15 +34,15 @@ data/
 scripts/
   gee/                # Google Earth Engine JavaScript scripts
   analysis/           # R analytical scripts (run in numerical order)
+  tables/             # R scripts that render Table 1-5 and S1-S7 CSVs
   figure_scripts/     # R scripts that render manuscript figures
 hecras_models/
   L29_Passu/          # HEC-RAS project for L29 Passu (inputs only)
   L27_Shisper/        # HEC-RAS project for L27 Shisper (inputs only)
-figures/              # final figures (PNG) and tables (CSV/MD/TEX)
+figures/              # final figures (PNG/TIFF) and tables (CSV)
 docs/
   data_sources.csv      # dataset versioning, URLs, citations
   SELECTION_CRITERIA.md # pre-registered lake selection criteria
-  sessionInfo.txt       # R session info at the time of analysis
 REPRODUCE.md          # step-by-step replication guide
 LICENSE               # MIT License
 ```

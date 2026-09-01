@@ -14,15 +14,30 @@ data/raw/
 .RData
 .DS_Store
 Thumbs.db
-hecras_models/**/Backup/ 
-hecras_models/**/Backup/ 
-hecras_models/**/Backup/ 
-hecras_models/**/*.vrt 
-hecras_models/**/*.dss 
-hecras_models/**/*.bco* 
-hecras_models/**/*.b0* 
-hecras_models/**/*.ic.o* 
-hecras_models/**/*.x0* 
-hecras_models/**/*.rasmap.backup 
-hecras_models/**/*.aux.xml 
-*.bak 
+hecras_models/**/Backup/
+hecras_models/**/*.vrt
+hecras_models/**/*.dss
+hecras_models/**/*.bco*
+hecras_models/**/*.b0*
+hecras_models/**/*.ic.o*
+hecras_models/**/*.x0*
+hecras_models/**/*.rasmap.backup
+hecras_models/**/*.aux.xml
+*.bak
+
+# Local scratch and superseded-version archives (not part of the tracked pipeline)
+scripts/OLD/
+data/processed/OLD/
+scripts/_review_tmp/
+figures/New folder/
+.~lock.*#
+
+# Response-letter-only exhibit figures (not manuscript figures)
+figures/L27_reviewer_figure*.png
+figures/Supplementary Fig*
+
+# Manuscript, correspondence and submission files (kept out of this data/code repo)
+/*.docx
+/*.pdf
+/Reviewers' comments/
+
