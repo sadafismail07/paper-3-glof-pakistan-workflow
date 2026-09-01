@@ -97,7 +97,6 @@ identification <- ident_dist |>
   )
 
 # ---- 3. Published characterisation + references (curated) ----------------
-# See header note: two references below are flagged as unverified.
 #
 # FOOTNOTE1_LAKES: superscript ¹ is appended to the Lake name for
 # these two rows in step 4 below -- L15 and L26 are the two entries

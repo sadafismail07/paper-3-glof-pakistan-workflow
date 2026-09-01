@@ -90,7 +90,7 @@ hb_L27 <- brp$Hb_m[brp$lake_id == "L27" & brp$scenario == "Mid"]
 # Table 5; the previous script version had this wrong ("4,500-6,937").
 khan_l27 <- "5348–6938"
 
-fmt_num <- function(x) format(round(x), scientific = FALSE, trim = TRUE)  # no thousands separator -- Geoenvironmental Disasters bans commas in table values
+fmt_num <- function(x) format(round(x), scientific = FALSE, trim = TRUE)  # no thousands separator -- required by the target journal's table formatting guidelines
 
 table05 <- t3 |>
   filter(Scenario %in% core_scenarios) |>

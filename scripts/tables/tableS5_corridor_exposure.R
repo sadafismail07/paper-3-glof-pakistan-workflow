@@ -59,7 +59,7 @@ fix_khurdupin_spelling <- function(name, lake_id) {
 
 # ---- 2. Join name, derive rank and display columns -------------------------
 
-fmt_int <- function(x) format(round(x), scientific = FALSE, trim = TRUE)  # no thousands separator -- Geoenvironmental Disasters bans commas in table values
+fmt_int <- function(x) format(round(x), scientific = FALSE, trim = TRUE)  # no thousands separator -- required by the target journal's table formatting guidelines
 
 tableS5 <- corridors |>
   left_join(names_lu, by = "lake_id") |>

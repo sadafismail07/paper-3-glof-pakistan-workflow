@@ -31,7 +31,7 @@
 # 2. BROKEN DATA SOURCE. The previous version read
 #    data/processed/L29_Passu_simulation_results.csv and
 #    L27_Shisper_simulation_results.csv, which were archived to
-#    data/processed/OLD/ this session as superseded by the _VERIFIED
+#    data/processed/OLD/ as superseded by the _VERIFIED
 #    versions. The _VERIFIED per-lake files don't carry a peak-discharge
 #    column at all (only depth/velocity/wetted-area -- simulated outputs,
 #    not the input boundary condition). This version reads
