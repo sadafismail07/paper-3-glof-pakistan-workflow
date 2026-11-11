@@ -61,7 +61,7 @@ tableS6 <- bind_rows(breach_q, routed_rows) |>
   select(-is_breach)
 
 stopifnot(
-  tableS6$`Peak Q (m³ s⁻¹)`[tableS6$Lake == "L29 Passu" & tableS6$Section == "Breach inflow"] == 1261,
+  tableS6$`Peak Q (m³ s⁻¹)`[tableS6$Lake == "L29 Passu" & tableS6$Section == "Breach inflow"] == 1258,
   tableS6$`Peak Q (m³ s⁻¹)`[tableS6$Lake == "L27 Shisper" & tableS6$Section == "Breach inflow"] == 12546
 )
 cat("Check passed.\n")

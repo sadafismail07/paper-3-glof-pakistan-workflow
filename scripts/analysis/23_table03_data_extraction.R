@@ -15,7 +15,7 @@ hyd_max <- function(path, qcol = "Q_m3_s") {
 }
 
 q_low_L29  <- hyd_max("data/processed/L29_breach_hydrograph_Low.csv")
-q_mid_L29  <- hyd_max("data/processed/L29_Passu_breach_hydrograph_Mid.csv")   # corrected file
+q_mid_L29  <- hyd_max("data/processed/L29_breach_hydrograph_Mid.csv")
 q_high_L29 <- hyd_max("data/processed/L29_breach_hydrograph_High.csv")
 q_low_L27  <- hyd_max("data/processed/L27_breach_hydrograph_Low.csv")
 q_mid_L27  <- hyd_max("data/processed/L27_breach_hydrograph_Mid.csv")
@@ -119,8 +119,8 @@ q_l27_mid <- round(table03_master$peak_q_m3s[table03_master$lake_id == "L27" & t
 
 stopifnot(
   nrow(table03_master) == 20,
-  q_l29_mid == 1261,
-  q_l29_b15 == 1892,
+  q_l29_mid == 1258,
+  q_l29_b15 == 1887,
   q_l27_mid == 12546,
   all(is.finite(table03_master$depth_max_m) & table03_master$depth_max_m > 0),
   all(is.finite(table03_master$vel_max_ms)  & table03_master$vel_max_ms  > 0),

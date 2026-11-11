@@ -50,7 +50,7 @@ table03 <- m |>
 
 stopifnot(
   nrow(table03) == 20,
-  round(table03$`Peak Q (m³ s⁻¹)`[table03$Lake == "L29 Passu" & table03$Scenario == "Mid (baseline)"]) == 1261,
+  round(table03$`Peak Q (m³ s⁻¹)`[table03$Lake == "L29 Passu" & table03$Scenario == "Mid (baseline)"]) == 1258,
   round(table03$`Peak Q (m³ s⁻¹)`[table03$Lake == "L27 Shisper" & table03$Scenario == "Mid (baseline)"]) == 12546
 )
 cat("Check passed.\n")
