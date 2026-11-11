@@ -1,34 +1,4 @@
-# 21_h4_exposure_and_volume_conservation_audit.R
-#
-# Two independent jobs for the reviewer-response round:
-#
-#   PART A — H4 exposure for the four n=0.10 bulked scenarios that were run
-#            (L27/L29 x bulk1.5/bulk2.0) but never extracted into
-#            table04_h4_exposure.csv. Mirrors the logic already used in
-#            19_h4_hazard_mapping.R (H4 = depth>1.5 OR depth*velocity>0.7)
-#            and 13_extract_population.R (terra::extract fun="sum") --
-#            this replicates the existing pipeline exactly, just applied
-#            to the four scenarios missing from the CSV.
-#
-#   PART B — Volume-accounting / conservation error, read directly out of
-#            the HEC-RAS plan HDF files, for every scenario, to get a
-#            trustworthy current number for R3.33 rather than relying on
-#            the possibly-stale "Vol. cons. (%)" column sitting in
-#            figures/table03_simulation_results.csv. HEC-RAS 7.0's exact
-#            internal HDF5 layout for this figure is not confirmed from
-#            documentation and varies by version, so this part first
-#            prints the HDF5 structure it finds, then tries a set of
-#            candidate paths. Read the console output before trusting the
-#            CSV it writes -- if none of the candidates match, the printed
-#            structure shows which path to add instead.
-#
-# Outputs (both written to data/processed/):
-#   h4_exposure_n010_scenarios.csv
-#   volume_conservation_all_scenarios.csv
-#
-# Run this from the project root (C:/Users/sadaf/Documents/PPR3), or just
-# open it in RStudio with that as the working directory — setwd() below
-# handles it either way.
+# Hazard-zone exposure (n = 0.10 runs) and volume errors
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -37,34 +7,27 @@ library(terra)
 library(sf)
 library(dplyr)
 
-# ══════════════════════════════════════════════════════════════════
-# PART A — H4 exposure for the four n=0.10 bulked scenarios
-# ══════════════════════════════════════════════════════════════════
-
 cat("\n========== PART A: H4 exposure, n=0.10 bulked scenarios ==========\n\n")
 
-# Scenario definitions: raster folders match what is already on disk.
 n010_scenarios <- data.frame(
   lake     = c("L27", "L27", "L29", "L29"),
   scenario = c("Mid (\u00d71.5 bulk, n=0.10)", "Mid (\u00d72.0 bulk, n=0.10)",
                "Mid (\u00d71.5 bulk, n=0.10)", "Mid (\u00d72.0 bulk, n=0.10)"),
   depth_path = c(
-    "hecras_models/L27_Shisper/L27_b15_n010/Depth (Max).Terrain.L27_terrain.tif",
-    "hecras_models/L27_Shisper/L27_b20_n010/Depth (Max).Terrain.L27_terrain.tif",
-    "hecras_models/L29_Passu/L29_b15_n010/Depth (Max).Terrain.Terrain.L29_terrain_final.tif",
-    "hecras_models/L29_Passu/L29_b20_n010/Depth (Max).Terrain.Terrain.L29_terrain_final.tif"
+    "hecras_models/L27_Shisper_v2/L27_b15_n010/Depth (Max).L27_terrain_v2.L27_terrain_v2.tif",
+    "hecras_models/L27_Shisper_v2/L27_b20_n010/Depth (Max).L27_terrain_v2.L27_terrain_v2.tif",
+    "hecras_models/L29_Passu_v2/L29_b15_n010/Depth (Max).L29_terrain_v2.L29_terrain_v2.tif",
+    "hecras_models/L29_Passu_v2/L29_b20_n010/Depth (Max).L29_terrain_v2.L29_terrain_v2.tif"
   ),
   vel_path = c(
-    "hecras_models/L27_Shisper/L27_b15_n010/Velocity (Max).Terrain.L27_terrain.tif",
-    "hecras_models/L27_Shisper/L27_b20_n010/Velocity (Max).Terrain.L27_terrain.tif",
-    "hecras_models/L29_Passu/L29_b15_n010/Velocity (Max).Terrain.Terrain.L29_terrain_final.tif",
-    "hecras_models/L29_Passu/L29_b20_n010/Velocity (Max).Terrain.Terrain.L29_terrain_final.tif"
+    "hecras_models/L27_Shisper_v2/L27_b15_n010/Velocity (Max).L27_terrain_v2.L27_terrain_v2.tif",
+    "hecras_models/L27_Shisper_v2/L27_b20_n010/Velocity (Max).L27_terrain_v2.L27_terrain_v2.tif",
+    "hecras_models/L29_Passu_v2/L29_b15_n010/Velocity (Max).L29_terrain_v2.L29_terrain_v2.tif",
+    "hecras_models/L29_Passu_v2/L29_b20_n010/Velocity (Max).L29_terrain_v2.L29_terrain_v2.tif"
   ),
   stringsAsFactors = FALSE
 )
 
-# Population, built-up, and OSM layers — same sources as the rest of the
-# pipeline (13_extract_population.R and the corridor-exposure step).
 ghs_pop   <- terra::rast("data/raw/GHS_POP_2025_GB_Chitral.tif")
 worldpop  <- terra::rast("data/raw/WorldPop_2020_GB_Chitral.tif")
 ghs_built <- terra::rast("data/raw/GHS_BUILT_S_2030_GB_Chitral.tif")
@@ -84,7 +47,6 @@ compute_h4_exposure <- function(lake, scenario, depth_path, vel_path) {
     velocity <- terra::resample(velocity, depth, method = "bilinear")
   }
 
-  # --- H4 mask: identical criterion to 19_h4_hazard_mapping.R ---
   dv <- depth * velocity
   h4_mask <- (depth > 1.5) | (dv > 0.7)
   h4 <- terra::ifel(h4_mask, 1, NA)
@@ -96,12 +58,10 @@ compute_h4_exposure <- function(lake, scenario, depth_path, vel_path) {
   n_wetted <- sum(terra::values(depth > 0) == 1, na.rm = TRUE)
   total_wetted_km2 <- round(n_wetted * cell_size / 1e6, 3)
 
-  # --- Polygonise H4 zone for vector overlay (buildings/roads/bridges) ---
   h4_poly <- terra::as.polygons(h4, dissolve = TRUE) |> sf::st_as_sf()
   h4_poly <- sf::st_transform(h4_poly, sf::st_crs(osm_buildings))
   h4_poly <- sf::st_make_valid(h4_poly)
 
-  # --- Population: simple cell-count sum, matching Section 3.10's method ---
   pop_ghs <- terra::extract(ghs_pop, terra::vect(sf::st_transform(h4_poly, terra::crs(ghs_pop))),
                              fun = "sum", na.rm = TRUE)[, 2]
   pop_wp  <- terra::extract(worldpop, terra::vect(sf::st_transform(h4_poly, terra::crs(worldpop))),
@@ -115,11 +75,9 @@ compute_h4_exposure <- function(lake, scenario, depth_path, vel_path) {
                            fun = "sum", na.rm = TRUE)[, 2]
   built <- ifelse(is.na(built), 0, built)
 
-  # --- Buildings: count OSM building footprints intersecting the H4 zone ---
   bld_hits <- sf::st_filter(osm_buildings, h4_poly, .predicate = sf::st_intersects)
   n_buildings <- nrow(bld_hits)
 
-  # --- Roads: length (km) of OSM road segments clipped to the H4 zone ---
   road_hits <- sf::st_filter(osm_roads, h4_poly, .predicate = sf::st_intersects)
   road_km <- 0
   if (nrow(road_hits) > 0) {
@@ -160,16 +118,9 @@ cat("\n--- H4 exposure results (n=0.10 bulked scenarios) ---\n")
 print(h4_results)
 cat("\nSaved: data/processed/h4_exposure_n010_scenarios.csv\n")
 
-
-# ══════════════════════════════════════════════════════════════════
-# PART B — Volume accounting / conservation error from plan HDF files
-# ══════════════════════════════════════════════════════════════════
-
 cat("\n\n========== PART B: Volume accounting from plan HDF files ==========\n\n")
-cat("NOTE: HEC-RAS 7.0's exact internal HDF5 layout for this is not fully\n")
-cat("confirmed. This script explores the file structure first and prints it,\n")
-cat("then tries several candidate locations. Check the printed\n")
-cat("structure/attributes against the final CSV before trusting it.\n\n")
+cat("The HDF5 layout of the volume-accounting summary differs between HEC-RAS versions,\n")
+cat("so the file structure is listed first and several candidate locations are tried.\n")
 
 if (!requireNamespace("rhdf5", quietly = TRUE)) {
   cat("Package 'rhdf5' not found. Install it with:\n")
@@ -181,13 +132,11 @@ library(rhdf5)
 
 # Find every plan HDF file across both lake project folders.
 plan_hdfs <- c(
-  list.files("hecras_models/L27_Shisper", pattern = "\\.p[0-9]+\\.hdf$", full.names = TRUE),
-  list.files("hecras_models/L29_Passu",   pattern = "\\.p[0-9]+\\.hdf$", full.names = TRUE)
+  list.files("hecras_models/L27_Shisper_v2", pattern = "\\.p[0-9]+\\.hdf$", full.names = TRUE),
+  list.files("hecras_models/L29_Passu_v2",   pattern = "\\.p[0-9]+\\.hdf$", full.names = TRUE)
 )
 cat(sprintf("Found %d plan HDF files.\n\n", length(plan_hdfs)))
 
-# --- Helper: get the human-readable plan title/short ID so we can match
-#     each HDF file to a scenario name, instead of guessing from the p-number.
 get_plan_title <- function(hdf_path) {
   title <- tryCatch({
     a <- rhdf5::h5readAttributes(hdf_path, "/Plan Data/Plan Information")
@@ -204,8 +153,6 @@ get_plan_title <- function(hdf_path) {
   title
 }
 
-# --- Helper: recursively list every group/dataset path in the file so we
-#     can spot anything with "Volume" or "Accounting" or "Error" in it.
 find_volume_paths <- function(hdf_path) {
   tryCatch({
     contents <- rhdf5::h5ls(hdf_path, recursive = TRUE)
@@ -216,9 +163,6 @@ find_volume_paths <- function(hdf_path) {
   }, error = function(e) character(0))
 }
 
-# --- Helper: try a set of known/plausible candidate locations for the
-#     volume error figure. Extend this list if the printed structure
-#     (below) shows a different path.
 candidate_paths <- c(
   "/Results/Unsteady/Summary/Volume Accounting",
   "/Results/Unsteady/Summary",
@@ -236,7 +180,6 @@ extract_volume_error <- function(hdf_path) {
       return(list(path = p, value = val, mode = "dataset"))
     }
   }
-  # Then try reading it as an attribute on the Unsteady Summary group.
   for (p in c("/Results/Unsteady/Summary", "/Results/Unsteady")) {
     val <- tryCatch({
       a <- rhdf5::h5readAttributes(hdf_path, p)
@@ -301,4 +244,3 @@ cat("\n\n========== DONE ==========\n")
 cat("Two files written to data/processed/:\n")
 cat("  1. h4_exposure_n010_scenarios.csv\n")
 cat("  2. volume_conservation_all_scenarios.csv\n")
-cat("Fold these into Tables 3/4 and the R3.33 text fix.\n")

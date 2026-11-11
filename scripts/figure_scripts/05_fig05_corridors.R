@@ -1,43 +1,4 @@
-# ════════════════════════════════════════════════════════════════
-# 05_fig05_corridors.R
-# Figure 5 — Downstream Corridors with Exposure Scores
-# PURPOSE: Map of all filtered lakes with their 50 km downstream corridors along the
-#           river network, colour-coded by composite exposure score. This is the
-#          "before simulation" overview — shows spatial pattern of exposure and
-#           justifies why L27 and L29 were selected.
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-#
-# UPDATED (2026-08-21): supersedes 05_fig05_corridors.R (moved to
-# scripts/OLD/). Fixes one problem found during manuscript review:
-#
-# ON-IMAGE TITLE FALSELY CLAIMED A SECOND EXCLUSION. The panel (a) title
-# read "16 corridors (L21 Karambar, L30 Khurdopin excluded)". Two things
-# were wrong with this: (1) there is no lake "L30" anywhere in the
-# working set -- the real lake named Khurdupin is L15, and (2) L15 was
-# never actually excluded by the filter below in the first place: the
-# old filter was `!lake_id %in% c("L21", "L30")`, and since no row has
-# lake_id "L30", that filter only ever removed L21. The resulting count
-# (17 - 1 = 16) was arithmetically correct, but the title's explanation
-# of *why* it was 16 was fabricated -- confirmed against the manuscript
-# body text (Section 4.1: "The L21 Karamber corridor ... is retained in
-# the working set but excluded from the spatial display in Fig. 5.
-# Across the remaining 16 corridors..." -- only ONE exclusion is
-# described there, matching the code's actual behaviour, not the old
-# title's claim of two). Confirmed visually too: L15's corridor IS
-# present and coloured in the panel (a) overview (it just isn't
-# labelled, and its longitude ~73.2°E falls in the gap between the
-# Chitral cluster box and the Hunza-Karakoram cluster box, which is why
-# it doesn't appear in panels (b) or (c) -- that is a real cartographic
-# gap between the two inset extents, not a data exclusion, and the
-# manuscript text does not claim otherwise).
-#
-# Fix: removed "L30" from the exclusion filter (it was dead code -- matched
-# nothing, changed no output) and corrected the on-image title to state
-# only the real exclusion (L21). No other logic changed; panel (a)'s
-# plotted corridors and the overview map are otherwise pixel-identical
-# to before this fix -- only the title text changes.
-# ════════════════════════════════════════════════════════════════
+# Corridor map
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 
@@ -55,11 +16,9 @@ library(cowplot)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 18.0
-FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
-BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
+FIG_DPI    <- 800
+BASE_SIZE  <- 9
 L <- "data/processed/fig01_layers"
-
-# --- 1. Load layers -----------------------------------------------------------
 
 cat("--- Loading layers ---
 ")
@@ -74,11 +33,8 @@ bridges    <- st_read(file.path(L, "osm_bridges.gpkg"), quiet = TRUE)
 cat("  All layers loaded
 ")
 
-# --- 2. Exclude L21 (spatial-display exclusion only; retained in the working
-#        set and in Table 2 -- see Section 4.1) --------------------------------
-
 corr <- corr_all |>
-  filter(!lake_id %in% c("L21")) |>
+  filter(!lake_id %in% character(0)) |>  # all 17 working-set corridors shown
   arrange(final_score)
 
 corr$display_label <- case_when(
@@ -95,8 +51,6 @@ if (length(ord_col) > 0) rivers$stream_wt <- pmin(rivers[[ord_col[1]]], 6)
 
 score_min <- floor(min(corr$final_score, na.rm = TRUE) * 10) / 10
 score_max <- ceiling(max(corr$final_score, na.rm = TRUE) * 10) / 10
-
-# --- 3. Clusters and extents --------------------------------------------------
 
 chitral_ids <- c("L06", "L01", "L02", "L03", "L04", "L05")
 hunza_ids   <- c("L27", "L28", "L26", "L25", "L24", "L29", "L19")
@@ -139,8 +93,6 @@ box_labels <- data.frame(
   y = c(chitral_ylim[2] - 0.05, hunza_ylim[2] - 0.05)
 )
 
-# --- 4. Theme -----------------------------------------------------------------
-
 theme_fig <- function(base_size = BASE_SIZE) {
   theme_minimal(base_size = base_size) +
     theme(
@@ -161,11 +113,6 @@ theme_fig <- function(base_size = BASE_SIZE) {
     )
 }
 
-# --- 5. Panel builder ---------------------------------------------------------
-# v9 FIX: roads legend now uses key_glyph = "path" on the geom_sf layer
-# and override.aes explicitly sets linetype=1, linewidth=0.5, fill=NA, shape=NA
-# This forces ggplot2 to draw a line swatch instead of a polygon/point box.
-
 build_panel <- function(xlim, ylim, corr_sub, lakes_sub, label_ids = NULL,
                         show_legend = FALSE, title = NULL,
                         show_scalebar = FALSE, show_boundary = TRUE) {
@@ -174,7 +121,7 @@ build_panel <- function(xlim, ylim, corr_sub, lakes_sub, label_ids = NULL,
                                      xmax = xlim[2], ymax = ylim[2]),
                                    crs = st_crs(4326)))
   riv_sub <- suppressWarnings(st_intersection(rivers, panel_bbox))
-  corr_sub_union <- st_union(corr_sub) |> st_make_valid()  # FIX: repair degenerate vertices before intersection
+  corr_sub_union <- st_union(corr_sub) |> st_make_valid()
   roads_sub   <- suppressWarnings(st_intersection(roads, corr_sub_union))
   bridges_sub <- suppressWarnings(st_intersection(bridges, corr_sub_union))
 
@@ -214,12 +161,6 @@ score",
       direction = 1, breaks = seq(0.3, 1.0, 0.1)
     )
 
-  # ── v9 FIX: roads legend ────────────────────────────────────────────────────
-  # Problem in v8: geom_sf() for line features was picking up the polygon
-  # key glyph (hollow rectangle) from the surrounding fill scales.
-  # Fix: set key_glyph = "path" explicitly on the roads geom_sf() call so
-  # ggplot2 draws a line segment in the legend key, then use override.aes to
-  # remove any residual fill/shape artefacts.
   if (nrow(roads_sub) > 0) {
     p <- p +
       geom_sf(
@@ -227,7 +168,6 @@ score",
         aes(colour = lbl),
         linewidth  = 0.35,
         show.legend = show_legend,
-        # Force a line-segment key glyph (not the default polygon rectangle)
         key_glyph  = "path"
       ) +
       scale_colour_manual(
@@ -291,8 +231,6 @@ score",
   return(p)
 }
 
-# --- 6. Build panels ----------------------------------------------------------
-
 cat("--- Building panels ---
 ")
 
@@ -302,7 +240,7 @@ p_overview <- build_panel(
   label_ids = c("L27", "L29"),
   show_legend   = TRUE,
   show_boundary = FALSE,
-  title         = "(a) Overview -- 16 corridors (L21 Karambar excluded)",
+  title         = "(a) Overview",
   show_scalebar = TRUE
 ) +
   geom_sf(data = box_chitral, fill = NA, colour = "#0072B2",
@@ -333,10 +271,8 @@ p_hunza <- build_panel(
   title         = "(c) Hunza-Karakoram cluster",
   show_scalebar = TRUE
 ) +
-  scale_x_continuous(breaks = seq(74.2, 75.0, by = 0.4)) +  # FIX: thin x-axis breaks (was 0.1 degree, too dense)
+  scale_x_continuous(breaks = seq(74.2, 75.0, by = 0.4)) +
   theme(panel.border = element_rect(fill = NA, colour = "#009E73", linewidth = 0.7))
-
-# --- 7. Combine + save --------------------------------------------------------
 
 cat("--- Combining panels ---
 ")

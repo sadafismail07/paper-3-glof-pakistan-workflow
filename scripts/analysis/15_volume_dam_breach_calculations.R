@@ -1,6 +1,4 @@
-# 15_volume_dam_breach_calculations.R
-# Compute lake volumes, dam heights, and Froehlich 2008 breach parameters
-# for the two selected lakes (L29 Passu, L27 Shisper).
+# Lake volumes and breach parameters
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -12,7 +10,6 @@ library(dplyr)
 
 volume_huggel <- function(A_m2) 0.104 * A_m2^1.42
 
-# L29 Passu (Huggel since Cook & Quincey moraine fails for small lakes)
 A_passu <- 0.142 * 1e6
 V_passu <- volume_huggel(A_passu)
 
@@ -94,4 +91,3 @@ write.csv(breach_table, "data/processed/breach_parameters.csv",
           row.names = FALSE)
 
 cat("Computed and saved volume + dam height + breach parameters\n")
-

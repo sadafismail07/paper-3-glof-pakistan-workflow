@@ -1,6 +1,4 @@
-# 02_define_study_area.R
-# Build the study area boundary from OCHA Pakistan administrative
-# boundaries: all 14 GB districts plus Upper and Lower Chitral.
+# Study area boundary
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -13,7 +11,6 @@ pak_districts <- sf::st_read(
   quiet = TRUE
 )
 
-# Filter to GB + Chitral; defensive grepl handles spelling variations
 gb_pattern <- "Gilgit.?Baltistan"
 
 study_area <- pak_districts |>
@@ -30,7 +27,6 @@ study_area <- pak_districts |>
   ) |>
   dplyr::select(adm2_name, adm2_pcode, adm1_name, study_unit, geometry)
 
-# Make valid (handles small topology issues from boundary data)
 study_area <- sf::st_make_valid(study_area)
 
 # Save 3 versions
@@ -61,4 +57,3 @@ sf::st_write(
 
 cat("Saved 3 study area files.\n")
 cat("Districts in study area:", nrow(study_area), "\n")
-

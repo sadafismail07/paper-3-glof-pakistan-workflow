@@ -1,17 +1,8 @@
-# ══════════════════════════════════════════════════════════════
-# Table S2 -- ranking stability
-# Self-contained: rebuilds inputs, computes all variants, writes CSV
-#
-# FIX (2026-08-24): surge credit is now restricted to lakes that are
-# themselves ice-dammed, matching 14_priority_scoring.R
-# (R3 Comment 12/13) -- the earlier version of this script gave L29
-# (moraine-dammed, fed by a surge-type glacier) undeserved surge
-# credit, which pushed it above L27 in every surge-inclusive column.
-# ══════════════════════════════════════════════════════════════
+# Scoring diagnostics
+
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
 suppressPackageStartupMessages({library(sf); library(dplyr); library(tidyr)})
-# ── 1. Rebuild the scoring inputs ─────────────────────────────
 corridors <- st_read("data/processed/lake_corridors_with_exposure.gpkg", quiet = TRUE)
 lakes_v   <- st_read("data/processed/lakes_polygons_verified.gpkg",      quiet = TRUE)
 lookup <- data.frame(
@@ -37,7 +28,6 @@ stopifnot(nrow(sb) == 17, !any(is.na(sb$tier_score)))
 cat("Inputs rebuilt:", nrow(sb), "lakes\n")
 cat("Surge credit after ice-dammed restriction:\n")
 print(sb[sb$surge_type == 1, c("lake_id", "lake_type", "surge_type", "surge_credit")])
-# ── 2. Normalisations ─────────────────────────────────────────
 minmax    <- function(x) { r <- range(x, na.rm=TRUE)
                            if (diff(r)==0) rep(.5,length(x)) else (x-r[1])/diff(r) }
 norm_rank <- function(x) (rank(x, ties.method="average") - 1)/(length(x) - 1)
@@ -46,7 +36,6 @@ norm_rob  <- function(x) { q <- quantile(x, c(.05,.95), na.rm=TRUE)
                            if (diff(q)==0) rep(.5,length(x)) else
                            pmin(pmax((x-q[1])/diff(q),0),1) }
 log10p <- function(x) log10(x + 1)
-# ── 3. Scoring ────────────────────────────────────────────────
 score_it <- function(d, norm = minmax, use_tier = FALSE, use_surge = TRUE) {
   h <- list(norm(d$vulnerability), norm(log10p(d$area_for_score * 1e6)))
   if (use_surge) h <- c(h, list(d$surge_credit))
@@ -63,7 +52,6 @@ rank_of <- function(s, label) {
   names(out)[2] <- label
   out
 }
-# ── 4. Assemble ───────────────────────────────────────────────
 S2 <- Reduce(function(x, y) left_join(x, y, by = "lake_id"), list(
   rank_of(score_it(sb, use_tier = TRUE),                    "With tier"),
   rank_of(score_it(sb, use_tier = TRUE, use_surge = FALSE), "With tier, no surge"),
@@ -80,7 +68,6 @@ S2 <- S2 |> left_join(lookup[, c("lake_id","lake_name")], by = "lake_id") |>
   select(lake_id, lake_name, all_of(cols), `Rank range`)
 print(as.data.frame(S2), row.names = FALSE)
 write.csv(S2, "data/processed/TableS2_ranking_stability.csv", row.names = FALSE)
-# ── 5. Summary lines for the caption ──────────────────────────
 adopted <- c("Adopted (min-max)","Adopted, no surge","Rank norm","Z-score","Robust 5-95")
 cat("\nL27 rank 1 in", sum(sapply(adopted, function(c) S2[[c]][S2$lake_id=="L27"]==1)),
     "of", length(adopted), "adopted-composite variants\n")

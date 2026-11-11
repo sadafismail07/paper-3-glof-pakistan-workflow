@@ -1,16 +1,5 @@
+# Inundation maps, L27
 
-# ════════════════════════════════════════════════════════════════
-# 07_fig07_inundation_L27.R
-# Figure 7 — Inundation Maps: L27 Shisper (Low / Mid / High)
-# PURPOSE: Identical layout to Fig 6 but for L27 Shisper (ice-dammed).
-# Shisper has a much larger footprint (up to 10.66 km²) so the map
-# extent will be wider.
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-# =============================================================================
-# fig07_v5_inundation_L27.R
-# =============================================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(terra)
@@ -25,11 +14,9 @@ library(ggnewscale)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 16.0
-FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
-BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
+FIG_DPI    <- 800
+BASE_SIZE  <- 9
 L <- "data/processed/fig07_layers"
-
-# --- 1. Load layers -----------------------------------------------------------
 
 cat("--- Loading layers ---
 ")
@@ -59,8 +46,6 @@ cat("  Roads:", nrow(roads), " Bridges:", nrow(bridges), "
 cat("  All loaded
 ")
 
-# --- 2. Disaggregate to reduce pixelation -------------------------------------
-
 cat("  Disaggregating depth rasters...
 ")
 d_low  <- disagg(d_low,  fact = 5, method = "bilinear")
@@ -71,8 +56,6 @@ d_mid[d_mid   < 0.01] <- NA
 d_high[d_high < 0.01] <- NA
 cat("  Done
 ")
-
-# --- 3. Classify depth --------------------------------------------------------
 
 classify_depth <- function(r) {
   m <- matrix(c(
@@ -92,8 +75,6 @@ levels(d_low_cls)  <- data.frame(id = 1:4, depth = c("1","2","3","4"))
 levels(d_mid_cls)  <- data.frame(id = 1:4, depth = c("1","2","3","4"))
 levels(d_high_cls) <- data.frame(id = 1:4, depth = c("1","2","3","4"))
 
-# --- 4. Extent — strictly within hillshade ------------------------------------
-
 hs_ext <- ext(hs)
 xlim <- c(as.numeric(hs_ext[1]), as.numeric(hs_ext[2]))
 ylim <- c(as.numeric(hs_ext[3]), as.numeric(hs_ext[4]))
@@ -112,10 +93,8 @@ cat("  Bridges after clip:", nrow(bridges), "
 cat("  Map extent: lon", round(xlim, 3), " lat", round(ylim, 3), "
 ")
 
-# --- 5. Depth colours ---------------------------------------------------------
-
 depth_cols <- c(
-  "1" = "#7FC1DE",   # darkened from #A8D8EA for contrast against basemap (R4.9)
+  "1" = "#7FC1DE",
   "2" = "#4A90C4",
   "3" = "#1B4F8A",
   "4" = "#1A1147"
@@ -127,8 +106,6 @@ depth_labels <- c(
   "3" = "7 - 15 m",
   "4" = "> 15 m"
 )
-
-# --- 6. Theme -----------------------------------------------------------------
 
 theme_fig <- function(base_size = BASE_SIZE) {
   theme_minimal(base_size = base_size) +
@@ -150,8 +127,6 @@ theme_fig <- function(base_size = BASE_SIZE) {
                                        margin = margin(0, 0, 2, 0))
     )
 }
-
-# --- 7. Panel builder ---------------------------------------------------------
 
 build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
                                    show_scalebar = FALSE, show_north = FALSE,
@@ -177,7 +152,6 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
       guide        = guide_legend(override.aes = list(linetype = 0))
     ) +
 
-    # Roads — key_glyph = "path" forces a line swatch in the legend
     geom_sf(data      = roads |> mutate(lbl = "KKH / Roads"),
             aes(colour = lbl),
             linewidth  = 0.3,
@@ -199,10 +173,10 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
     # Bridges
     geom_sf(data = bridges, colour = "#E31A1C", shape = 17, size = 1.2) +
 
-    # Shisper Lake origin marker
-    annotate("point", x = 74.56, y = 36.305, shape = 21,
+    # Shisper ice dam / breach inflow (glacier terminus)
+    annotate("point", x = 74.5767, y = 36.3516, shape = 21,
              size = 2, fill = "white", colour = "black", stroke = 0.5) +
-    annotate("text", x = 74.56, y = 36.302, label = "Shisper Lake",
+    annotate("text", x = 74.5767, y = 36.3496, label = "Shisper ice dam",
              size = 1.6, fontface = "bold", vjust = 1) +
 
     coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
@@ -233,13 +207,9 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
   return(p)
 }
 
-# --- 8. Build panels ----------------------------------------------------------
-
 cat("--- Building panels ---
 ")
 
-# Top row: Low (left — north arrow, y-axis, no x-axis)
-#          Mid (right — no y-axis, no x-axis)
 p_low <- build_inundation_panel(
   d_low_cls, "(a) Low (10.2 M m³)",
   show_north = TRUE, show_xaxis = FALSE, show_yaxis = TRUE
@@ -263,12 +233,10 @@ p_legend_source <- build_inundation_panel(
 )
 legend_grob <- cowplot::get_legend(p_legend_source)
 
-# --- 9. Assemble layout -------------------------------------------------------
-
 p_top <- plot_grid(
   p_low, p_mid,
   ncol       = 2,
-  rel_widths = c(1, 0.88)   # left panel slightly wider: has y-axis labels
+  rel_widths = c(1, 0.88)
 )
 
 p_bot <- plot_grid(
@@ -283,8 +251,6 @@ p_final <- plot_grid(
   rel_heights = c(1, 1)
 )
 
-# --- 10. Save -----------------------------------------------------------------
-
 ggsave(file.path(OUT_DIR, "fig07_v5_inundation_L27.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
@@ -295,5 +261,3 @@ ggsave(file.path(OUT_DIR, "fig07_v5_inundation_L27.tiff"), p_final,
 
 cat("Done! Saved to", OUT_DIR, "
 ")
-
-

@@ -1,34 +1,4 @@
-# ============================================================
-# tableS3_hazard_classes.R
-#
-# UPDATED (2026-08-26): `Roads (km)` previously rounded to 2
-# decimals; both `Area (km²)` and `Roads (km)` are now rounded to 3
-# decimals and formatted with sprintf("%.3f", ...) so every value shows
-# exactly 3 decimal places. Also added the stopifnot() sanity check this
-# script previously lacked. Original archived to
-# scripts/OLD/tableS3_hazard_classes.R.
-#
-# Table S3 -- six-class hazard breakdown (H1-H6) for L27 and L29,
-# Mid baseline scenario. Thresholds: Smith, Davey & Cox (2014,
-# WRL TR 2014/07); AIDR Guideline 7-3 (2017).
-#
-# Each cell is assigned the least severe class whose D*V, depth
-# and velocity thresholds it satisfies, defaulting to H6.
-# Uses per-cell max depth and max velocity (not necessarily
-# co-occurring), so class assignment is an upper bound.
-#
-# Sources:
-#   hecras_models/<lake>/<lake>_Mid/Depth (Max)....tif
-#   hecras_models/<lake>/<lake>_Mid/Velocity (Max)....tif
-#   data/processed/OSM_buildings_GB_Chitral.gpkg
-#   data/processed/OSM_roads_GB_Chitral.gpkg
-#   data/processed/OSM_bridges_GB_Chitral.gpkg
-#   data/raw/GHS_POP_2025_GB_Chitral.tif
-#   data/raw/WorldPop_2020_GB_Chitral.tif
-#   data/raw/GHS_BUILT_S_2030_GB_Chitral.tif
-#
-# Output: figures/tableS3_hazard_classes.csv
-# ============================================================
+# Hazard classes
 
 library(terra)
 library(sf)
@@ -39,12 +9,12 @@ sf::sf_use_s2(FALSE)
 
 SCENARIOS <- list(
   L27 = list(
-    depth = "hecras_models/L27_Shisper/L27_Mid/Depth (Max).Terrain.L27_terrain.tif",
-    vel   = "hecras_models/L27_Shisper/L27_Mid/Velocity (Max).Terrain.L27_terrain.tif"
+    depth = "hecras_models/L27_Shisper_v2/L27_Mid/Depth (Max).L27_terrain_v2.L27_terrain_v2.tif",
+    vel   = "hecras_models/L27_Shisper_v2/L27_Mid/Velocity (Max).L27_terrain_v2.L27_terrain_v2.tif"
   ),
   L29 = list(
-    depth = "hecras_models/L29_Passu/L29_Mid/Depth (Max).Terrain.Terrain.L29_terrain_final.tif",
-    vel   = "hecras_models/L29_Passu/L29_Mid/Velocity (Max).Terrain.Terrain.L29_terrain_final.tif"
+    depth = "hecras_models/L29_Passu_v2/L29_Mid/Depth (Max).L29_terrain_v2.L29_terrain_v2.tif",
+    vel   = "hecras_models/L29_Passu_v2/L29_Mid/Velocity (Max).L29_terrain_v2.L29_terrain_v2.tif"
   )
 )
 
@@ -102,7 +72,7 @@ exposure_for_class <- function(h_class, class_val, cell_size) {
   road_km <- 0
   if (nrow(road_hits) > 0) {
     clipped <- suppressWarnings(sf::st_intersection(sf::st_geometry(road_hits), poly_osm))
-    road_km <- round(sum(sf::st_length(clipped)) / 1000, 3)
+    road_km <- round(as.numeric(sum(sf::st_length(clipped))) / 1000, 3)
   }
 
   n_bridges <- nrow(sf::st_filter(osm_bridges, poly_osm, .predicate = sf::st_intersects))
@@ -141,21 +111,13 @@ for (lid in names(SCENARIOS)) {
 tableS3 <- do.call(rbind, result_rows)
 rownames(tableS3) <- NULL
 
-# ---- Sanity check -----------------------------------------------------------
-# 2 lakes x 6 hazard classes = 12 rows; areas and road lengths are never
-# negative.
 stopifnot(
   nrow(tableS3) == 12,
   all(tableS3$`Area (km²)` >= 0),
   all(tableS3$`Roads (km)` >= 0)
 )
-cat("Sanity check passed: 12 rows (2 lakes x H1-H6), no negative areas/roads.\n")
+cat("Check passed.\n")
 
-# ---- Standardize display to exactly 3 decimal places (2026-08-26) --
-# `Area (km²)` was already round(..., 3) internally but, like the other
-# tables, still displayed a variable number of digits once written to CSV
-# (round() drops trailing zeros). `Roads (km)` was rounded to 2 decimals
-# above; both are now formatted with sprintf("%.3f", ...).
 tableS3 <- tableS3 |>
   dplyr::mutate(
     `Area (km²)`  = sprintf("%.3f", `Area (km²)`),
@@ -165,7 +127,7 @@ stopifnot(
   all(grepl("^-?[0-9]+\\.[0-9]{3}$", tableS3$`Area (km²)`)),
   all(grepl("^-?[0-9]+\\.[0-9]{3}$", tableS3$`Roads (km)`))
 )
-cat("Sanity check passed: Area / Roads display exactly 3 decimal places\n")
+cat("Check passed.\n")
 
 dir.create("figures", showWarnings = FALSE)
 write.csv(tableS3, "figures/tableS3_hazard_classes.csv", row.names = FALSE)

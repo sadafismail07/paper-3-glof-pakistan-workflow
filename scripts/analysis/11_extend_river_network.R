@@ -1,8 +1,4 @@
-# 11_extend_river_network.R
-# Re-clip HydroRIVERS with a 75 km buffer around the study area to capture
-# downstream segments that extend beyond the original district clip.
-# This was needed because L21 Karamber traced only 2.3 km in the original
-# clip due to NEXT_DOWN references pointing outside the dataset.
+# Clip HydroRIVERS with a 75 km buffer
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -42,4 +38,3 @@ sf::st_write(rivers_extended,
              "data/processed/HydroRIVERS_extended_GB_Chitral.gpkg",
              delete_dsn = TRUE,
              quiet = TRUE)
-

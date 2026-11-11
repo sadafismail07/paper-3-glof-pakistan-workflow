@@ -1,6 +1,4 @@
-# 09_process_dem.R
-# Load Copernicus 30m DEM exported from GEE, reproject to UTM 42N,
-# generate hillshade and slope rasters.
+# Reproject the DEM to UTM 42N
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 library(terra)
@@ -45,4 +43,3 @@ terra::writeRaster(slope_deg, "data/processed/DEM_slope_UTM42N.tif",
                    gdal = c("COMPRESS=DEFLATE", "PREDICTOR=2", "TILED=YES"))
 
 cat("\nDEM processing complete.\n")
-

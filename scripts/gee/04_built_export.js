@@ -1,5 +1,4 @@
-// 04_built_export.js
-// Export GHS-BUILT-S R2023A epoch 2030 for GB + Chitral study area
+// Export GHS-BUILT-S
 
 var studyArea = ee.Geometry.Rectangle({
   coords: [70.8, 34.8, 77.5, 37.7],
@@ -16,4 +15,3 @@ Export.image.toDrive({
   scale: 100, region: studyArea, crs: 'EPSG:4326',
   maxPixels: 1e10, fileFormat: 'GeoTIFF'
 });
-

@@ -1,6 +1,4 @@
-// 03_population_export.js
-// Export GHS-POP 2025 and WorldPop 2020 for GB + Chitral study area
-// Repository: glof-pakistan-ppr3
+// Export GHS-POP and WorldPop
 
 var studyArea = ee.Geometry.Rectangle({
   coords: [70.8, 34.8, 77.5, 37.7],
@@ -34,4 +32,3 @@ Export.image.toDrive({
   scale: 100, region: studyArea, crs: 'EPSG:4326',
   maxPixels: 1e10, fileFormat: 'GeoTIFF'
 });
-

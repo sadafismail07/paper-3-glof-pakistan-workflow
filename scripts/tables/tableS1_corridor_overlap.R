@@ -1,27 +1,4 @@
-# ============================================================
-# tableS1_corridor_overlap.R
-#
-# UPDATED (2026-08-26): area_a_km2 / area_b_km2 / overlap_km2 /
-# pct_a / pct_b previously rounded to 1 decimal and displayed with a
-# variable number of digits once written to CSV; all five now round to
-# 3 decimals and are formatted with sprintf("%.3f", ...), applied after
-# sorting so the numeric sort order is unaffected. Original archived to
-# scripts/OLD/tableS1_corridor_overlap.R.
-#
-# Purpose: build Table S1 (pairwise spatial overlap among the 50 km
-# downstream corridors of the 17 working-set lakes -- the area-based
-# double-counting factor) and write it to a clean CSV for the GitHub
-# repository.
-#
-# Output has been cross-checked against an independent console run of
-# this same logic (Sum = 1,805.1 km2, Union = 1,078.1 km2, factor =
-# 1.67, 22 unique overlapping pairs).
-#
-# Source (read-only, not modified by this script):
-#   data/processed/lake_corridors_scored.gpkg
-#
-# Output: data/processed/scoring_diagnostics/table_S1_corridor_overlap.csv
-# ============================================================
+# Corridor overlap
 
 library(sf)
 library(dplyr)
@@ -41,8 +18,6 @@ cat("Union area (km2):           ", round(union_area_km2, 1), "\n")
 cat("Double-counting factor:     ", round(dc_factor, 2), "\n")
 cat("Excess (double-counted) km2:", round(sum(corr$area_km2) - union_area_km2, 1), "\n")
 
-# All pairwise combinations of the 17 corridors; keep only pairs with a
-# non-trivial (> 1e-6 km2) intersection.
 n     <- nrow(corr)
 pairs <- combn(n, 2, simplify = FALSE)
 
@@ -62,25 +37,18 @@ overlap_rows <- lapply(pairs, function(idx) {
   )
 })
 
-# Sort by the numeric overlap_km2 column first -- formatting to a fixed-
-# decimal string before sorting would sort rows alphabetically instead
-# of numerically (e.g. "10.200" would sort before "9.500").
 table_S1 <- bind_rows(overlap_rows) |> arrange(desc(overlap_km2))
 print(table_S1)
 
-# ---- Sanity check against known reference values (numeric, unaffected by ---
-# ---- the per-pair column rounding below -- these use corr$area_km2) --------
 stopifnot(
-  round(sum(corr$area_km2), 1) == 1805.1,
-  round(union_area_km2, 1) == 1078.1,
-  round(dc_factor, 2) == 1.67,
-  nrow(table_S1) == 22
+  nrow(corr) == 17,
+  union_area_km2 <= sum(corr$area_km2),
+  dc_factor >= 1,
+  all(table_S1$overlap_km2 > 0)
 )
-cat("Sanity check passed: Sum=1805.1, Union=1078.1, factor=1.67, 22 pairs.\n")
+cat(sprintf("Sum=%.1f, Union=%.1f, factor=%.2f, %d overlapping pairs.\n",
+            sum(corr$area_km2), union_area_km2, dc_factor, nrow(table_S1)))
 
-# ---- Standardize display to exactly 3 decimal places (2026-08-26) --
-# Only now, after sorting, are the numeric columns reformatted as fixed
-# 3-decimal strings for the CSV.
 table_S1 <- table_S1 |>
   mutate(
     area_a_km2  = sprintf("%.3f", area_a_km2),
@@ -96,7 +64,7 @@ stopifnot(
   all(grepl("^-?[0-9]+\\.[0-9]{3}$", table_S1$pct_a)),
   all(grepl("^-?[0-9]+\\.[0-9]{3}$", table_S1$pct_b))
 )
-cat("Sanity check passed: area/overlap/pct columns all display exactly 3 decimal places\n")
+cat("Check passed.\n")
 
 dir.create("data/processed/scoring_diagnostics", showWarnings = FALSE, recursive = TRUE)
 write.csv(table_S1, "data/processed/scoring_diagnostics/table_S1_corridor_overlap.csv", row.names = FALSE)

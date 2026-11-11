@@ -1,18 +1,15 @@
-# 19_h4_hazard_mapping.R
-# Apply Westoby 2015 high-hazard (H4) threshold to all 14 HEC-RAS scenarios.
-# H4 criterion: depth > 1.5 m OR (depth x velocity) > 0.7 m^2/s
-# Outputs: binary H4 rasters per scenario + summary CSV.
+# Hazard zone rasters
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 library(terra)
 library(dplyr)
 
 # Locate all result rasters
-l29_files <- list.files("hecras_models/L29_Passu",
+l29_files <- list.files("hecras_models/L29_Passu_v2",
                          pattern = "\\.tif$",
                          recursive = TRUE,
                          full.names = TRUE)
-l27_files <- list.files("hecras_models/L27_Shisper",
+l27_files <- list.files("hecras_models/L27_Shisper_v2",
                          pattern = "\\.tif$",
                          recursive = TRUE,
                          full.names = TRUE)
@@ -83,4 +80,3 @@ summary_df <- do.call(rbind, results_list)
 summary_df$lake_id <- ifelse(grepl("L27", summary_df$scenario), "L27", "L29")
 write.csv(summary_df, "data/processed/h4_hazard_summary.csv",
           row.names = FALSE)
-

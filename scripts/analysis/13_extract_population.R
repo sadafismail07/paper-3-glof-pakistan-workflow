@@ -1,6 +1,4 @@
-# 13_extract_population.R
-# Extract per-corridor population sums from GHS-POP 2025 and WorldPop 2020.
-# Both datasets reported for cross-comparison; mean used in priority scoring.
+# Population per corridor
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -37,4 +35,3 @@ print(corridors_4326 |>
         dplyr::arrange(desc(pop_mean)) |>
         dplyr::select(lake_id, distance_km,
                       pop_ghs2025, pop_worldpop2020, pop_mean))
-

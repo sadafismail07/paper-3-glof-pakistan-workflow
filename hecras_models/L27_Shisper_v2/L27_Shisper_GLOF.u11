@@ -1,0 +1,189 @@
+Flow Title=L27_Shisper_tunnel_2020_volume
+Program Version=7.00
+Use Restart= 0 
+Boundary Location=                ,                ,        ,        ,                ,Perimeter 1     ,                ,Breach_Inflow                   ,                                ,                                
+Interval=5MIN
+Flow Hydrograph= 865 
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.80   20.81   20.82   20.82   20.83   20.84   20.85   20.86
+   20.86   20.87   20.88   20.89   20.90   20.91   20.91   20.92   20.93   20.94
+   20.95   20.96   20.97   20.98   20.99   20.99   21.00   21.01   21.02   21.03
+   21.04   21.05   21.06   21.07   21.08   21.09   21.10   21.11   21.12   21.13
+   21.15   21.16   21.17   21.18   21.19   21.20   21.21   21.22   21.24   21.25
+   21.26   21.27   21.28   21.29   21.31   21.32   21.33   21.34   21.36   21.37
+   21.38   21.40   21.41   21.42   21.44   21.45   21.46   21.48   21.49   21.51
+   21.52   21.53   21.55   21.56   21.58   21.59   21.61   21.62   21.64   21.65
+   21.67   21.69   21.70   21.72   21.73   21.75   21.77   21.78   21.80   21.82
+   21.83   21.85   21.87   21.89   21.91   21.92   21.94   21.96   21.98   22.00
+   22.02   22.04   22.05   22.07   22.09   22.11   22.13   22.15   22.17   22.19
+   22.22   22.24   22.26   22.28   22.30   22.32   22.34   22.37   22.39   22.41
+   22.43   22.46   22.48   22.50   22.53   22.55   22.58   22.60   22.62   22.65
+   22.67   22.70   22.73   22.75   22.78   22.80   22.83   22.86   22.88   22.91
+   22.94   22.97   22.99   23.02   23.05   23.08   23.11   23.14   23.17   23.20
+   23.23   23.26   23.29   23.32   23.35   23.38   23.42   23.45   23.48   23.51
+   23.55   23.58   23.61   23.65   23.68   23.72   23.75   23.79   23.82   23.86
+   23.90   23.93   23.97   24.01   24.05   24.09   24.12   24.16   24.20   24.24
+   24.28   24.32   24.36   24.41   24.45   24.49   24.53   24.57   24.62   24.66
+   24.71   24.75   24.80   24.84   24.89   24.93   24.98   25.03   25.07   25.12
+   25.17   25.22   25.27   25.32   25.37   25.42   25.47   25.52   25.57   25.63
+   25.68   25.73   25.79   25.84   25.90   25.95   26.01   26.07   26.13   26.18
+   26.24   26.30   26.36   26.42   26.48   26.54   26.60   26.67   26.73   26.79
+   26.86   26.92   26.99   27.05   27.12   27.19   27.26   27.33   27.40   27.47
+   27.54   27.61   27.68   27.75   27.83   27.90   27.97   28.05   28.13   28.20
+   28.28   28.36   28.44   28.52   28.60   28.68   28.76   28.84   28.93   29.01
+   29.10   29.18   29.27   29.36   29.45   29.54   29.63   29.72   29.81   29.90
+   30.00   30.09   30.19   30.28   30.38   30.48   30.58   30.68   30.78   30.88
+   30.98   31.09   31.19   31.30   31.40   31.51   31.62   31.73   31.84   31.95
+   32.07   32.18   32.30   32.41   32.53   32.65   32.77   32.89   33.01   33.14
+   33.26   33.39   33.51   33.64   33.77   33.90   34.03   34.16   34.30   34.43
+   34.57   34.71   34.85   34.99   35.13   35.27   35.42   35.56   35.71   35.86
+   36.01   36.16   36.31   36.47   36.62   36.78   36.94   37.10   37.26   37.42
+   37.59   37.76   37.92   38.09   38.26   38.44   38.61   38.79   38.97   39.15
+   39.33   39.51   39.69   39.88   40.07   40.26   40.45   40.64   40.84   41.04
+   41.23   41.44   41.64   41.84   42.05   42.26   42.47   42.68   42.90   43.11
+   43.33   43.55   43.78   44.00   44.23   44.46   44.69   44.92   45.16   45.40
+   45.64   45.88   46.12   46.37   46.62   46.87   47.13   47.38   47.64   47.90
+   48.17   48.43   48.70   48.98   49.25   49.53   49.81   50.09   50.37   50.66
+   50.95   51.24   51.54   51.84   52.14   52.44   52.75   53.06   53.37   53.69
+   54.01   54.33   54.65   54.98   55.31   55.65   55.98   56.32   56.67   57.01
+   57.37   57.72   58.08   58.44   58.80   59.17   59.54   59.91   60.29   60.67
+   61.06   61.44   61.84   62.23   62.63   63.03   63.44   63.85   64.27   64.69
+   65.11   65.54   65.97   66.40   66.84   67.28   67.73   68.18   68.64   69.10
+   69.56   70.03   70.51   70.99   71.47   71.95   72.45   72.94   73.44   73.95
+   74.46   74.97   75.50   76.02   76.55   77.09   77.63   78.17   78.72   79.28
+   79.84   80.40   80.98   81.55   82.14   82.72   83.32   83.92   84.52   85.13
+   85.75   86.37   87.00   87.63   88.27   88.92   89.57   90.23   90.89   91.56
+   92.24   92.92   93.61   94.31   95.01   95.72   96.44   97.16   97.89   98.63
+   99.38  100.13  100.88  101.65  102.42  103.20  103.99  104.78  105.59  106.40
+  107.21  108.04  108.87  109.71  110.56  111.42  112.28  113.16  114.04  114.93
+  115.83  116.73  117.65  118.57  119.51  120.45  121.40  122.36  123.33  124.30
+  125.29  126.29  127.29  128.31  129.33  130.37  131.41  132.47  133.53  134.61
+  135.69  136.78  137.89  139.00  140.13  141.27  142.42  143.57  144.74  145.92
+  147.11  148.32  149.53  145.93  142.34  138.74  135.14  131.54  127.94  124.35
+  120.75  117.15  113.55  109.95  106.35  102.76   99.16   95.56   91.96   88.36
+   84.77   81.17   77.57   73.97   70.37   66.78   63.18   59.58   55.98   52.38
+   48.78   45.19   41.59   37.99   34.39   30.79   27.20   23.60   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00   20.00
+   20.00   20.00   20.00   20.00   20.00
+Stage Hydrograph TW Check=0
+Flow Hydrograph Slope= 0.09 
+DSS Path=
+Use DSS=False
+Use Fixed Start Time=True
+Fixed Start Date/Time=01AUG2025,00:00
+Is Critical Boundary=False
+Critical Boundary Flow=
+Boundary Location=                ,                ,        ,        ,                ,Perimeter 1     ,                ,Downstream_Outflow              ,                                ,                                
+Friction Slope=0.005
+Met Point Raster Parameters=,,,,
+Precipitation Mode=Disable
+Wind Mode=No Wind Forces
+Air Density Mode=
+Wave Mode=No Wave Forcing
+Met BC=Precipitation|Expanded View=0
+Met BC=Precipitation|Point Interpolation=Nearest
+Met BC=Precipitation|Gridded Source=DSS
+Met BC=Precipitation|Gridded Interpolation=
+Met BC=Evapotranspiration|Expanded View=0
+Met BC=Evapotranspiration|Point Interpolation=Nearest
+Met BC=Evapotranspiration|Gridded Source=DSS
+Met BC=Evapotranspiration|Gridded Interpolation=
+Met BC=Wind Speed|Expanded View=0
+Met BC=Wind Speed|Point Interpolation=Nearest
+Met BC=Wind Speed|Gridded Source=DSS
+Met BC=Wind Speed|Gridded Interpolation=
+Met BC=Wind Direction|Expanded View=0
+Met BC=Wind Direction|Point Interpolation=Nearest
+Met BC=Wind Direction|Gridded Source=DSS
+Met BC=Wind Direction|Gridded Interpolation=
+Met BC=Wind Velocity X|Expanded View=0
+Met BC=Wind Velocity X|Point Interpolation=Nearest
+Met BC=Wind Velocity X|Gridded Source=DSS
+Met BC=Wind Velocity X|Gridded Interpolation=
+Met BC=Wind Velocity Y|Expanded View=0
+Met BC=Wind Velocity Y|Point Interpolation=Nearest
+Met BC=Wind Velocity Y|Gridded Source=DSS
+Met BC=Wind Velocity Y|Gridded Interpolation=
+Met BC=Wave Forcing X|Expanded View=0
+Met BC=Wave Forcing X|Point Interpolation=Nearest
+Met BC=Wave Forcing X|Gridded Source=DSS
+Met BC=Wave Forcing X|Gridded Interpolation=
+Met BC=Wave Forcing Y|Expanded View=0
+Met BC=Wave Forcing Y|Point Interpolation=Nearest
+Met BC=Wave Forcing Y|Gridded Source=DSS
+Met BC=Wave Forcing Y|Gridded Interpolation=
+Met BC=Air Density|Mode=Constant
+Met BC=Air Density|Expanded View=0
+Met BC=Air Density|Constant Value=1.225
+Met BC=Air Density|Constant Units=kg/m3
+Met BC=Air Density|Point Interpolation=Nearest
+Met BC=Air Density|Gridded Source=DSS
+Met BC=Air Density|Gridded Interpolation=
+Met BC=Air Temperature|Expanded View=0
+Met BC=Air Temperature|Point Interpolation=Nearest
+Met BC=Air Temperature|Gridded Source=DSS
+Met BC=Air Temperature|Gridded Interpolation=
+Met BC=Humidity|Expanded View=0
+Met BC=Humidity|Point Interpolation=Nearest
+Met BC=Humidity|Gridded Source=DSS
+Met BC=Humidity|Gridded Interpolation=
+Met BC=Air Pressure|Mode=Constant
+Met BC=Air Pressure|Expanded View=0
+Met BC=Air Pressure|Constant Value=1013.2
+Met BC=Air Pressure|Constant Units=mb
+Met BC=Air Pressure|Point Interpolation=Inv Distance
+Met BC=Air Pressure|Gridded Source=DSS
+Met BC=Air Pressure|Gridded Interpolation=
+Non-Newtonian Method= 0 ,   
+Non-Newtonian Constant Vol Conc=0
+Non-Newtonian Yield Method= 0 ,   
+Non-Newtonian Yield Coef=0, 0
+User Yeild=   0
+Non-Newtonian Sed Visc= 0 ,   
+Non-Newtonian Obrian B=0
+User Viscosity=0
+User Viscosity Ratio=0
+Herschel-Bulkley Coef=0, 0
+Clastic Method= 0 ,   
+Coulomb Phi=0
+Voellmy X=0
+Non-Newtonian Hindered FV= 0 
+Non-Newtonian FV K=0
+Non-Newtonian ds=0
+Non-Newtonian Max Cv=0
+Non-Newtonian Bulking Method= 0 , 
+Non-Newtonian High C Transport= 0 , 
+Lava Activation= 0 
+Temperature=1300,15,,15,14,980
+Heat Ballance=1,1200,0.5,1,70,0.95
+Viscosity=1000,,,
+Yield Strength=,,,
+Consistency Factor=,,,
+Profile Coefficient=4,1.3,
+Lava Param=,2500,

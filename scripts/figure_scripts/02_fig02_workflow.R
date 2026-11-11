@@ -1,35 +1,8 @@
-
-# ════════════════════════════════════════════════════════════════
-# 02_fig2_workflow.R
-# Figure 2 — Reproducible Workflow Diagram
-# PURPOSE: Flowchart of the entire methodology from data inputs to manuscript output.
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-#
-# UPDATED (2026-08-21): supersedes 02_fig02_workflow.R (moved to scripts/OLD/).
-# Fix for R1.software: the previous version colour-coded step boxes BY
-# SOFTWARE TOOL (QGIS/GEE/R/HEC-RAS), with its own 5-entry colour legend,
-# even though the boxes were already grouped into labelled phase panels
-# (Acquisition/Delineation/Simulation/Assessment). That made "which
-# software" the dominant visual read instead of "what stage." Step boxes
-# are now coloured by phase (matching their panel's colour family) and
-# the tool-based colour legend is removed -- the phase panels are already
-# labelled, so a separate key isn't needed. The tool name is unchanged as
-# an italic subtitle inside each box, so no information is lost.
-# ════════════════════════════════════════════════════════════════
-
-# =============================================================================
-# Fig 2 — Reproducible Workflow Diagram (publication version)
-# Output: figures/fig02_workflow.pdf  (83 mm wide, single-column)
-# Packages: ggplot2, dplyr, tibble
-# natural 4-phase structure
-# =============================================================================
+# Workflow diagram
 
 library(ggplot2)
 library(dplyr)
 library(tibble)
-
-# ── 1. Steps ──────────────────────────────────────────────────────────────────
 
 steps <- tribble(
   ~phase,        ~phase_id, ~step_id, ~label,                      ~tool,
@@ -38,15 +11,13 @@ steps <- tribble(
   "Acquisition",  1,         3,        "Compile base layers",       "QGIS",
   "Acquisition",  1,         4,        "Acquire DEM + imagery",     "GEE",
   "Delineation",  2,         5,        "Delineate lakes (NDWI)",    "GEE + QGIS",
-  "Delineation",  2,         6,        "Map corridors + exposure",  "QGIS + R",
+  "Delineation",  2,         6,        "Map corridors + exposure",  "Python + R",
   "Delineation",  2,         7,        "Score + rank lakes",        "R",
   "Simulation",   3,         8,        "Parameterise breach model", "R",
   "Simulation",   3,         9,        "Run flood simulations",     "HEC-RAS 2D",
   "Assessment",   4,         10,       "Map hazard + exposure",     "QGIS + R",
-  "Assessment",   4,         11,       "Validate peak discharges",  "R + literature"
+  "Assessment",   4,         11,       "Check peak discharges",     "R + literature"
 )
-
-# ── 2. Layout constants ───────────────────────────────────────────────────────
 
 box_w    <- 38
 box_h    <- 11
@@ -75,8 +46,6 @@ steps <- steps |>
     y_mid    = y_top - box_h / 2
   )
 
-# ── 3. Phase panels ───────────────────────────────────────────────────────────
-
 phase_cols   <- c("Acquisition" = "#E8F4FA", "Delineation" = "#E8F7E8",
                   "Simulation"  = "#FDF3E8", "Assessment"  = "#F5EAF5")
 phase_border <- c("Acquisition" = "#2A6EAA", "Delineation" = "#2A7A2A",
@@ -96,8 +65,6 @@ phase_panels <- steps |>
     border = phase_border[phase]
   )
 
-# ── 4. Within-phase arrows ────────────────────────────────────────────────────
-
 within_arrows <- steps |>
   group_by(phase_id) |>
   arrange(pos_in_phase, .by_group = TRUE) |>
@@ -109,9 +76,6 @@ within_arrows <- steps |>
   filter(!is.na(x_to)) |>
   ungroup()
 
-# ── 5. Between-phase arrows ───────────────────────────────────────────────────
-# From bottom of phase panel → top of next phase panel (not into boxes)
-
 between_arrows <- phase_panels |>
   arrange(phase_id) |>
   mutate(
@@ -122,11 +86,6 @@ between_arrows <- phase_panels |>
   filter(!is.na(y_to)) |>
   select(phase, x_arr, y_from, y_to)
 
-# ── 6. Step-box colours (BY PHASE, not by software tool) ─────────────────────
-# A deeper tint of each phase's colour family, so boxes read clearly against
-# their own (paler) panel background while keeping the phase grouping as the
-# single colour-coded dimension in the figure.
-
 step_fill <- c("Acquisition" = "#CFE8F5", "Delineation" = "#CFEECF",
                "Simulation"  = "#FCE3C8", "Assessment"  = "#E8D2EE")
 
@@ -136,12 +95,8 @@ steps <- steps |>
     border = phase_border[phase]
   )
 
-# ── 7. Canvas ─────────────────────────────────────────────────────────────────
-
 x_range <- c(0, canvas_w)
 y_range <- c(min(phase_panels$ymin) - 4, max(phase_panels$ymax) + 2)
-
-# ── 8. Plot ───────────────────────────────────────────────────────────────────
 
 p <- ggplot() +
 
@@ -163,7 +118,6 @@ p <- ggplot() +
   ) +
   scale_colour_manual(values = phase_border, guide = "none") +
 
-  # Between-phase arrows (panel bottom → panel top, no overlap with boxes)
   geom_segment(
     data = between_arrows,
     aes(x = x_arr, xend = x_arr, y = y_from, yend = y_to),
@@ -195,7 +149,6 @@ p <- ggplot() +
     size = 2.5, fontface = "bold", hjust = 0.5, colour = "#111111"
   ) +
 
-  # Tool subtitle (unchanged -- still names the software used, just not colour-coded)
   geom_text(
     data = steps,
     aes(x = x_mid, y = y_mid - 1.7, label = tool),
@@ -209,11 +162,8 @@ p <- ggplot() +
     plot.background = element_rect(fill = "white", colour = NA)
   )
 
-# ── 9. Export ────────────────────────────────────────────────────────────────
-
 dir.create("figures", showWarnings = FALSE)
 
-# dpi bumped from 600 to 800 for GitHub/publication release
 ggsave("figures/fig02_workflow.tiff",
        width = 174, height = 115, units = "mm",
        dpi = 800, bg = "white", compression = "lzw")

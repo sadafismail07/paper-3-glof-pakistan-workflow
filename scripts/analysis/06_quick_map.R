@@ -1,6 +1,4 @@
-# 06_quick_map.R
-# Quick visualization of vulnerable GLOF sites colored by vulnerability.
-# Working-set lakes (vulnerability 4-5) are labeled.
+# Quick map of the lakes
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -55,4 +53,3 @@ ggsave(
 )
 
 cat("Saved: figures/fig01_quick_lake_map.png\n")
-

@@ -1,6 +1,4 @@
-# 01_clean_inventory.R
-# Load the NDMA Vulnerable GLOF Sites dataset, clean column names,
-# add a stable lake_id, and save processed outputs.
+# Clean the lake inventory
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 
@@ -48,4 +46,3 @@ sf::st_write(
 cat("Saved cleaned inventory.\n")
 cat("  data/processed/lakes_vulnerable_GB_Chitral.csv\n")
 cat("  data/processed/lakes_vulnerable_GB_Chitral.gpkg\n")
-

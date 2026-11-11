@@ -1,6 +1,4 @@
-# 07_clip_hydrosheds.R
-# Clip HydroRIVERS and HydroBASINS to study area.
-# Outputs: full river network, main-rivers-only, L8 and L9 sub-basins.
+# Clip HydroRIVERS and HydroBASINS
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -57,4 +55,3 @@ for (level in names(basin_files)) {
 
   cat("HydroBASINS", level, ":", nrow(basins_intersect), "sub-basins\n")
 }
-

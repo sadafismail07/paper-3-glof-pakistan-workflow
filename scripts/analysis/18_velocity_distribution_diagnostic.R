@@ -1,6 +1,4 @@
-# 18_velocity_distribution_diagnostic.R
-# Compute velocity distribution statistics from HEC-RAS Velocity (Max) rasters.
-# Reports 95th percentile as primary metric to handle localized mesh artifacts.
+# Velocity statistics from HEC-RAS rasters
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 library(terra)
@@ -32,7 +30,7 @@ velocity_diagnostic <- function(raster_path, label = NULL) {
   )
 
   cat(sprintf("  Median:           %.2f m/s\n", results$median))
-  cat(sprintf("  95th percentile:  %.2f m/s (recommended for paper)\n", results$p95))
+  cat(sprintf("  95th percentile:  %.2f m/s\n", results$p95))
   cat(sprintf("  99th percentile:  %.2f m/s\n", results$p99))
   cat(sprintf("  Max:              %.2f m/s\n", results$max))
   cat(sprintf("  %% above 10 m/s:   %.2f%%\n", results$pct_above_10))
@@ -41,8 +39,3 @@ velocity_diagnostic <- function(raster_path, label = NULL) {
 
   invisible(results)
 }
-
-# Example usage:
-# vel_path <- "hecras_models/L27_Shisper/L27_Mid/Velocity (Max).Terrain.L27_terrain.tif"
-# diag <- velocity_diagnostic(vel_path, "L27 Mid")
-

@@ -1,29 +1,12 @@
-
-# ════════════════════════════════════════════════════════════════
-# 20_simulation_results.R
-# PURPOSE: L27_Shisper_simulation_results_VERIFIED.csv
-#          L29_Passu_simulation_results_VERIFIED.csv
-#          ALL_simulation_results_VERIFIED.csv
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-
-# verify_all_metrics.R
-# Extracts depth, velocity, and wetted area metrics from HEC-RAS rasters
-# Covers both L27_Shisper and L29_Passu
+# Simulation result tables
 
 library(terra)
 library(dplyr)
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 
-# -------------------------------------------------------------
-# 1. Configure paths and thresholds
-# -------------------------------------------------------------
-
 WET_THRESHOLD_M <- 0.05  # 5 cm noise filter
 
-# Scenario table — folder names now match what list.files() actually found
 scenarios <- data.frame(
   lake = c(
     rep("L27", 7),
@@ -33,7 +16,6 @@ scenarios <- data.frame(
     "Low", "Mid_baseline", "High", "Mid_n04", "Mid_n06", "Mid_bulk1.5", "Mid_bulk2.0",
     "Low", "Mid_baseline", "High", "Mid_n04", "Mid_n06", "Mid_b15",    "Mid_b20"
   ),
-  # These folder names are taken directly from the list.files() output
   folder = c(
     "L27_Low", "L27_Mid", "L27_High", "L27_Mid_n04", "L27_Mid_n06",
     "L27_Mid_bulk1.5", "L27_Mid_bulk2.0",
@@ -41,15 +23,11 @@ scenarios <- data.frame(
     "L29_Mid_b15", "L29_Mid_b20"
   ),
   base_dir = c(
-    rep("hecras_models/L27_Shisper", 7),
-    rep("hecras_models/L29_Passu",  7)
+    rep("hecras_models/L27_Shisper_v2", 7),
+    rep("hecras_models/L29_Passu_v2",  7)
   ),
   stringsAsFactors = FALSE
 )
-
-# -------------------------------------------------------------
-# 2. Helper: find depth or velocity raster inside a folder
-# -------------------------------------------------------------
 
 find_raster <- function(folder, kind, base_dir) {
   folder_path <- file.path(base_dir, folder)
@@ -60,7 +38,7 @@ find_raster <- function(folder, kind, base_dir) {
   }
 
   all_tifs <- list.files(folder_path,
-                         pattern = "\.tif$",
+                         pattern = "\\.tif$",
                          full.names = TRUE,
                          recursive = TRUE,
                          ignore.case = TRUE)
@@ -84,10 +62,6 @@ find_raster <- function(folder, kind, base_dir) {
 
   hits[1]
 }
-
-# -------------------------------------------------------------
-# 3. Extract metrics from one scenario row
-# -------------------------------------------------------------
 
 extract_metrics <- function(row) {
   depth_file <- find_raster(row$folder, "Depth",    row$base_dir)
@@ -141,10 +115,6 @@ extract_metrics <- function(row) {
   base_result
 }
 
-# -------------------------------------------------------------
-# 4. Run for all scenarios
-# -------------------------------------------------------------
-
 cat("Extracting metrics from HEC-RAS rasters...
 
 ")
@@ -153,10 +123,6 @@ results <- do.call(rbind, lapply(
   seq_len(nrow(scenarios)),
   function(i) extract_metrics(scenarios[i, ])
 ))
-
-# -------------------------------------------------------------
-# 5. Quick sanity check — flag any all-NA rows
-# -------------------------------------------------------------
 
 cat("
 === Extraction summary ===
@@ -176,10 +142,6 @@ if (nrow(missing) > 0) {
 ✓ All rasters found and extracted successfully.
 ")
 }
-
-# -------------------------------------------------------------
-# 6. Compare against existing CSV (if present)
-# -------------------------------------------------------------
 
 csv_path <- "data/processed/simulation_results.csv"
 
@@ -224,10 +186,6 @@ No existing CSV found at", csv_path, "— skipping comparison.
 ")
 }
 
-# -------------------------------------------------------------
-# 7. Save verified results (one CSV per lake + a combined one)
-# -------------------------------------------------------------
-
 dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
 
 write.csv(results[results$lake == "L27", ],
@@ -251,5 +209,3 @@ cat("  data/processed/L29_Passu_simulation_results_VERIFIED.csv
 ")
 cat("  data/processed/ALL_simulation_results_VERIFIED.csv
 ")
-
-

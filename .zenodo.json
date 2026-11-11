@@ -1,6 +1,6 @@
 {
   "title": "GLOF prioritisation and hydrodynamic simulation in Gilgit-Baltistan and Chitral, northern Pakistan: a reproducible open-data workflow",
-  "description": "A reproducible workflow with R and Google Earth Engine scripts for lake delineation, corridor extraction, multi-criteria priority scoring, and hydrodynamic hazard analysis. The package encompasses processed spatial datasets and HEC-RAS model inputs for glacial lake outburst flood (GLOF) prioritisation across Gilgit-Baltistan and Chitral, northern Pakistan, built entirely on publicly available datasets. Released under the MIT License (see LICENSE).",
+  "description": "Scripts (R, Python, Google Earth Engine), HEC-RAS 2D model inputs and figures for a glacial lake outburst flood (GLOF) study in Gilgit-Baltistan and Chitral, northern Pakistan. Released under the MIT License.",
   "creators": [
     {
       "name": "Ismail, Sadaf",
@@ -25,7 +25,9 @@
     "hydrodynamic modelling",
     "HEC-RAS",
     "hazard mapping",
-    "reproducible workflow"
+    "reproducible workflow",
+    "ice-dammed lake",
+    "surge-type glacier"
   ],
   "language": "eng",
   "access_right": "open"

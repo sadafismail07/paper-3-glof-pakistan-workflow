@@ -1,19 +1,5 @@
+# Hazard zone maps
 
-# ════════════════════════════════════════════════════════════════
-# 10_fig10_h4_hazard.R
-# Figure 10 — Hazard Class Map with Infrastructure Overlay 
-# PURPOSE: THE HEADLINE FIGURE. Westoby H4 hazard zones for both lakes (mid scenario)
-#          with population and infrastructure overlaid. Tells the key story:
-#          "residential buildings are mostly above the floodplain; transportation
-#          infrastructure (KKH, bridges) is the real exposure.
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-# ============================================================
-# fig10_v4_fix_h4_hazard.R
-# Fig 10 — H4 Hazard Class Map with Infrastructure Overlay
-# v4 with terrain fix: hillshade cropped to map extent
-# ============================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(terra)
@@ -28,15 +14,14 @@ library(ggnewscale)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 11.0
-FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
-BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
+FIG_DPI    <- 800
+BASE_SIZE  <- 9
 P          <- "data/processed/fig010o_layers"
 
-# ── 1. Load layers ────────────────────────────────────────────
 cat("── Loading layers ──
 ")
 
-# FIX: load as _full so we can re-crop after extent is computed
+# load as _full so we can re-crop after extent is computed
 hs_l29_full <- rast(file.path(P, "L29_hillshade_wgs84.tif"))
 hs_l27      <- rast("data/processed/fig07_layers/L27_hillshade_wgs84.tif")
 
@@ -65,7 +50,6 @@ cat("  All layers loaded
 
 ")
 
-# ── 2. Map extents ────────────────────────────────────────────
 get_lims <- function(r) {
   e <- ext(r)
   list(xlim = c(xmin(e), xmax(e)),
@@ -74,14 +58,7 @@ get_lims <- function(r) {
 
 lim_l27 <- get_lims(hs_l27)
 
-# L29: 8% padding around H4 extent (same as v4)
-e29   <- ext(h4_l29_raw)
-x_pad <- (xmax(e29) - xmin(e29)) * 0.08
-y_pad <- (ymax(e29) - ymin(e29)) * 0.08
-lim_l29 <- list(
-  xlim = c(xmin(e29) - x_pad, xmax(e29) + x_pad),
-  ylim = c(ymin(e29) - y_pad, ymax(e29) + y_pad)
-)
+lim_l29 <- get_lims(hs_l29_full)
 
 cat("  L29 map extent: lon", round(lim_l29$xlim, 4),
     " lat", round(lim_l29$ylim, 4), "
@@ -91,8 +68,6 @@ cat("  L27 map extent: lon", round(lim_l27$xlim, 4),
 
 ")
 
-# FIX: crop hillshade to the FINAL map extent (not H4 extent)
-# This ensures terrain fills the whole L29 panel
 hs_l29 <- crop(hs_l29_full,
                ext(lim_l29$xlim[1], lim_l29$xlim[2],
                    lim_l29$ylim[1], lim_l29$ylim[2]))
@@ -101,7 +76,6 @@ cat("  L29 hillshade re-cropped to map extent:",
 
 ")
 
-# ── 3. Population: log-scale, masked inside H4 ───────────────
 prep_pop <- function(pop, h4_raw) {
   h4_r <- resample(h4_raw, pop, method = "near")
   out  <- pop
@@ -113,7 +87,6 @@ prep_pop <- function(pop, h4_raw) {
 pop_l29 <- prep_pop(pop_l29, h4_l29_raw)
 pop_l27 <- prep_pop(pop_l27, h4_l27_raw)
 
-# ── 4. Annotation text ────────────────────────────────────────
 fmt_ann <- function(lake_id) {
   r <- ann[ann$lake == lake_id, ]
   sprintf(
@@ -131,7 +104,6 @@ ann_l27       <- fmt_ann("L27")
 n_bridges_l29 <- ann[ann$lake == "L29", "bridges"]
 n_bridges_l27 <- ann[ann$lake == "L27", "bridges"]
 
-# ── 5. Theme ──────────────────────────────────────────────────
 theme_fig <- function(base_size = BASE_SIZE) {
   theme_minimal(base_size = base_size) +
     theme(
@@ -160,7 +132,6 @@ theme_fig <- function(base_size = BASE_SIZE) {
     )
 }
 
-# ── 6. Panel builder ──────────────────────────────────────────
 build_panel <- function(hs, h4, h4_raw, pop,
                         roads, bridges,
                         xlim, ylim,
@@ -174,7 +145,6 @@ build_panel <- function(hs, h4, h4_raw, pop,
   xr <- xlim[2] - xlim[1]
   yr <- ylim[2] - ylim[1]
 
-  # Annotation box: bottom-right, 36% wide, 30% tall, text centred
   ann_xmin <- xlim[2] - 0.38 * xr
   ann_xmax <- xlim[2] - 0.004
   ann_ymin <- ylim[1] + 0.003
@@ -184,8 +154,6 @@ build_panel <- function(hs, h4, h4_raw, pop,
 
   p <- ggplot() +
 
-    # Layer 1 — Hillshade
-    # na.value = "white" fills any edge pixels outside raster coverage
     geom_spatraster(data = hs, show.legend = FALSE) +
     scale_fill_gradient(low      = "grey5",
                         high     = "white",
@@ -213,7 +181,6 @@ log scale)",
       )
     ) +
 
-    # Layer 3 — H4 hazard zone (red — unambiguous against blue pop)
     ggnewscale::new_scale_fill() +
     geom_spatraster(data = h4, show.legend = show_legend,
                     alpha = 0.78) +
@@ -316,7 +283,6 @@ DxV >0.7 sq.m/s)"),
   return(p)
 }
 
-# ── 7. Build panels ───────────────────────────────────────────
 cat("── Building panels ──
 ")
 
@@ -329,7 +295,7 @@ p_l29 <- build_panel(
   bridges       = bridges_l29,
   xlim          = lim_l29$xlim,
   ylim          = lim_l29$ylim,
-  title         = "(a) L29 Passu - Mid scenario H4 hazard zone",
+  title         = "(a) L29 Passu",
   ann_text      = ann_l29,
   n_bridges_csv = n_bridges_l29,
   show_legend   = TRUE,
@@ -347,7 +313,7 @@ p_l27 <- build_panel(
   bridges       = bridges_l27,
   xlim          = lim_l27$xlim,
   ylim          = lim_l27$ylim,
-  title         = "(b) L27 Shisper - Mid scenario H4 hazard zone",
+  title         = "(b) L27 Shisper",
   ann_text      = ann_l27,
   n_bridges_csv = n_bridges_l27,
   show_legend   = FALSE,
@@ -356,7 +322,6 @@ p_l27 <- build_panel(
   show_yaxis    = FALSE
 )
 
-# ── 8. Assemble — legend in own narrow column ─────────────────
 cat("── Assembling ──
 ")
 
@@ -368,7 +333,6 @@ p_maps  <- plot_grid(p_l29_noleg, p_l27,
 p_final <- plot_grid(p_maps, legend_grob,
                      ncol = 2, rel_widths = c(1, 0.18))
 
-# ── 9. Save ───────────────────────────────────────────────────
 cat("── Saving ──
 ")
 
@@ -386,7 +350,5 @@ cat("  Saved: fig10_v4_fix_h4_hazard.tiff
 ")
 
 cat("
-Fig 10 v4 fix complete.
+Done.
 ")
-
-

@@ -40,4 +40,32 @@ figures/Supplementary Fig*
 /*.docx
 /*.pdf
 /Reviewers' comments/
+_delete/
 
+# Submission package, working notes and local scratch
+CRST_submission/
+Claude outputs/
+*.wps
+_tmp_dem_win/
+data/processed/_archive_pre_submission/
+figures/_archive_pre_submission/
+data/processed/pipeline_run_log*.csv
+data/processed/v2_results/
+*.gpkg-journal
+hecras_models/v2_inputs/README_rerun_v2.md
+hecras_models/v2_inputs/check_*.png
+
+# Superseded HEC-RAS projects (replaced by the *_v2 projects)
+hecras_models/L27_Shisper/
+hecras_models/L29_Passu/
+
+
+# HEC-RAS run-time files
+hecras_models/**/Backup.*
+hecras_models/**/*.b[0-9][0-9]
+
+# Not part of the public repository
+data/
+docs/
+REPRODUCE.md
+figures/*.csv

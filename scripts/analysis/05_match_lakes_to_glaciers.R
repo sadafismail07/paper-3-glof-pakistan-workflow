@@ -1,6 +1,4 @@
-# 05_match_lakes_to_glaciers.R
-# Spatially match each working-set lake to its RGI parent glacier.
-# Direct intersection first, nearest-neighbor for unmatched lakes.
+# Match lakes to RGI glaciers
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -15,7 +13,6 @@ glaciers   <- sf::st_read("data/processed/RGI7_glaciers_GB_Chitral.gpkg",
 
 working_set <- lakes |> dplyr::filter(vulnerability >= 4)
 
-# Direct match by intersection
 lakes_matched <- sf::st_join(
   working_set,
   glaciers |> dplyr::select(rgi_id, glac_name, area_km2,
@@ -50,4 +47,3 @@ sf::st_write(
   "data/processed/lakes_working_set_with_rgi.gpkg",
   delete_dsn = TRUE, quiet = TRUE
 )
-

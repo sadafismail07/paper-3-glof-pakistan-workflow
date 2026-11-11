@@ -1,6 +1,5 @@
-# ============================================================
-# fig08_v6_tornado.R
-# ============================================================
+# Sensitivity chart
+
 setwd("C:/Users/sadaf/Documents/PPR3")
 library(ggplot2)
 library(dplyr)
@@ -10,17 +9,13 @@ library(cowplot)
 OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_W     <- 22.0
 FIG_H     <- 26.0
-FIG_DPI   <- 800   # bumped from 600 to 800 dpi for repo/publication release
-BASE_SIZE <- 9   # bumped from 7 for label legibility (R4.9)
-# ── 1. Load & merge verified data ─────────────────────────────
+FIG_DPI   <- 800
+BASE_SIZE <- 9
 ver <- read_csv("data/processed/ALL_simulation_results_VERIFIED.csv",
                 show_col_types = FALSE) %>%
   mutate(scenario = recode(scenario,
     "Mid_b15" = "Mid_bulk1.5",
     "Mid_b20" = "Mid_bulk2.0"))
-# NOTE: all_simulations_combined.csv (no suffix) no longer exists on
-# disk -- reading all_simulations_combined_v2.csv instead. That file
-# already uses a "lake" column (not "lake_id"), so no rename is needed.
 combined <- read_csv("data/processed/all_simulations_combined_v2.csv",
                      show_col_types = FALSE) %>%
   mutate(scenario = recode(scenario,
@@ -131,11 +126,6 @@ metric_cols <- c(
   "Wetted area"   = "#1B7837"
 )
 
-# ── 6. Group assignment and bold/pastel shading ──────────────
-# Each of the 6 "param" levels belongs to one of three parameter
-# groups, and to one of two rows within that group (the higher-
-# magnitude / higher-value member of the pair rendered at full
-# opacity, the other at reduced opacity).
 group_of <- function(param) {
   case_when(
     param %in% c("Bulking f = 1.5", "Bulking f = 2.0")   ~ "Sed. bulking",
@@ -174,9 +164,6 @@ build_panel <- function(df, panel_title, subtitle, x_limits) {
       check_overlap = TRUE
     ) +
     geom_hline(yintercept = 0, color = "grey20", linewidth = 0.3) +
-    # ylim (not a hard scale limit) zooms the view without dropping data
-    # outside it -- the group-name labels below are placed just past
-    # this range and rely on clip = "off" to still be drawn.
     coord_flip(ylim = x_limits, clip = "off") +
     scale_fill_manual(values = metric_cols, name = "Metric") +
     scale_alpha_manual(values = c(bold = 1, pastel = 0.45), guide = "none") +
@@ -196,8 +183,6 @@ build_panel <- function(df, panel_title, subtitle, x_limits) {
     )
 }
 
-# Horizontal separators between the three parameter groups (drawn as
-# dashed lines between params 2/3 and 4/5 of the 6-level y-axis).
 add_group_separators <- function(p) {
   p + geom_hline(yintercept = 0) +
     annotate("segment", x = 2.5, xend = 2.5, y = -Inf, yend = Inf,
@@ -206,9 +191,6 @@ add_group_separators <- function(p) {
              linetype = "dashed", color = "grey50", linewidth = 0.3)
 }
 
-# Group-name side labels with a coloured vertical tick, drawn outside
-# the panel using coord_flip(clip = "off") plus expanded plot margin
-# (set in build_panel() above).
 add_group_labels <- function(p, df, y_min) {
   labs_df <- df %>%
     distinct(param, group) %>%

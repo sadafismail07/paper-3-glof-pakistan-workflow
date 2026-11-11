@@ -1,15 +1,5 @@
+# Inundation maps, L29
 
-# ════════════════════════════════════════════════════════════════
-# 06_fig06_inundation_L29.R
-# Figure 6 — Inundation Maps: L29 Passu (Low / Mid / High)
-# PURPOSE: Three-panel map showing how flood extent grows across volume scenarios
-#          for the moraine-dammed lake. Each panel shows one scenario.
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-# =============================================================================
-# fig06_v4_inundation_L29.R
-# =============================================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(terra)
@@ -24,11 +14,9 @@ library(ggnewscale)
 OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 12.0
-FIG_DPI    <- 800   # bumped from 600 to 800 dpi for repo/publication release
-BASE_SIZE  <- 9   # bumped from 7 for label legibility (R4.9)
+FIG_DPI    <- 800
+BASE_SIZE  <- 9
 L <- "data/processed/fig06_layers"
-
-# --- 1. Load layers -----------------------------------------------------------
 
 cat("--- Loading layers ---
 ")
@@ -41,8 +29,6 @@ bridges <- st_read(file.path(L, "L29_bridges.gpkg"), quiet = TRUE)
 cat("  All loaded
 ")
 
-# --- 2. Disaggregate to reduce pixelation -------------------------------------
-
 cat("  Disaggregating depth rasters...
 ")
 d_low  <- disagg(d_low,  fact = 7, method = "bilinear")
@@ -53,8 +39,6 @@ d_mid[d_mid < 0.01]   <- NA
 d_high[d_high < 0.01] <- NA
 cat("  Done
 ")
-
-# --- 3. Classify depth into 4 classes -----------------------------------------
 
 classify_depth <- function(r) {
   m <- matrix(c(
@@ -73,8 +57,6 @@ d_high_cls <- classify_depth(d_high)
 levels(d_low_cls)  <- data.frame(id = 1:4, depth = c("1","2","3","4"))
 levels(d_mid_cls)  <- data.frame(id = 1:4, depth = c("1","2","3","4"))
 levels(d_high_cls) <- data.frame(id = 1:4, depth = c("1","2","3","4"))
-
-# --- 4. Extent tight to actual flood -----------------------------------------
 
 flood_ext <- function(r) {
   cells <- which(!is.na(values(r)))
@@ -100,10 +82,8 @@ ylim <- c(ymin_f - ypad, ymax_f + ypad)
 cat("  Flood extent: lon", round(xlim, 3), " lat", round(ylim, 3), "
 ")
 
-# --- 5. Depth colours ---------------------------------------------------------
-
 depth_cols <- c(
-  "1" = "#7FC1DE",   # darkened from #A8D8EA for contrast against basemap (R4.9)
+  "1" = "#7FC1DE",
   "2" = "#4A90C4",
   "3" = "#1B4F8A",
   "4" = "#1A1147"
@@ -115,8 +95,6 @@ depth_labels <- c(
   "3" = "3 - 7 m",
   "4" = "> 7 m"
 )
-
-# --- 6. Theme -----------------------------------------------------------------
 
 theme_fig <- function(base_size = BASE_SIZE) {
   theme_minimal(base_size = base_size) +
@@ -138,8 +116,6 @@ theme_fig <- function(base_size = BASE_SIZE) {
                                        margin = margin(0, 0, 2, 0))
     )
 }
-
-# --- 7. Panel builder ---------------------------------------------------------
 
 build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
                                     show_scalebar = FALSE, show_north = FALSE,
@@ -193,9 +169,9 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
              size = 1.8, fontface = "italic", colour = "grey25", angle = -60) +
 
     # Passu Lake origin
-    annotate("point", x = 74.893, y = 36.455, shape = 21,
+    annotate("point", x = 74.8797, y = 36.4574, shape = 21,
              size = 2, fill = "white", colour = "black", stroke = 0.5) +
-    annotate("text", x = 74.893, y = 36.453, label = "Passu Lake",
+    annotate("text", x = 74.8797, y = 36.4554, label = "Passu Lake",
              size = 1.6, fontface = "bold", vjust = 1) +
 
     coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
@@ -225,8 +201,6 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
   return(p)
 }
 
-# --- 8. Build panels ----------------------------------------------------------
-
 cat("--- Building panels ---
 ")
 
@@ -242,12 +216,14 @@ p_high <- build_inundation_panel(d_high_cls,
            "(c) High (3.23 M m³)",
            show_legend = TRUE, show_north = TRUE, show_yaxis = FALSE)
 
-# --- 9. Combine + save --------------------------------------------------------
-
 cat("--- Combining ---
 ")
 
-p_final <- plot_grid(p_low, p_mid, p_high, ncol = 3, rel_widths = c(1, 1, 1.3))
+p_legend  <- cowplot::get_legend(p_high)
+p_high_nl <- p_high + theme(legend.position = "none")
+p_maps    <- plot_grid(p_low, p_mid, p_high_nl, ncol = 3,
+                       align = "h", axis = "tb", rel_widths = c(1.22, 1, 1))
+p_final   <- plot_grid(p_maps, p_legend, ncol = 2, rel_widths = c(1, 0.17))
 
 ggsave(file.path(OUT_DIR, "fig06_v4_inundation_L29.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
@@ -259,5 +235,3 @@ ggsave(file.path(OUT_DIR, "fig06_v4_inundation_L29.tiff"), p_final,
 
 cat("Done! Saved to", OUT_DIR, "
 ")
-
-

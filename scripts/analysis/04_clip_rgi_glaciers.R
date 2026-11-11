@@ -1,6 +1,4 @@
-# 04_clip_rgi_glaciers.R
-# Load RGI 7.0 Region 14 (South Asia West) and clip to study area.
-# Reports surge-type breakdown and total glacier area.
+# Clip RGI 7.0 glaciers to the study area
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -27,7 +25,6 @@ study_bbox <- sf::st_as_sfc(sf::st_bbox(study_area))
 in_bbox <- sf::st_intersects(glaciers_full, study_bbox, sparse = FALSE)[, 1]
 glaciers_bbox <- glaciers_full[in_bbox, ]
 
-# Stage 2: exact intersection
 glaciers_study <- sf::st_intersection(glaciers_bbox, study_area)
 
 cat("Glaciers in study area:", nrow(glaciers_study), "\n")
@@ -41,4 +38,3 @@ sf::st_write(
   "data/processed/RGI7_glaciers_GB_Chitral.gpkg",
   delete_dsn = TRUE, quiet = TRUE
 )
-

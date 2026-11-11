@@ -1,6 +1,4 @@
-# 00_setup_project.R
-# Create folder structure for the GLOF Pakistan workflow project.
-# Run once at project initialization.
+# Create the project folders
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 
@@ -26,4 +24,3 @@ for (f in folders) {
 }
 
 cat("\nFolder structure ready inside:", getwd(), "\n")
-

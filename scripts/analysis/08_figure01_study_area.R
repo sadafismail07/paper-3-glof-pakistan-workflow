@@ -1,5 +1,4 @@
-# 08_figure01_study_area.R
-# Generate Figure 1 (study area map) with all base layers.
+# Study area map (base layers)
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -58,4 +57,3 @@ ggsave("figures/fig01_study_area_v2.png",
        plot = p, width = 12, height = 8, dpi = 200)
 
 cat("Saved: figures/fig01_study_area_v2.png\n")
-

@@ -1,9 +1,4 @@
-# 17_breach_hydrograph_generation.R
-# Generate breach inflow hydrographs for HEC-RAS using Froehlich 2008
-# breach parameters and Walder 1996 / Singh 1996 hydrograph shape.
-# Peak Q estimated as geometric mean of Walder & O'Connor 1997 (lower)
-# and Costa & Schuster 1988 (upper) empirical bounds. Total integrated
-# volume rescaled to match Vw exactly.
+# Breach hydrographs
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 library(dplyr)
@@ -55,7 +50,6 @@ for (i in 1:nrow(bp)) {
               res$Q_walder_lower, res$Q_costa_upper))
 }
 
-# Generate sediment-bulked hydrographs for both lakes (Mid scenario only)
 cat("\nGenerating sediment-bulked hydrographs (Mid scenario):\n")
 for (lake_id in c("L29", "L27")) {
   mid_file <- sprintf("data/processed/%s_breach_hydrograph_Mid.csv", lake_id)
@@ -73,4 +67,3 @@ for (lake_id in c("L29", "L27")) {
                 lake_id, factor, max(bulked$Q_m3_s)))
   }
 }
-

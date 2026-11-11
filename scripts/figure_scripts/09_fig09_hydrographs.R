@@ -1,9 +1,5 @@
+# Breach hydrographs
 
-# ============================================================
-# fig09_hydrographs_v6.R
-# Fix: unified legend — coloured line segment + name + peak Q
-# one row per scenario, single box per panel
-# ============================================================
 setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(ggplot2)
@@ -15,10 +11,9 @@ library(colorspace)
 OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
 FIG_W     <- 20.0
 FIG_H     <- 8.0
-FIG_DPI   <- 800   # bumped from 600 to 800 dpi for repo/publication release
-BASE_SIZE <- 9   # bumped from 7 for label legibility (R4.9)
+FIG_DPI   <- 800
+BASE_SIZE <- 9
 
-# ── 1. Load data ──────────────────────────────────────────────
 read_hydro <- function(path, lake, scenario) {
   d <- read.csv(path)
   d$lake     <- lake
@@ -46,18 +41,11 @@ dat <- bind_rows(
 dat$scenario <- factor(dat$scenario, levels = scen_order)
 dat$time_h   <- dat$time_hours
 
-# ── 2. Peaks ──────────────────────────────────────────────────
-# Locate the peak ROW for plotting the time marker (uses curve max)
 peaks <- dat |>
   group_by(lake, scenario) |>
   slice(which.max(Q_m3_s)) |>
   ungroup()
 
-# Canonical peak-Q values from Table 3 (verified HEC-RAS inputs).
-# The discrete hydrograph CSV maxima can fall a few m³/s below these
-# because the time sampling does not land exactly on the analytical
-# peak; we display the Table 3 values to keep the figure and table
-# perfectly consistent.
 canonical_peaks <- tribble(
   ~lake,         ~scenario,        ~Q_label,
   "L29 Passu",   "Mid baseline",   1261,
@@ -68,7 +56,6 @@ canonical_peaks <- tribble(
   "L27 Shisper", "Bulk ×2.0", 25092
 )
 
-# ── 3. Style maps ─────────────────────────────────────────────
 scen_lty <- c(
   "Mid baseline"   = "solid",
   "Bulk ×1.5" = "dashed",
@@ -80,7 +67,6 @@ scen_lwd <- c(
   "Bulk ×2.0" = 0.60
 )
 
-# ── 4. Theme ──────────────────────────────────────────────────
 theme_hydro <- function(base_size = BASE_SIZE) {
   theme_minimal(base_size = base_size) +
     theme(
@@ -104,7 +90,6 @@ theme_hydro <- function(base_size = BASE_SIZE) {
     )
 }
 
-# ── 5. Panel builder ──────────────────────────────────────────
 build_hydro <- function(lake_name, col, title, subtitle, y_breaks) {
 
   d    <- dat   |> filter(lake == lake_name)
@@ -128,15 +113,11 @@ build_hydro <- function(lake_name, col, title, subtitle, y_breaks) {
   scen_cols <- setNames(c(col_mid, col_15, col_20), scen_order)
   cols_vec  <- c(col_mid, col_15, col_20)
 
-# Peak values — use canonical Table 3 values for the legend labels
   pk <- canonical_peaks |>
     filter(lake == lake_name) |>
     arrange(factor(scenario, levels = scen_order)) |>
     pull(Q_label)
 
-  # ── Unified legend geometry ───────────────────────────────
-  # Box sits in the recession area: x from 45% to 100% of max_t
-  # y from 70% to 100% of y_max
   bx0 <- max_t * 0.45; bx1 <- max_t * 1.00
   by0 <- y_max * 0.68; by1 <- y_max * 1.01
 
@@ -251,7 +232,6 @@ build_hydro <- function(lake_name, col, title, subtitle, y_breaks) {
   return(p)
 }
 
-# ── 6. Build ──────────────────────────────────────────────────
 cat("── Building panels ──
 ")
 
@@ -271,7 +251,6 @@ p_l27 <- build_hydro(
   y_breaks  = seq(0, 30000, by = 5000)
 )
 
-# ── 7. Assemble ───────────────────────────────────────────────
 cat("── Assembling ──
 ")
 
@@ -283,7 +262,6 @@ p_final <- cowplot::plot_grid(
   axis       = "tb"
 )
 
-# ── 8. Save ───────────────────────────────────────────────────
 cat("── Saving ──
 ")
 
@@ -303,5 +281,3 @@ cat("  Saved: fig09_hydrographs_v6.tiff
 cat("
 Fig 9 v6 complete.
 ")
-
-

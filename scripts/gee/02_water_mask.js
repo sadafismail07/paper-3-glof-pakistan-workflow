@@ -1,15 +1,4 @@
-// ===================================================================
-// Script: 02_water_mask.js
-// Purpose: Multi-index water mask for vulnerable GLOF lakes in
-//          GB + Chitral, Pakistan
-// Repository: glof-pakistan-ppr3
-//
-// Combined NDWI + MNDWI + NDSI rule:
-//   water = NDWI > 0.2 AND MNDWI > 0.0 AND NDSI < 0.6
-//
-// Exports NDWI, MNDWI, and combined water mask at 10m resolution
-// Sentinel-2 SR Harmonized, August-September 2024 composite
-// ===================================================================
+// Water mask from Sentinel-2
 
 var studyArea = ee.Geometry.Rectangle({
   coords: [70.8, 34.8, 77.5, 37.7],
@@ -61,4 +50,3 @@ Export.image.toDrive({
   folder: 'GLOF_Pakistan_PPR3', scale: 10, region: studyArea,
   crs: 'EPSG:4326', maxPixels: 1e10, fileFormat: 'GeoTIFF'
 });
-

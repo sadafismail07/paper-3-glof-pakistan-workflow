@@ -1,7 +1,4 @@
-# 03_assign_lakes_to_districts.R
-# Spatially join lake inventory to study area districts.
-# Flags lakes outside the study area as out-of-scope but retained
-# for transparency.
+# Join lakes to districts
 
 setwd("C:/Users/sadaf/Documents/PPR3")
 sf::sf_use_s2(FALSE)
@@ -55,4 +52,3 @@ sf::st_write(
 cat("\nSaved:\n")
 cat("  data/processed/lakes_with_district.gpkg (full)\n")
 cat("  data/processed/lakes_analysis_set.gpkg  (in-study-area only)\n")
-

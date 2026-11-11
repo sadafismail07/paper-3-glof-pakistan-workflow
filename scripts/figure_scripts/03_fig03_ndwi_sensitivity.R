@@ -1,13 +1,4 @@
-
-# ════════════════════════════════════════════════════════════════
-# 03_fig03_ndwi_sensitivity.R
-# Figure 3 —  NDWI Threshold Sensitivity
-# PURPOSE: ..... 
-# AUTHOR:  Ismail, Sadaf — GSAIS, Kyoto University
-# DATE:    2026
-# ════════════════════════════════════════════════════════════════
-
-# Fig 3 v2 — NDWI Threshold Sensitivity
+# NDWI threshold sensitivity
 
 library(ggplot2)
 library(dplyr)
@@ -33,13 +24,6 @@ df <- read_csv(
     )
   )
 
-# The source layer (data/processed/Threshold_sensitivity.csv) carries the
-# lake-name attribute as "Khurdopin" and "Karambar" -- both mistyped
-# relative to this study's own working-set spelling ("Khurdupin", the L15
-# lake per the NDMA inventory) and the L21 lake's Table 1 spelling
-# ("Karamber"). Corrected here at display time, matching the
-# fix_khurdupin_spelling()/strip_bualtar() precedent used in the table
-# scripts, rather than editing the source CSV.
 df <- df |>
   mutate(
     name = recode(name, "Khurdopin" = "Khurdupin", "Karambar" = "Karamber")
@@ -56,8 +40,6 @@ lake_colours <- c(
 
 circle_r <- 0.022
 
-# ── Actual point coordinates ────────────────────────────────────────────────
-
 shishper_y <- df |>
   filter(
     threshold == chosen_threshold,
@@ -72,10 +54,6 @@ passu_y <- df |>
   ) |>
   pull(area_km2)
 
-# ── Labels + swapped arrow targets ──────────────────────────────────────────
-# Text positions stay the same.
-# ONLY arrow targets are swapped.
-
 x_label <- chosen_threshold + 0.045
 
 labels_df <- tibble(
@@ -89,10 +67,6 @@ labels_df <- tibble(
   # Text locations stay unchanged
   x_label = x_label,
   y_label = c(0.58, 0.32),
-
-  # ── SWAPPED TARGETS ───────────────────────────────────────────────────────
-  # 0.162 -> lower point (Passu)
-  # 0.019 -> upper point (Shishper)
 
   pt_y = c(passu_y, shishper_y)
 
@@ -111,15 +85,11 @@ labels_df <- tibble(
     y_start = y_label - 0.025
   )
 
-# ── Highlight circles ───────────────────────────────────────────────────────
-
 circles_df <- df |>
   filter(
     threshold == chosen_threshold,
     name %in% c("Shisper", "Passu")
   )
-
-# ── Khurdopin annotation ────────────────────────────────────────────────────
 
 khurdupin_t0 <- df |>
   filter(
@@ -130,8 +100,6 @@ khurdupin_t0 <- df |>
 annot_x      <- 0.018
 annot_y_top  <- khurdupin_t0$area_km2 + 0.07
 arrow_x_end  <- khurdupin_t0$threshold + (circle_r * 0.5)
-
-# ── Plot ────────────────────────────────────────────────────────────────────
 
 p <- ggplot(
   df,
@@ -204,9 +172,6 @@ artefacts",
     linewidth = 0.3
   ) +
 
-  # ── Open coloured circles ONLY on plot ───────────────────────────────────
-  # show.legend = FALSE prevents legend changes
-
   geom_point(
     data = circles_df,
     aes(
@@ -277,7 +242,7 @@ artefacts",
     y = expression("Detected lake area (km"^2*")")
   ) +
 
-  theme_classic(base_size = 9) +   # bumped from 7 for label legibility (R4.9)
+  theme_classic(base_size = 9) +
 
   theme(
     legend.position      = "top",
@@ -303,8 +268,6 @@ artefacts",
     )
   )
 
-# ── Export ──────────────────────────────────────────────────────────────────
-
 dir.create("figures", showWarnings = FALSE)
 
 ggsave("figures/fig03_ndwi_sensitivity_v2.tiff",
@@ -318,4 +281,3 @@ ggsave("figures/fig03_ndwi_sensitivity_v2.png",
 message(
   "Saved: figures/fig03_ndwi_sensitivity_v2.tiff  +  .png"
 )
-

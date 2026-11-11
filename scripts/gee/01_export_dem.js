@@ -1,13 +1,4 @@
-// ===================================================================
-// Script: 01_export_dem.js
-// Purpose: Export Copernicus 30m DEM clipped to GB + Chitral study area
-// Repository: glof-pakistan-ppr3
-//
-// Run via Google Earth Engine Code Editor:
-//   https://code.earthengine.google.com/
-//
-// Output: GeoTIFF exported to Drive folder GLOF_Pakistan_PPR3
-// ===================================================================
+// Export the GLO-30 DEM
 
 var studyArea = ee.Geometry.Rectangle({
   coords: [70.8, 34.8, 77.5, 37.7],
@@ -48,4 +39,3 @@ Export.image.toDrive({
 });
 
 print('Export task created. Click Tasks tab and Run.');
-
