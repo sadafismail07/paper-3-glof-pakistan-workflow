@@ -1,6 +1,5 @@
-# Study area map
+# Figure 1: study area
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 library(sf)
 library(terra)
 library(ggplot2)
@@ -9,12 +8,15 @@ library(cowplot)
 library(ggrepel)
 library(dplyr)
 library(tidyterra)
-OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
+if (!dir.exists("data/processed/figure_layers"))
+  system2("python", "scripts/figure_scripts/00_prepare_figure_layers.py")
+OUT_DIR    <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 12.0
 FIG_DPI    <- 800
 BASE_SIZE  <- 9
-L <- "data/processed/fig01_layers"
+L <- "data/processed/figure_layers/maps"
 cat("--- Loading layers ---\n")
 lakes      <- st_read(file.path(L, "lakes.gpkg"), quiet = TRUE)
 pak_L0     <- st_read(file.path(L, "pak_L0.gpkg"), quiet = TRUE)
@@ -23,7 +25,7 @@ afg_L0     <- st_read(file.path(L, "afg_L0.gpkg"), quiet = TRUE)
 chn_L0     <- st_read(file.path(L, "chn_L0.gpkg"), quiet = TRUE)
 glaciers   <- st_read(file.path(L, "glaciers_clipped.gpkg"), quiet = TRUE)
 rivers     <- st_read(file.path(L, "rivers_clipped.gpkg"), quiet = TRUE)
-hs_rast    <- rast(file.path(L, "hillshade_clipped.tif"))
+hs_rast    <- rast("data/processed/DEM_hillshade_WGS84.tif")
 cat("  All layers loaded\n")
 WORKING_IDS <- c("L01","L02","L03","L04","L05","L06","L15","L19","L20",
                  "L21","L22","L24","L25","L26","L27","L28","L29")
@@ -196,14 +198,14 @@ p_inset <- ggplot() +
 cat("--- Saving ---\n")
 p_final <- ggdraw() +
   draw_plot(p_main)
-ggsave(file.path(OUT_DIR, "fig01_v6_study_area.png"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_1.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
-ggsave(file.path(OUT_DIR, "fig01_v6_study_area.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_1.tiff"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
 chk <- lakes |> st_drop_geometry() |>
   select(lake_id, glacier_name, vulnerability) |> arrange(lake_id)
 print(as.data.frame(chk), row.names = FALSE)
-write.csv(chk, file.path(OUT_DIR, "fig01_v6_lakes_plotted.csv"), row.names = FALSE)
+write.csv(chk, file.path(OUT_DIR, "Figure_1_lakes_plotted.csv"), row.names = FALSE)
 cat("Done! Saved to", OUT_DIR, "\n")

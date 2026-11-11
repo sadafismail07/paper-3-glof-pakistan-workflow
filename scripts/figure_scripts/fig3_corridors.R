@@ -1,6 +1,5 @@
-# Corridor map
+# Figure 3: screening corridors
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(sf)
 library(terra)
@@ -12,13 +11,16 @@ library(tidyterra)
 library(scico)
 library(ggnewscale)
 library(cowplot)
+if (!dir.exists("data/processed/figure_layers"))
+  system2("python", "scripts/figure_scripts/00_prepare_figure_layers.py")
 
-OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR    <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 18.0
 FIG_DPI    <- 800
 BASE_SIZE  <- 9
-L <- "data/processed/fig01_layers"
+L <- "data/processed/figure_layers/maps"
 
 cat("--- Loading layers ---
 ")
@@ -27,7 +29,7 @@ corr_all   <- st_read("data/processed/lake_corridors_scored.gpkg", quiet = TRUE)
 lakes      <- st_read(file.path(L, "lakes.gpkg"), quiet = TRUE)
 gb_chitral <- st_read(file.path(L, "gb_chitral.gpkg"), quiet = TRUE)
 rivers     <- st_read(file.path(L, "rivers_clipped.gpkg"), quiet = TRUE)
-hs_rast    <- rast(file.path(L, "hillshade_clipped.tif"))
+hs_rast    <- rast("data/processed/DEM_hillshade_WGS84.tif")
 roads      <- st_read(file.path(L, "osm_roads.gpkg"), quiet = TRUE)
 bridges    <- st_read(file.path(L, "osm_bridges.gpkg"), quiet = TRUE)
 cat("  All layers loaded
@@ -280,11 +282,11 @@ cat("--- Combining panels ---
 p_bottom <- plot_grid(p_chitral, p_hunza, ncol = 2, rel_widths = c(1, 1))
 p_final  <- plot_grid(p_overview, p_bottom, ncol = 1, rel_heights = c(1, 1))
 
-ggsave(file.path(OUT_DIR, "fig05_v9_corridors.png"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_3.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig05_v9_corridors.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_3.tiff"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
 

@@ -1,4 +1,4 @@
-# Priority scores
+# Figure 4: priority scores
 
 library(ggplot2)
 library(dplyr)
@@ -112,16 +112,17 @@ Bar: composite score. Highlighted rows: simulated lakes."
     plot.background      = element_rect(fill = "white", colour = NA),
     panel.background     = element_rect(fill = "white", colour = NA)
   )
-OUT_DIR <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 
 n_lakes <- nrow(df)
 fig_h   <- max(60, n_lakes * 5.8)
 
-ggsave(file.path(OUT_DIR, "fig04_v4_priority_scoring.png"), p,
+ggsave(file.path(OUT_DIR, "Figure_4.png"), p,
        width = 84, height = fig_h, units = "mm",
        dpi = 800, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig04_v4_priority_scoring.tiff"), p,
+ggsave(file.path(OUT_DIR, "Figure_4.tiff"), p,
        width = 84, height = fig_h, units = "mm",
        dpi = 800, bg = "white", compression = "lzw")
 

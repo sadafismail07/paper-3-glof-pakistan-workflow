@@ -20,13 +20,17 @@ steps <- c(
   "scripts/tables/tableS5_corridor_exposure.R",
   "scripts/tables/tableS6_downstream_attenuation.R",
   "scripts/tables/tableS7_weighting_sensitivity.R",
-  "scripts/figure_scripts/04_fig04_priority_scoring.R",
-  "scripts/figure_scripts/05_fig05_corridors.R",
-  "scripts/figure_scripts/06_fig06_inundation_L29.R",
-  "scripts/figure_scripts/07_fig07_inundation_L27.R",
-  "scripts/figure_scripts/08_fig08_tornado.R",
-  "scripts/figure_scripts/10_fig10_h4_hazard.R",
-  "scripts/figure_scripts/11_fig11_validation.R"
+  "scripts/figure_scripts/fig1_study_area.R",
+  "scripts/figure_scripts/fig2_workflow.R",
+  "scripts/figure_scripts/fig4_priority_scores.R",
+  "scripts/figure_scripts/fig5_breach_hydrographs.R",
+  "scripts/figure_scripts/figS1_ndwi_threshold.R",
+  "scripts/figure_scripts/fig3_corridors.R",
+  "scripts/figure_scripts/fig6_inundation_passu.R",
+  "scripts/figure_scripts/fig7_inundation_shisper.R",
+  "scripts/figure_scripts/fig8_sensitivity.R",
+  "scripts/figure_scripts/fig9_hazard_zones.R",
+  "scripts/figure_scripts/figS2_breach_peaks.R"
 )
 log <- data.frame(step = steps, status = NA_character_, message = NA_character_)
 for (i in seq_along(steps)) {

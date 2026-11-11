@@ -1,12 +1,11 @@
-# Sensitivity chart
+# Figure 8: sensitivity chart
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(readr)
 library(cowplot)
-OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR   <- "figures"
 FIG_W     <- 22.0
 FIG_H     <- 26.0
 FIG_DPI   <- 800
@@ -220,12 +219,12 @@ p_final <- plot_grid(p29, p27, ncol = 1, align = "v")
 # ── 8. Save ────────────────────────────────────────────────
 dir.create(OUT_DIR, showWarnings = FALSE)
 
-ggsave(file.path(OUT_DIR, "fig08_v6_tornado.png"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_8.png"), p_final,
        width = FIG_W, height = FIG_H, units = "cm",
        dpi = FIG_DPI, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig08_v6_tornado.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_8.tiff"), p_final,
        width = FIG_W, height = FIG_H, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
 
-cat("Saved: fig08_v6_tornado.png + .tiff\n")
+cat("Saved: Figure_8.png + .tiff\n")

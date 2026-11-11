@@ -1,6 +1,5 @@
-# Inundation maps, L29
+# Figure 6: inundation maps, Passu
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(terra)
 library(ggplot2)
@@ -10,13 +9,16 @@ library(sf)
 library(dplyr)
 library(cowplot)
 library(ggnewscale)
+if (!dir.exists("data/processed/figure_layers"))
+  system2("python", "scripts/figure_scripts/00_prepare_figure_layers.py")
 
-OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR    <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 12.0
 FIG_DPI    <- 800
 BASE_SIZE  <- 9
-L <- "data/processed/fig06_layers"
+L <- "data/processed/figure_layers/fig6"
 
 cat("--- Loading layers ---
 ")
@@ -25,6 +27,9 @@ d_low   <- rast(file.path(L, "L29_Low_depth_wgs84.tif"))
 d_mid   <- rast(file.path(L, "L29_Mid_depth_wgs84.tif"))
 d_high  <- rast(file.path(L, "L29_High_depth_wgs84.tif"))
 roads   <- st_read(file.path(L, "L29_roads.gpkg"), quiet = TRUE)
+lake_xy <- st_read("data/processed/lakes_polygons_verified.gpkg", quiet = TRUE) |>
+  filter(lake_id == "L29") |> st_transform(32642) |> st_geometry() |> st_centroid() |>
+  st_transform(4326) |> st_coordinates() |> as.numeric()
 bridges <- st_read(file.path(L, "L29_bridges.gpkg"), quiet = TRUE)
 cat("  All loaded
 ")
@@ -169,9 +174,9 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
              size = 1.8, fontface = "italic", colour = "grey25", angle = -60) +
 
     # Passu Lake origin
-    annotate("point", x = 74.8797, y = 36.4574, shape = 21,
+    annotate("point", x = lake_xy[1], y = lake_xy[2], shape = 21,
              size = 2, fill = "white", colour = "black", stroke = 0.5) +
-    annotate("text", x = 74.8797, y = 36.4554, label = "Passu Lake",
+    annotate("text", x = lake_xy[1], y = lake_xy[2] - 0.002, label = "Passu Lake",
              size = 1.6, fontface = "bold", vjust = 1) +
 
     coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
@@ -225,11 +230,11 @@ p_maps    <- plot_grid(p_low, p_mid, p_high_nl, ncol = 3,
                        align = "h", axis = "tb", rel_widths = c(1.22, 1, 1))
 p_final   <- plot_grid(p_maps, p_legend, ncol = 2, rel_widths = c(1, 0.17))
 
-ggsave(file.path(OUT_DIR, "fig06_v4_inundation_L29.png"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_6.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig06_v4_inundation_L29.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_6.tiff"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
 

@@ -11,9 +11,18 @@ flood (GLOF) study in Gilgit-Baltistan and Chitral, northern Pakistan.
 
 HEC-RAS results, terrain rasters and input datasets are not included.
 
+## Figures
+
+Each figure has its own script in `scripts/figure_scripts/` (`fig1_*` to `fig9_*`,
+`figS1_*` to `figS3_*`). Run from the project root, for example
+`Rscript scripts/figure_scripts/fig3_corridors.R`. Output goes to `figures/`.
+The map figures use layers built by `00_prepare_figure_layers.py`, which the
+R scripts run automatically if the layers are missing.
+
 ## Software
 
-R 4.5, Python 3, QGIS 3.34, HEC-RAS 7.0, Google Earth Engine.
+R 4.5, Python 3 (numpy, pandas, geopandas, rasterio, shapely, matplotlib, rdata),
+QGIS 3.34, HEC-RAS 7.0, Google Earth Engine.
 
 ## License
 

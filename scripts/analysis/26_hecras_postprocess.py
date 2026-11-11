@@ -168,43 +168,6 @@ def clip_osm(name, bounds, out):
     g = g[g.intersects(gpd.GeoSeries([box(*bounds)], crs=32642).to_crs(4326).iloc[0])]
     g.to_file(out, driver='GPKG')
 
-for lake, fdir, fol in [('L29', 'fig06_layers', 'L29'), ('L27', 'fig07_layers', 'L27')]:
-    od = os.path.join(P_OUT, fdir); os.makedirs(od, exist_ok=True)
-    allb = None
-    for scen in ['Low', 'Mid', 'High']:
-        dp, _ = rasters(lake, f'{lake}_{scen}'); d, T, crs, _ = read(dp); d[d <= WET] = np.nan
-        write_utm(d, T, crs, os.path.join(od, f'{lake}_{scen}_depth.tif'))
-        to_wgs84(d, T, crs, os.path.join(od, f'{lake}_{scen}_depth_wgs84.tif'))
-        rows_, cols_ = np.where(np.isfinite(d))
-        x0, y0 = T * (cols_.min(), rows_.max() + 1); x1, y1 = T * (cols_.max() + 1, rows_.min())
-        b = (x0, y0, x1, y1); allb = b if allb is None else (min(allb[0], b[0]), min(allb[1], b[1]), max(allb[2], b[2]), max(allb[3], b[3]))
-    pad = 1500; B = (allb[0] - pad, allb[1] - pad, allb[2] + pad, allb[3] + pad)
-    hillshade(B, os.path.join(od, f'{lake}_hillshade.tif'), os.path.join(od, f'{lake}_hillshade_wgs84.tif'))
-    for k in ['roads', 'bridges']:
-        clip_osm(k, B, os.path.join(od, f'{lake}_{k}.gpkg'))
-    print('wrote', fdir)
-
-od = os.path.join(P_OUT, 'fig010o_layers'); os.makedirs(od, exist_ok=True); ann = []
-for lake in ['L29', 'L27']:
-    poly, h4, d, v, T, crs, prof = h4_poly(lake, f'{lake}_Mid')
-    hh = np.where(h4, 1.0, np.nan)
-    to_wgs84(hh, T, crs, os.path.join(od, f'{lake}_Mid_h4_wgs84.tif'))
-    to_wgs84(hh, T, crs, os.path.join(od, f'{lake}_Mid_h4_wgs84_x4.tif'), scale=4)
-    gpd.GeoDataFrame({'lake_id': [lake]}, geometry=[poly], crs=32642).to_crs(4326).to_file(os.path.join(od, f'{lake}_h4_outline.gpkg'), driver='GPKG')
-    x0, y0, x1, y1 = poly.bounds; B = (x0 - 1500, y0 - 1500, x1 + 1500, y1 + 1500)
-    for k in ['roads', 'bridges']: clip_osm(k, B, os.path.join(od, f'{lake}_{k}.gpkg'))
-    if lake == 'L29': hillshade(B, os.path.join(P_OUT, '_hs_tmp.tif'), os.path.join(od, 'L29_hillshade_wgs84.tif'))
-    for name, fn in [('worldpop', 'WorldPop_2020_GB_Chitral.tif'), ('ghspop', 'GHS_POP_2025_GB_Chitral.tif'), ('built', 'GHS_BUILT_S_2030_GB_Chitral.tif')]:
-        with rasterio.open(os.path.join(RAW, fn)) as r:
-            g = gpd.GeoSeries([box(*B)], crs=32642).to_crs(r.crs)
-            a, tr = mask(r, list(g), crop=True, filled=True, nodata=0)
-            to_wgs84(a[0].astype('float64'), tr, r.crs, os.path.join(od, f'{lake}_{name}_wgs84.tif'), nodata=0)
-    e = [r for r in ex_rows if r['scenario'] == f'{lake}_Mid'][0]
-    ann.append([lake, {'L27': 'L27 Shisper', 'L29': 'L29 Passu'}[lake], e['h4_area_km2'], e['roads_h4_km'], e['bridges_h4'],
-                e['built_area_h4_m2'], e['pop_wp_h4'], e['pop_ghs_h4']])
-with open(os.path.join(od, 'fig010o_annotations.csv'), 'w', newline='') as f:
-    w = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC); w.writerow(['lake', 'label', 'h4_km2', 'roads_km', 'bridges', 'built_m2', 'pop_wp', 'pop_ghs']); w.writerows(ann)
-print('wrote fig010o_layers')
 
 for root, dirs, files in os.walk(P_OUT):
     for fn in files:

@@ -1,6 +1,5 @@
-# Hazard zone maps
+# Figure 9: hazard zones
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(terra)
 library(ggplot2)
@@ -10,20 +9,23 @@ library(sf)
 library(dplyr)
 library(cowplot)
 library(ggnewscale)
+if (!dir.exists("data/processed/figure_layers"))
+  system2("python", "scripts/figure_scripts/00_prepare_figure_layers.py")
 
-OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR    <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 11.0
 FIG_DPI    <- 800
 BASE_SIZE  <- 9
-P          <- "data/processed/fig010o_layers"
+P          <- "data/processed/figure_layers/fig9"
 
 cat("── Loading layers ──
 ")
 
 # load as _full so we can re-crop after extent is computed
 hs_l29_full <- rast(file.path(P, "L29_hillshade_wgs84.tif"))
-hs_l27      <- rast("data/processed/fig07_layers/L27_hillshade_wgs84.tif")
+hs_l27      <- rast("data/processed/figure_layers/fig7/L27_hillshade_wgs84.tif")
 
 h4_l29_raw  <- rast(file.path(P, "L29_Mid_h4_wgs84_x4.tif"))
 h4_l27_raw  <- rast(file.path(P, "L27_Mid_h4_wgs84_x4.tif"))
@@ -44,7 +46,7 @@ roads_l29   <- st_read(file.path(P, "L29_roads.gpkg"),   quiet = TRUE)
 roads_l27   <- st_read(file.path(P, "L27_roads.gpkg"),   quiet = TRUE)
 bridges_l29 <- st_read(file.path(P, "L29_bridges.gpkg"), quiet = TRUE)
 bridges_l27 <- st_read(file.path(P, "L27_bridges.gpkg"), quiet = TRUE)
-ann         <- read.csv(file.path(P, "fig010o_annotations.csv"))
+ann         <- read.csv(file.path(P, "annotations.csv"))
 
 cat("  All layers loaded
 
@@ -336,17 +338,17 @@ p_final <- plot_grid(p_maps, legend_grob,
 cat("── Saving ──
 ")
 
-ggsave(file.path(OUT_DIR, "fig10_v4_fix_h4_hazard.png"),
+ggsave(file.path(OUT_DIR, "Figure_9.png"),
        p_final, width = FIG_WIDTH, height = FIG_HEIGHT,
        units = "cm", dpi = FIG_DPI, bg = "white")
-cat("  Saved: fig10_v4_fix_h4_hazard.png
+cat("  Saved: Figure_9.png
 ")
 
-ggsave(file.path(OUT_DIR, "fig10_v4_fix_h4_hazard.tiff"),
+ggsave(file.path(OUT_DIR, "Figure_9.tiff"),
        p_final, width = FIG_WIDTH, height = FIG_HEIGHT,
        units = "cm", dpi = FIG_DPI, bg = "white",
        compression = "lzw")
-cat("  Saved: fig10_v4_fix_h4_hazard.tiff
+cat("  Saved: Figure_9.tiff
 ")
 
 cat("

@@ -1,4 +1,4 @@
-# Shisper drainage modes
+# Figure S3: Shisper drainage modes
 
 import os, glob, shutil, tempfile, numpy as np, rasterio, geopandas as gpd, warnings; warnings.filterwarnings('ignore')
 import pandas as pd, matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
@@ -30,12 +30,12 @@ ax[0].set_title('(a) Inflow hydrographs',loc='left',fontweight='bold',fontsize=9
 # (b) width of the hazard zone along the ravine
 from shapely.geometry import Point
 from shapely.ops import substring
-F=gpd.read_file(shutil.copy(P+'lake_flowpaths.gpkg',tempfile.mkdtemp())).to_crs(32642).set_index('lake_id'); g=F.geometry['L27']; s0=g.project(Point(1000614,4037416))
+F=gpd.read_file(shutil.copy(P+'lake_flowpaths.gpkg',tempfile.mkdtemp())).to_crs(32642).set_index('lake_id'); g=F.geometry['L27']; s0=g.project(gpd.read_file('hecras_models/v2_inputs/L27_inflow_BC_v2.shp').to_crs(32642).geometry.union_all().centroid)
 rav=substring(g,s0,s0+9000)
 def width(m):
     rows,cols=np.where(m>0.5); xs,ys=rasterio.transform.xy(T,rows,cols)
     ok=[(x,y) for x,y in zip(xs,ys) if rav.distance(Point(x,y))<600]
-    ch=np.array([rav.project(Point(x,y)) for x,y in ok])/1000
+    ch=np.array([rav.project(Point(x,y)) for x,y in ok]); ch=ch[(ch>0)&(ch<rav.length)]/1000
     bins=np.arange(0,9.01,0.5); h,_=np.histogram(ch,bins=bins); return bins[:-1]+0.25, h*900/500.0
 for m,lab,cc,ls in [(A,'Abrupt breach, full lake',cols['breach'],'-'),(B,'Ice-dam failure, full lake',cols['fail'],'-'),(C,'Tunnel drainage, 2019 volume',cols['tun'],'--')]:
     x,wd=width(m); ax[1].plot(x,wd,color=cc,ls=ls,lw=1.4,marker='o',ms=2.5,label=lab)
@@ -45,6 +45,6 @@ ax[1].set_xlim(0,9); ax[1].set_ylim(bottom=0); ax[1].set_xlabel('Distance below 
 ax[1].legend(fontsize=6.2,loc='upper left',framealpha=0.95)
 ax[1].set_title('(b) Hazard-zone width in the ravine',loc='left',fontweight='bold',fontsize=9)
 fig.tight_layout(w_pad=1.2)
-out=ROOT+'/figures/'
-fig.savefig(out+'figS3_shisper_drainage_modes.png',dpi=300); fig.savefig(out+'figS3_shisper_drainage_modes.tiff',dpi=600,pil_kwargs={'compression':'tiff_lzw'})
-print('Saved figures/figS3_shisper_drainage_modes.png and .tiff')
+out=ROOT+'/figures/'; os.makedirs(out,exist_ok=True)
+fig.savefig(out+'Figure_S3.png',dpi=300); fig.savefig(out+'Figure_S3.tiff',dpi=600,pil_kwargs={'compression':'tiff_lzw'})
+print('Saved figures/Figure_S3.png and .tiff')

@@ -1,6 +1,5 @@
-# Inundation maps, L27
+# Figure 7: inundation maps, Shisper
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(terra)
 library(ggplot2)
@@ -10,13 +9,16 @@ library(sf)
 library(dplyr)
 library(cowplot)
 library(ggnewscale)
+if (!dir.exists("data/processed/figure_layers"))
+  system2("python", "scripts/figure_scripts/00_prepare_figure_layers.py")
 
-OUT_DIR    <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR    <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_WIDTH  <- 17.4
 FIG_HEIGHT <- 16.0
 FIG_DPI    <- 800
 BASE_SIZE  <- 9
-L <- "data/processed/fig07_layers"
+L <- "data/processed/figure_layers/fig7"
 
 cat("--- Loading layers ---
 ")
@@ -24,9 +26,12 @@ hs      <- rast(file.path(L, "L27_hillshade_wgs84.tif"))
 d_low   <- rast(file.path(L, "L27_Low_depth_wgs84.tif"))
 d_mid   <- rast(file.path(L, "L27_Mid_depth_wgs84.tif"))
 d_high  <- rast(file.path(L, "L27_High_depth_wgs84.tif"))
+dam_xy  <- st_read("hecras_models/v2_inputs/L27_inflow_BC_v2.shp", quiet = TRUE) |>
+  st_geometry() |> st_union() |> st_centroid() |> st_transform(4326) |>
+  st_coordinates() |> as.numeric()
 
-roads_full   <- st_read("data/processed/fig01_layers/osm_roads.gpkg",   quiet = TRUE)
-bridges_full <- st_read("data/processed/fig01_layers/osm_bridges.gpkg", quiet = TRUE)
+roads_full   <- st_read("data/processed/figure_layers/maps/osm_roads.gpkg",   quiet = TRUE)
+bridges_full <- st_read("data/processed/figure_layers/maps/osm_bridges.gpkg", quiet = TRUE)
 
 if (file.exists(file.path(L, "L27_roads.gpkg"))) {
   roads_l27   <- st_read(file.path(L, "L27_roads.gpkg"),   quiet = TRUE)
@@ -174,9 +179,9 @@ build_inundation_panel <- function(depth_cls, title, show_legend = FALSE,
     geom_sf(data = bridges, colour = "#E31A1C", shape = 17, size = 1.2) +
 
     # Shisper ice dam / breach inflow (glacier terminus)
-    annotate("point", x = 74.5767, y = 36.3516, shape = 21,
+    annotate("point", x = dam_xy[1], y = dam_xy[2], shape = 21,
              size = 2, fill = "white", colour = "black", stroke = 0.5) +
-    annotate("text", x = 74.5767, y = 36.3496, label = "Shisper ice dam",
+    annotate("text", x = dam_xy[1], y = dam_xy[2] - 0.002, label = "Shisper ice dam",
              size = 1.6, fontface = "bold", vjust = 1) +
 
     coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
@@ -251,11 +256,11 @@ p_final <- plot_grid(
   rel_heights = c(1, 1)
 )
 
-ggsave(file.path(OUT_DIR, "fig07_v5_inundation_L27.png"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_7.png"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white")
 
-ggsave(file.path(OUT_DIR, "fig07_v5_inundation_L27.tiff"), p_final,
+ggsave(file.path(OUT_DIR, "Figure_7.tiff"), p_final,
        width = FIG_WIDTH, height = FIG_HEIGHT, units = "cm",
        dpi = FIG_DPI, bg = "white", compression = "lzw")
 

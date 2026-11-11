@@ -69,3 +69,5 @@ data/
 docs/
 REPRODUCE.md
 figures/*.csv
+
+__pycache__/

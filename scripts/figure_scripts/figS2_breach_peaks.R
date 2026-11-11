@@ -1,13 +1,13 @@
-# Breach peaks against empirical relations
+# Figure S2: breach peaks against empirical relations
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(ggplot2)
 library(dplyr)
 library(cowplot)
 library(scales)
 
-OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR   <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_W     <- 17.4
 FIG_H     <- 9.0
 FIG_DPI   <- 800
@@ -44,8 +44,10 @@ make_hecras <- function(df, lake_code, lake_label) {
 hecras_l29 <- make_hecras(sim, "L29", "L29 Passu")
 hecras_l27 <- make_hecras(sim, "L27", "L27 Shisper")
 
-V29 <- 2154184;  H29 <- 37.5
-V27 <- 16600000; H27 <- 134
+bp  <- read.csv("data/processed/breach_parameters.csv")
+mid <- function(l, col) bp[[col]][bp$lake_id == l & bp$scenario == "Mid"]
+V29 <- mid("L29", "Vw_m3"); H29 <- mid("L29", "Hb_m")
+V27 <- mid("L27", "Vw_m3"); H27 <- mid("L27", "Hb_m")
 
 q_walder <- function(V) 0.045 * V^0.66
 q_costa  <- function(V, H) 0.063 * (1000 * 9.81 * V * H)^0.42
@@ -248,15 +250,15 @@ p_final <- cowplot::plot_grid(
 
 cat("── Saving ──\n")
 
-ggsave(file.path(OUT_DIR, "fig11_validation_v4.png"),
+ggsave(file.path(OUT_DIR, "Figure_S2.png"),
        p_final, width = FIG_W, height = FIG_H,
        units = "cm", dpi = FIG_DPI, bg = "white")
-cat("  Saved: fig11_validation_v4.png\n")
+cat("  Saved: Figure_S2.png\n")
 
-ggsave(file.path(OUT_DIR, "fig11_validation_v4.tiff"),
+ggsave(file.path(OUT_DIR, "Figure_S2.tiff"),
        p_final, width = FIG_W, height = FIG_H,
        units = "cm", dpi = FIG_DPI, bg = "white",
        compression = "lzw")
-cat("  Saved: fig11_validation_v4.tiff\n")
+cat("  Saved: Figure_S2.tiff\n")
 
 cat("\nFig 11 v4 complete.\n")

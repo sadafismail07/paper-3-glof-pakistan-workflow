@@ -1,4 +1,4 @@
-# Workflow diagram
+# Figure 2: workflow
 
 library(ggplot2)
 library(dplyr)
@@ -164,11 +164,12 @@ p <- ggplot() +
 
 dir.create("figures", showWarnings = FALSE)
 
-ggsave("figures/fig02_workflow.tiff",
+dir.create("figures", showWarnings = FALSE)
+ggsave("figures/Figure_2.tiff",
        width = 174, height = 115, units = "mm",
        dpi = 800, bg = "white", compression = "lzw")
 
-ggsave("figures/fig02_workflow.png",
+ggsave("figures/Figure_2.png",
   plot = p, width = 174, height = 115, units = "mm", dpi = 800)
 
-message("Saved: figures/fig02_workflow.tiff  +  .png")
+message("Saved: figures/Figure_2.tiff  +  .png")

@@ -1,4 +1,4 @@
-# NDWI threshold sensitivity
+# Figure S1: NDWI threshold
 
 library(ggplot2)
 library(dplyr)
@@ -62,7 +62,7 @@ labels_df <- tibble(
   name = c("Shisper", "Passu"),
 
   # Text shown
-  lab = c("0.162 km²", "0.019 km²"),
+  lab = sprintf("%.3f km\u00b2", c(passu_y, shishper_y)),
 
   # Text locations stay unchanged
   x_label = x_label,
@@ -270,14 +270,15 @@ artefacts",
 
 dir.create("figures", showWarnings = FALSE)
 
-ggsave("figures/fig03_ndwi_sensitivity_v2.tiff",
+dir.create("figures", showWarnings = FALSE)
+ggsave("figures/Figure_S1.tiff",
        plot = p, width = 83, height = 80, units = "mm",
        dpi = 800, bg = "white", compression = "lzw")
 
-ggsave("figures/fig03_ndwi_sensitivity_v2.png",
+ggsave("figures/Figure_S1.png",
        plot = p, width = 83, height = 80, units = "mm",
        dpi = 800, bg = "white")
 
 message(
-  "Saved: figures/fig03_ndwi_sensitivity_v2.tiff  +  .png"
+  "Saved: figures/Figure_S1.tiff  +  .png"
 )

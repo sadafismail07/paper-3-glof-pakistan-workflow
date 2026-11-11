@@ -1,6 +1,5 @@
-# Breach hydrographs
+# Figure 5: breach hydrographs
 
-setwd("C:/Users/sadaf/Documents/PPR3")
 
 library(ggplot2)
 library(dplyr)
@@ -8,7 +7,8 @@ library(cowplot)
 library(scales)
 library(colorspace)
 
-OUT_DIR   <- "C:/Users/sadaf/Documents/PPR3/figures"
+OUT_DIR   <- "figures"
+dir.create(OUT_DIR, showWarnings = FALSE)
 FIG_W     <- 20.0
 FIG_H     <- 8.0
 FIG_DPI   <- 800
@@ -46,14 +46,13 @@ peaks <- dat |>
   slice(which.max(Q_m3_s)) |>
   ungroup()
 
-canonical_peaks <- tribble(
-  ~lake,         ~scenario,        ~Q_label,
-  "L29 Passu",   "Mid baseline",   1261,
-  "L29 Passu",   "Bulk ×1.5", 1892,
-  "L29 Passu",   "Bulk ×2.0", 2522,
-  "L27 Shisper", "Mid baseline",   12546,
-  "L27 Shisper", "Bulk ×1.5", 18819,
-  "L27 Shisper", "Bulk ×2.0", 25092
+t3 <- read.csv("data/processed/table03_master_data.csv")
+pk_of <- function(l, s) round(t3$peak_q_m3s[t3$lake_id == l & t3$scenario_code == s])
+canonical_peaks <- tibble(
+  lake     = rep(c("L29 Passu", "L27 Shisper"), each = 3),
+  scenario = rep(scen_order, 2),
+  Q_label  = c(pk_of("L29", "Mid"), pk_of("L29", "Mid_b15"), pk_of("L29", "Mid_b20"),
+               pk_of("L27", "Mid"), pk_of("L27", "Mid_b15"), pk_of("L27", "Mid_b20"))
 )
 
 scen_lty <- c(
@@ -265,17 +264,17 @@ p_final <- cowplot::plot_grid(
 cat("── Saving ──
 ")
 
-ggsave(file.path(OUT_DIR, "fig09_hydrographs_v6.png"),
+ggsave(file.path(OUT_DIR, "Figure_5.png"),
        p_final, width = FIG_W, height = FIG_H,
        units = "cm", dpi = FIG_DPI, bg = "white")
-cat("  Saved: fig09_hydrographs_v6.png
+cat("  Saved: Figure_5.png
 ")
 
-ggsave(file.path(OUT_DIR, "fig09_hydrographs_v6.tiff"),
+ggsave(file.path(OUT_DIR, "Figure_5.tiff"),
        p_final, width = FIG_W, height = FIG_H,
        units = "cm", dpi = FIG_DPI, bg = "white",
        compression = "lzw")
-cat("  Saved: fig09_hydrographs_v6.tiff
+cat("  Saved: Figure_5.tiff
 ")
 
 cat("
